@@ -118,3 +118,8 @@ setInterval(() => {
 
 //  https://medium.com/preezma/memory-leaks-in-javascript-and-how-to-avoid-them-63916a02f68 this is memory leak 
 //  refernce https://dev.to/alwaysaman/day-6understanding-stack-and-heap-in-javascript-3766
+
+//  Java scripts runtime
+console.log("===>1");
+setTimeout(() => console.log("===>2"), 1000);
+console.log("3")
