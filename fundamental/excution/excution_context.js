@@ -59,6 +59,25 @@ const getBouncer = async (token) => {
 
 let nums = [10, 7, 0, 0, 9];
 
+//  two sum 
+
+function twoSum(nums, target) {
+    let mapSum = {};
+    for (let i = 0; i < nums.length; i++){
+        const isAvialble = target - nums[i];
+        if (mapSum.hasOwnProperty(isAvialble)) {
+            return [mapSum[isAvialble], i];
+        }
+        else {
+            mapSum[nums[i]] = i;
+        }
+    }
+}
+let twoPair = [0,7,1,9];
+var target = 7;
+var twoAns = twoSum(twoPair, target)
+// console.log(twoAns)
+
 //  FindDublicate in array;
 
 const findDublicateValue = (nums,) => {
@@ -113,9 +132,86 @@ function optimalStockTradin(prices) {
     }
     return maxPrice;
 }
+function optimalStockTradinOtherWay(prices) {
+    let minNumber = prices[0];
+    let maxPrice = 0;
+    for (let i = 1; i < prices.length; i++){
+        var currentMaxPrice = prices[i] - minNumber;
+        maxPrice = Math.max(currentMaxPrice, maxPrice);
+        minNumber = Math.min(minNumber, prices[i]);
+    }
+    return maxPrice;
+}
+
 let stockPrice = [4,3,2,1];
 const result = optimalStockTradin(stockPrice);
-// console.log(result);
+const resultOther = optimalStockTradinOtherWay(stockPrice);
+// console.log(resultOther);
+
+// Array Product Excluding Current 
+
+function arrayProductExcludingCurren(nums) {
+    let n = nums.length;
+    let result = new Array(n);
+    for (let i = 0; i < n; i++){
+        let multiply = 1;
+        for (let j = 0; j < n; j++){
+            if (j !== i) {
+                multiply *= nums[j];
+            }
+        }
+        result[i] = multiply;
+    }
+
+    return result;
+}
+
+
+//  arrayProductExcludingCurren Optimised way
+function arrayProductExcludingCurrenOptimise(product) {
+    let res = [];
+    let left = 1;
+    for (let i = 0; i < product.length; i++){
+        res[i] = left;
+        left *= product[i];
+    }
+
+    let right = 1;
+
+    for (let j = product.length - 1; j >= 0; j--){
+        res[j] *= right;
+        right *= product[j];
+    }
+    return res
+}
+var products = [1,2,3];
+var printsNewProp = arrayProductExcludingCurren(products);
+var opt = arrayProductExcludingCurrenOptimise(products);
+// console.log(printsNewProp,opt)
+
+// Balanced Brackets
+function isBalanced(str) {
+    var stack = [];
+    let pairs = { ")": "(", "}": "{", "]": "[" };
+
+    for (let char of str) {
+        if (["(", "{", "["].includes(char)) {
+            stack.push(char);
+        }
+        else if ([")", "}", "]"].includes(char)) {
+            if (stack.length === 0 || stack.pop() !== pairs[char]) {
+                return false
+            }
+
+        }
+    }
+    console.log(stack)
+    return stack.length === 0;
+}
+
+var str = "([)]";
+const res = isBalanced(str);
+console.log(res);
 
 
 
