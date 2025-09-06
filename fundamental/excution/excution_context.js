@@ -21,3 +21,101 @@ sayMyName();
 //  when global created in browser and push into stack and sayMyName also create a own context 
 // https://www.freecodecamp.org/news/how-javascript-works-behind-the-scene-javascript-execution-context
 // https://dev.to/jahid6597/javascript-execution-context-a-deep-dive-4kno
+
+const getHired = async () => {
+    fetch("https://workwithus.lucioai.com/get-started", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            name: "Raushan Kumar",
+            email: "sraushan890@gmail.com"
+        }),
+    }).then((res) => res.json())
+        .then((resp)=>getBouncer(resp.token))
+        .catch((err) => console.log(err));
+    
+}
+// getHired()
+
+
+const getBouncer = async (token) => {
+    console.log(token)
+    try {
+        const response = await fetch("https://workwithus.lucioai.com/bouncer", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`, // 👈 attach toke
+            }
+        })
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+let nums = [10, 7, 0, 0, 9];
+
+//  FindDublicate in array;
+
+const findDublicateValue = (nums,) => {
+   let count = {};
+    for (let i = 0; i < nums.length; i++) {
+      
+        if (count.hasOwnProperty(nums[i])) {
+            count[nums[i]]++;
+        } else {
+            count[nums[i]] = 1;
+        }
+    };
+
+
+  for(let key in count ){
+      if (count[key] > 1) {
+          return true;
+      }
+  }
+    return false;
+}
+
+// findDublicateValue(nums);
+//  Find Missing Number in Sequence
+function findMissingNumberInSequence(numbers) {
+    let n = numbers.length;
+    let expectedSum = n * (n + 1) / 2;
+    let actualSum = 0;
+    for (let i = 0; i < n; i++){
+        actualSum += numbers[i];
+    }
+    return expectedSum - actualSum;
+}
+
+let missingNumber = [1, 3, 0];
+let ans = findMissingNumberInSequence(missingNumber);
+// console.log(ans);
+
+// Optimal Stock Trading
+
+function optimalStockTradin(prices) {
+    let minNumber = prices[0];
+    let maxPrice = 0;
+    for (let i = 1; i < prices.length; i++){
+        var currentMaxPrice = prices[i] - minNumber;
+        if (currentMaxPrice > maxPrice) {
+            maxPrice = currentMaxPrice;
+        }
+        if (minNumber > prices[i]) {
+            minNumber = prices[i];
+        }
+    }
+    return maxPrice;
+}
+let stockPrice = [4,3,2,1];
+const result = optimalStockTradin(stockPrice);
+// console.log(result);
+
+
+
