@@ -1,0 +1,102 @@
+# Interview Prep Roadmap with Questions
+
+- Week 1: Core JS & TS
+  - JS Fundamentals (Closures, this, Hoisting)
+    - Q: What is a closure? Give a real-world example.
+    - Q: How does 'this' behave in arrow vs normal functions?
+    - Q: Explain hoisting in JavaScript with example.
+  - Async & Event Loop
+    - Q: Explain microtask vs macrotask queue.
+    - Q: Difference between setTimeout and Promise.resolve().
+    - Q: How async/await works internally?
+  - Advanced JS (Polyfills, Currying, Memoization)
+    - Q: Write a polyfill for Array.map.
+    - Q: What is currying? Implement a curry function.
+    - Q: Explain memoization and when to use it.
+  - TypeScript (Types, Generics, Utility Types)
+    - Q: Difference between type and interface in TypeScript.
+    - Q: How do generics improve reusability?
+    - Q: Explain Partial<T> and Pick<T, K> with examples.
+
+- Week 2: React.js / React Native
+  - React Lifecycle vs Hooks
+    - Q: How does useEffect differ from useLayoutEffect?
+    - Q: When would you use useMemo or useCallback?
+    - Q: Explain React’s rendering cycle.
+  - State Mgmt (Redux Toolkit, Context)
+    - Q: When to use Redux vs Context API?
+    - Q: Explain how Redux Toolkit simplifies reducers.
+    - Q: What is the difference between thunk and saga?
+  - Performance Optimization
+    - Q: How do you optimize large lists in React?
+    - Q: What is React.memo and when to use it?
+    - Q: Explain code splitting in React.
+  - React Native Basics
+    - Q: How navigation works in React Native?
+    - Q: What is the use of WebView in RN apps?
+    - Q: How to debug performance issues in RN?
+
+- Week 3: APIs & System Concepts
+  - REST vs GraphQL
+    - Q: Difference between REST and GraphQL.
+    - Q: When would you prefer GraphQL over REST?
+    - Q: Explain overfetching and underfetching.
+  - JWT, Cookies, Refresh Tokens
+    - Q: Difference between cookie and localStorage for auth.
+    - Q: What is a refresh token and why needed?
+    - Q: How do you secure JWT tokens?
+  - Centralized API Handler
+    - Q: Why use Axios interceptors?
+    - Q: How to handle global errors in API calls?
+    - Q: Explain retry logic for failed requests.
+  - Micro-frontend Architecture
+    - Q: What is a micro-frontend?
+    - Q: How did you implement it in your project?
+    - Q: Pros and cons of micro-frontends.
+
+- Week 4: DSA Deep Dive
+  - Arrays & Strings
+    - Q: Implement two-sum problem.
+    - Q: Find longest substring without repeating characters.
+    - Q: Implement sliding window maximum.
+  - Linked List / Stack / Queue
+    - Q: Reverse a linked list.
+    - Q: Detect cycle in a linked list.
+    - Q: Implement a stack using queues.
+  - Trees & Graphs
+    - Q: Find height of a binary tree.
+    - Q: Level-order traversal of tree.
+    - Q: Implement BFS on a graph.
+  - Basic DP
+    - Q: Climbing stairs problem.
+    - Q: Coin change problem.
+    - Q: Longest common subsequence.
+
+- Week 5: System Design
+  - Beginner (Parking lot, Elevator, Observer)
+    - Q: Design a parking lot system.
+    - Q: Design an elevator system.
+    - Q: Explain Observer pattern with example.
+  - Intermediate (Chat App, Dashboard)
+    - Q: Design a chat application.
+    - Q: Design a scalable dashboard.
+    - Q: Explain rate limiting techniques.
+  - Patterns (Singleton, Factory, Pub-Sub)
+    - Q: Implement Singleton in TypeScript.
+    - Q: Difference between Factory and Abstract Factory.
+    - Q: Explain Publisher-Subscriber model.
+
+- Week 6: Mock & Revision
+  - Mock DSA
+    - Q: Solve 2 medium DSA problems in 30 minutes.
+    - Q: Explain your approach before coding.
+  - Mock React/JS
+    - Q: Explain React reconciliation.
+    - Q: Debug a common hook misuse problem.
+  - Mock System Design
+    - Q: Walk through designing a chat app end-to-end.
+    - Q: Discuss trade-offs in your dashboard design.
+  - HR + Projects
+    - Q: Tell me about a project you are proud of.
+    - Q: What was the biggest challenge in micro-frontend runtime system?
+    - Q: How do you handle conflicts in a team?
