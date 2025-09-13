@@ -125,14 +125,42 @@ console.log("===>1");
 setTimeout(() => console.log("===>2"), 1000);
 console.log("3")
 
-//  Memory Heap ==> in Javascript variable ,object and function allocate the memory in memory Heap during global execution and compiler time so then can access variable and object and function 
+// 1.  Memory Heap ==> in Javascript variable ,object and function allocate the memory in memory Heap during global execution and compiler time so then can access variable and object and function 
 // What is Proceess to allocate the memory in the Heap
 //  Allocate the memory you need
 //  Use the Allocated memory (read and write);
 //  Release the allocated when it's no need
 
-// Call Stack 
-// Call Stack does to store variable and function as run our code and all function variable in the stack called stack frame 
+// 2. Call Stack 
+// Call Stack does to run code during execution time and  store variable and function as run our code and all function variable in the stack called stack frame 
 //  call stack run first in last out method (FILO) 
 //  also keep in reference where the code run and which have 
 // call stack have different implement so always not store data in memory Heap
+
+// 3. stack overflow  recurion and function runing contious  is cause stack overflow
+
+// 4. garbage collection
+//  garbage collector use sweep mark alogrithm and garbage collectin also give false impression to developer,it meams do't worry i can handle to memory 
+// garbage collection were we can store variable object array funtions etc
+
+// Memory leak
+
+//  Global varibale
+// Example
+var a = 1;
+var b = 2;
+var c = 3;
+
+//  Event Listenser using 
+
+const element = document.getElementById("button")
+element.addEventListener("click", handleClic);
+//  what happen if you never remove then interal runing make that happen to memory leak
+//  setInterval
+
+console.log("1");
+setTimeout(() => console.log("2"));
+ Promise.resolve(console.log("3"));
+console.log("4")
+
+
