@@ -103,3 +103,40 @@ const result = entires.map(([key, value]) => {
 });
 
 console.log(result); // ['name', 'age', 'city']
+
+//  challenge question
+const numbers = [1, 2, 3, 4, 5];
+
+const results = numbers
+  .filter((num) => num % 2 === 0)
+  .map((num) => num * 2)
+  .reduce((acc, num) => acc + num, 0);
+// console.log(results);
+
+const original = numbers.slice(); // slice method is here not slice because not passing required paramerter
+// console.log(original);
+original.reverse();
+// console.log(original);
+const flattened = [[1, 2], [3], [4, 5]].flat();
+console.log(flattened);
+const found = flattened.find((num) => num > 3);
+console.log(found);
+
+try {
+  const obj = null;
+  obj.property = "value";
+} catch (e) {
+  console.log(e.name);
+}
+
+try {
+  undeclaredVariable;
+} catch (e) {
+  console.log(e.name);
+}
+
+try {
+  JSON.parse("invalid json");
+} catch (e) {
+  console.log(e.name);
+}
