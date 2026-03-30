@@ -64,6 +64,17 @@ newArray.pushMehtod("!");
 newArray.popMethod();
 newArray.popMethod();
 newArray.deleteMethod(1);
-console.log("====================================");
-console.log(newArray);
-console.log("====================================");
+
+//  C++
+
+// int a[20];   static array  we always know the size at complie time
+//  classes in javascripts
+//  we gone talk about reference types
+//  we gone talk about context
+//  we gone talk about  instantiation
+
+var obj = { value: 10 };
+var obj2 = obj;
+var obj3 = { value: 10 };
+
+//  context
