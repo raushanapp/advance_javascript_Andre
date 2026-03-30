@@ -75,3 +75,45 @@ mapped.stop();
 source.next(2);
 
 unsub();
+
+const target = { name: "John", age: 30 };
+const handler = {
+  get(obj, prop) {
+    if (prop in obj) {
+      console.log("Props", prop, "OBJECT ", obj);
+      return `[${obj[prop]}]`;
+    }
+    return `missing ${prop}`;
+  },
+  set(obj, prop, value) {
+    console.log(`Setting ${prop} to ${value}`);
+    obj[prop] = value.toUpperCase();
+    return true;
+  },
+};
+// this is used to create poxy object and used to be log the value while getting and setting
+const proxy = new Proxy(target, handler);
+proxy.city = "New York";
+// console.log(proxy.name); // [John]
+// console.log(proxy.city); // [30]
+// console.log(proxy.country); // missing country
+
+//  User
+
+const user = {
+  profile: {
+    settings: {
+      theme: "dark",
+    },
+  },
+};
+
+const getTheme = (obj) => obj?.profile?.settings?.theme ?? "light";
+const getLanguage = (obj) => obj?.profile?.settings?.language ?? "en";
+const getNotifications = (obj) => obj?.profile?.settings?.notifications ?? true;
+
+//  log the values
+console.log("Theme:", getTheme(user));
+console.log("Language:", getLanguage(user));
+console.log("Notifications:", getNotifications(user));
+console.log("Notifications:", getTheme(null));
