@@ -124,3 +124,15 @@ setInterval(() => {
 console.log("===>1");
 setTimeout(() => console.log("===>2"), 1000);
 console.log("3")
+
+//  Memory Heap ==> in Javascript variable ,object and function allocate the memory in memory Heap during global execution and compiler time so then can access variable and object and function 
+// What is Proceess to allocate the memory in the Heap
+//  Allocate the memory you need
+//  Use the Allocated memory (read and write);
+//  Release the allocated when it's no need
+
+// Call Stack 
+// Call Stack does to store variable and function as run our code and all function variable in the stack called stack frame 
+//  call stack run first in last out method (FILO) 
+//  also keep in reference where the code run and which have 
+// call stack have different implement so always not store data in memory Heap

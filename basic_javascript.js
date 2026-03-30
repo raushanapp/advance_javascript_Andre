@@ -17,7 +17,6 @@ const userData = {
 };
 findUser(userData); // if calling every time then what happen javascript compalir does just cache data like this Found Vineet Jain and returing everytime to you because the does only return findUser nothing else
 
-
 // hidden classes comes into compiler
 //  Dynamically type added and removed and change object properties
 // Define a simple constructor function  for example
@@ -85,3 +84,5 @@ const hashTable1 = {
 // javascript is interpeter language to build client side  application  and Brendan Eich  created by years 1995  and sever side application using node js 
 // javascript is a  dynamicall type programming  language that support math calualtion and dynamical, it is allows you to  dynamically add HTML contents to the DOM and fetching a data dynamically 
 // creates dynamic style declarations, fetches contents from another website,
+// JavaScript is primarily the programming language for the web. 
+// It allows you to implement complex features on web pages, transforming static HTML and CSS into dynamic, interactive experiences. Every time you see timely content updates, interactive maps, animated graphics, or scrolling video elements on a website, JavaScript is likely involved
