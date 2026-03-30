@@ -113,7 +113,28 @@ const getLanguage = (obj) => obj?.profile?.settings?.language ?? "en";
 const getNotifications = (obj) => obj?.profile?.settings?.notifications ?? true;
 
 //  log the values
-console.log("Theme:", getTheme(user));
-console.log("Language:", getLanguage(user));
-console.log("Notifications:", getNotifications(user));
-console.log("Notifications:", getTheme(null));
+// console.log("Theme:", getTheme(user));
+// console.log("Language:", getLanguage(user));
+// console.log("Notifications:", getNotifications(user));
+// console.log("Notifications:", getTheme(null));
+
+// Quiz
+
+const moduleMap = new Map();
+
+async function loadModule(name) {
+  if (moduleMap.has(name)) {
+    return moduleMap.get(name);
+  }
+  const module = await Promise.resolve({
+    default: () => `Module ${name} loaded`,
+    version: "1.0.0",
+  });
+
+  moduleMap.set(name, module);
+  return module;
+}
+
+loadModule("auth").then((m) => console.log(m.default()));
+loadModule("auth").then((m) => console.log(m.version));
+loadModule("db").then((m) => console.log(m.default()));
