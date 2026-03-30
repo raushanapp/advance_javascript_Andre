@@ -81,3 +81,7 @@ const hashTable1 = {
   } 
 }
 
+//  what is javascripts
+// javascript is interpeter language to build client side  application  and Brendan Eich  created by years 1995  and sever side application using node js 
+// javascript is a  dynamicall type programming  language that support math calualtion and dynamical, it is allows you to  dynamically add HTML contents to the DOM and fetching a data dynamically 
+// creates dynamic style declarations, fetches contents from another website,
