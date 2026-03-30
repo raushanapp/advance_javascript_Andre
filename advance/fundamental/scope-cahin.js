@@ -29,3 +29,5 @@ function sayMyName() {
 }
 
 sayMyName();
+
+//  this keyword dynamic scope it's not matter where it written it's how it's called
