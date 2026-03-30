@@ -135,6 +135,62 @@ async function loadModule(name) {
   return module;
 }
 
-loadModule("auth").then((m) => console.log(m.default()));
-loadModule("auth").then((m) => console.log(m.version));
-loadModule("db").then((m) => console.log(m.default()));
+// loadModule("auth").then((m) => console.log(m.default()));
+// loadModule("auth").then((m) => console.log(m.version));
+// loadModule("db").then((m) => console.log(m.default()));
+
+function createCounter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getValue: () => count,
+  };
+}
+
+const counter1 = createCounter();
+const counter2 = createCounter();
+
+counter1.increment();
+counter1.increment();
+counter2.increment();
+
+// console.log("Counter 1 Value:", counter1.getValue()); // 2
+// console.log("Counter 2 Value:", counter2.getValue()); // 2
+// counter1.decrement();
+// console.log("Counter 1 Value after decrement:", counter1.getValue()); // 1
+// console.log("Counter 2 Value remains:", counter2.getValue()); // 2
+
+//  WeakMap javascript
+const wm = new WeakMap();
+let obj1 = { name: "Object 1" };
+let obj2 = { name: "Object 2" };
+let obj3 = obj1;
+wm.set(obj1, "Values1");
+wm.set(obj2, "Values2");
+wm.set(obj3, "Values3");
+
+// console.log(wm.get(obj1)); // Values1
+// console.log(wm.get(obj2)); // Values2
+// console.log(wm.get(obj3)); // Values3
+// console.log(wm.has(obj1)); // true
+// console.log(wm.size);
+
+// Custom Error
+
+class CustomError extends Error {
+  constructor(message) {
+    super(message);
+    // this.name = "CustomError";
+    this.name = message;
+  }
+}
+
+try {
+  throw new CustomError("Something went wrong!");
+} catch (e) {
+  console.log(e.name); // CustomError
+  console.log(e instanceof Error);
+  console.log(e instanceof CustomError);
+  console.log(e.constructor.name);
+}
