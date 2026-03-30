@@ -50,14 +50,10 @@ class Emitter {
     return true;
   }
 }
-
 //  example and used
-
 const emitter = new Emitter();
 const logger = new Logger();
-
 const unsub = emitter.on("process", (data) => logger.log(data.toUpperCase()));
 emitter.emit("process", "hello");
-
 //  when you no logger need the listener
 unsub();

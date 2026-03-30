@@ -6,7 +6,6 @@ function jsEngine(code) {
 }
 let ans = jsEngine("var a = 5");
 console.log(ans);
-
 // inline caching
 function findUser(user) {
   return `found ${user.firstName} ${user.lastName}`;
@@ -16,7 +15,6 @@ const userData = {
   lastName: "Jain",
 };
 findUser(userData); // if calling every time then what happen javascript compalir does just cache data like this Found Vineet Jain and returing everytime to you because the does only return findUser nothing else
-
 // hidden classes comes into compiler
 //  Dynamically type added and removed and change object properties
 // Define a simple constructor function  for example
@@ -30,11 +28,9 @@ const ceoEmployee = new employee(100000, "ceo");
 // add two new properties to saleEmployee
 newHire.payDay = "payDay";
 newHire.phoneNumber = 7329292984;
-
 // add the same two properties to ceoEmployee but in a different order
 ceoEmployee.phoneNumber = 9087654;
 ceoEmployee.payDay = "Monday";
-
 // store data
 // internal Hood of javascripts
 const hashTable = {
@@ -79,31 +75,25 @@ const hashTable1 = {
     },
   },
 };
-
 //  what is javascripts
 // javascript is interpeter language to build client side  application  and Brendan Eich  created by years 1995  and sever side application using node js
 // javascript is a  dynamicall type programming  language that support math calualtion and dynamical, it is allows you to  dynamically add HTML contents to the DOM and fetching a data dynamically
 // creates dynamic style declarations, fetches contents from another website,
 // JavaScript is primarily the programming language for the web.
 // It allows you to implement complex features on web pages, transforming static HTML and CSS into dynamic, interactive experiences. Every time you see timely content updates, interactive maps, animated graphics, or scrolling video elements on a website, JavaScript is likely involved
-
 //  javascripts  quizes question have
-
 const user = {
   name: "Vineet",
   age: 24,
   city: "Pune",
 };
-
 const keys = Object.keys(user);
 const values = Object.values(user);
 const entires = Object.entries(user);
 const result = entires.map(([key, value]) => {
   return typeof value === "string" ? key.toUpperCase() : value * 2;
 });
-
 console.log(result); // ['name', 'age', 'city']
-
 //  challenge question
 const numbers = [1, 2, 3, 4, 5];
 
@@ -112,7 +102,6 @@ const results = numbers
   .map((num) => num * 2)
   .reduce((acc, num) => acc + num, 0);
 // console.log(results);
-
 const original = numbers.slice(); // slice method is here not slice because not passing required paramerter
 // console.log(original);
 original.reverse();
@@ -121,14 +110,12 @@ const flattened = [[1, 2], [3], [4, 5]].flat();
 console.log(flattened);
 const found = flattened.find((num) => num > 3);
 console.log(found);
-
 try {
   const obj = null;
   obj.property = "value";
 } catch (e) {
   console.log(e.name);
 }
-
 try {
   undeclaredVariable;
 } catch (e) {
