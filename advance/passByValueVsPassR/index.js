@@ -52,3 +52,33 @@ var user2 = { name: "nerd", org: "dev" };
 var eq = user1 == user2; // false
 
 var deepEq = JSON.stringify(user1) === JSON.stringify(user2); // true
+
+//  exercise
+// var user1 = {name : "nerd", org: "dev"};
+// var user2 = {name : "nerd", org: "dev"};
+// var eq = user1 == user2;
+// alert(eq); // gives false
+
+const number = 100;
+const string = "Jay";
+let obj5 = {
+  value: "a",
+};
+let obj7 = {
+  value: "b",
+};
+let obj6 = obj2;
+
+function change(number, string, obj1, obj2) {
+  number = number * 10;
+  string = "Pete";
+  obj5 = obj7;
+  obj7.value = "c";
+}
+
+change(number, string, obj5, obj7);
+
+//Guess the outputs here before you run the code:
+console.log(number);
+console.log(string);
+console.log(obj5.value);
