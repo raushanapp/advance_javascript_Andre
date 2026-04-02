@@ -24,6 +24,6 @@ function mergeSortArrays(arr1, arr2) {
 
 // let result = mergeSortArrays([1, 3, 5], [2, 4, 6]);
 let result = mergeSortArrays([-1, 3, 5, 7], [1, 2, 4, 6]);
-console.log("====================================");
-console.log(result);
-console.log("====================================");
+// console.log("====================================");
+// console.log(result);
+// console.log("====================================");
