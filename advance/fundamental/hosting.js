@@ -12,7 +12,9 @@ var teddy = "Teddy";
 var test2 = function () {
   console.log("------- test 2");
 };
-
+var f = console.log("====================================");
+console.log();
+console.log("====================================");
 //  function declaration
 function test() {
   console.log("ohhhh ");
@@ -37,3 +39,9 @@ function foodThoughts() {
 }
 
 foodThoughts();
+//  Global execution Context  we have
+//  Global object and this
+
+//  creation phase in javascripts when variable  declarations are processed
+//  execution phase
+//  hosting
