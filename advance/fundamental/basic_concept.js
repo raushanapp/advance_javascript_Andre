@@ -40,3 +40,14 @@ if (name === "Billay" || name === "Allicy") {
   // this logical OR operator checks if either condition is true
   console.log("Hello, " + name + "!");
 }
+
+//  this logical AND operator checks if both conditions are true
+if (name === "Billay" && age === 30) {
+  console.log("Hello, Billay! You are 30.");
+}
+
+//  ! (NOT) operator
+if (!(name === "Billay")) {
+  // this logical NOT operator checks if the condition is false and adds the opposite
+  console.log("You are not Billay.");
+}
