@@ -21,6 +21,8 @@ var last_name = "Doe"; // this called snake_case
 var age = 30; // this is a number in javasripts
 var str = "Raushan"; // this is a string in javascripts
 var isAge = false; // this is a boolean types in javascripts
+var nullValue = null;
+var undefined_value;
 
 //  conditional statements in javascripts
 
