@@ -21,3 +21,22 @@ var last_name = "Doe"; // this called snake_case
 var age = 30; // this is a number in javasripts
 var str = "Raushan"; // this is a string in javascripts
 var isAge = false; // this is a boolean types in javascripts
+
+//  conditional statements in javascripts
+
+var name = "Billay";
+if (name === "Billay") {
+  console.log("Hello, Billay!");
+} else if (name === "Allicy") {
+  console.log("Hello, Allicy!");
+} else {
+  // if both of the above comparisons are failed then this condition will be excuted
+  console.log("Hello, stranger!");
+}
+
+//  Javascripts logical operators
+
+if (name === "Billay" || name === "Allicy") {
+  // this logical OR operator checks if either condition is true
+  console.log("Hello, " + name + "!");
+}
