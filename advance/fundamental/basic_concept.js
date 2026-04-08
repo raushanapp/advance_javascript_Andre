@@ -53,3 +53,12 @@ if (!(name === "Billay")) {
   // this logical NOT operator checks if the condition is false and adds the opposite
   console.log("You are not Billay.");
 }
+
+//  Object means  a collection of key-value pairs
+
+var test = {
+  name: "jhon",
+  age: 30,
+  hobbies: ["reading", "swimming"],
+  isMarried: false,
+};
