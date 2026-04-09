@@ -30,7 +30,6 @@ let target3 = 6;
 
 function findTwoSum(arr, target) {
   let leng = arr.length - 1;
-  console.log(leng, arr);
   if (!arr || arr.length < 2) {
     return "Invalid Input";
   }
@@ -45,10 +44,40 @@ function findTwoSum(arr, target) {
   return [];
 }
 
+//  optimal approach using a hash map
+
+function findTwoSumOptimal(arr, target) {
+  if (!arr || arr.length < 2) return "Invalid Input";
+  let indices = new Map();
+  for (let i = 0; i < arr.length; i++) {
+    let complete = target - arr[i];
+    if (indices.has(complete)) {
+      return [indices.get(complete), i];
+    }
+    indices.set(arr[i], i);
+    console.log(indices, "==", i, indices.set(arr[i], i));
+  }
+  return [];
+}
+
+//  other approach
+
+function findTwoSum1(arr, target) {
+  if (!arr || arr.length < 2) return "Invalid Input";
+  let zeroIndex = arr[0];
+  let oneIndex = arr[1];
+  if (zeroIndex + oneIndex === target) return [0, 1];
+  // while (zeroIndex < oneIndex) {
+  //     let value= target-
+  // }
+}
+
 // let result = findTwoSum(inputs, target);
 let result = findTwoSum([], target);
 let result2 = findTwoSum(inputs2, target2);
 let result3 = findTwoSum(inputs3, target3);
-console.log(result);
+let ans = findTwoSumOptimal([-3, 4, 6, 8, 6], 14);
+// console.log(result);
+console.log(ans, "ANS");
 // console.log(result2);
 // console.log(result3);
