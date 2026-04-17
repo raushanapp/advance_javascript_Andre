@@ -20,8 +20,10 @@
 //     -109 <= target <= 109
 
 let inputs = [2, 7, 11, 15];
+// [0,1]
 let target = 9;
 let inputs2 = [3, 2, 4];
+// [1,2]
 let target2 = 6;
 let inputs3 = [3, 3];
 let target3 = 6;
