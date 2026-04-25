@@ -59,3 +59,37 @@ function findMinMax(itemlist) {
 }
 
 console.log(findMinMax(arr2));
+
+/* 
+Given an integer array arr[] and an integer k, your task is to find and return the kth smallest element in the given array.
+Note: The kth smallest element is determined based on the sorted order of the array.
+Examples :
+Input: arr[] = [10, 5, 4, 3, 48, 6, 2, 33, 53, 10], k = 4
+Output: 5
+Explanation: 4th smallest element in the given array is 5.
+
+Input: arr[] = [7, 10, 4, 3, 20, 15], k = 3
+Output: 7
+Explanation: 3rd smallest element in the given array is 7.
+
+Constraints:
+1 ≤ arr.size() ≤ 105
+1 ≤ arr[i] ≤ 105
+1 ≤ k ≤  arr.size()
+*/
+
+let input = [10, 5, 4, 3, 48, 6, 2, 33, 53, 10];
+let k = 4;
+
+function findKthSmallest(arr, k) {
+  if (!arr || k <= 0 || k > arr.length) {
+    return "Invalid input";
+  }
+  arr.sort((a, b) => a - b);
+  return arr[k - 1];
+}
+
+console.log(findKthSmallest(input, k));
+//  time complexity: O(n log n)
+
+//  different approach: use a modified version of quickselect for better performance
