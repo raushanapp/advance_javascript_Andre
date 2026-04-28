@@ -17,3 +17,19 @@
 //     -104 <= nums[i] <= 104
 
 // Follow up: If you have figured out the O(n) solution, try coding another solution using the divide and conquer approach, which is more subtle.
+
+let arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+//  brute force approach
+function maxSubArray(nums) {
+  if (!nums || nums.length === 0) return 0;
+
+  for (let i = 0; i < nums.length; i++) {
+    let subarry = [];
+    for (let j = i; j < nums.length; j++) {
+      subarry.push(nums[j]);
+      console.log(subarry);
+    }
+  }
+}
+
+let result = maxSubArray(arr);
