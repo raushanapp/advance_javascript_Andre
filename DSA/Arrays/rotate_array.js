@@ -27,31 +27,67 @@ Follow up:
 */
 
 let nums=[1,2,3,4,5,6,7];
-let roundRotate=3;
+let k=3;
 
-function rotateRightArray(arr,k){
-	 const n = nums.length;
-    k = k % n;
+// function rotateRightArray(arr,k){
+// 	 const n = nums.length;
+//     k = k % n;
 
-    let count = 0;
+//     let count = 0;
 
-    for (let start = 0; count < n; start++) {
-        let current = start;
-        let prev = nums[start];
+//     for (let start = 0; count < n; start++) {
+//         let current = start;
+//         let prev = nums[start];
 
-        do {
-            let next = (current + k) % n;
-            [nums[next], prev] = [prev, nums[next]];
-            current = next;
-            count++;
-        } while (start !== current);
-    }
-    return nums
+//         do {
+//             let next = (current + k) % n;
+//             [nums[next], prev] = [prev, nums[next]];
+//             current = next;
+//             count++;
+//         } while (start !== current);
+//     }
+//     return nums
+
+// }
+
+// //  second approach 
+
+// function rotateArrayRight(arr,k){
+
+// 	let n= arr.length; 
+// 	let start=0;
+// 	for(let i=arr.length-1;i>=0;i--){
+// 		console.log(i,arr[i])
+//        arr[start]=arr[i];
+//        arr[i]=arr[start]
+//        start++;
+// 	}
+
+// 	return arr
+// }
+
+//  third approach
+
+function reverse(arr, start, end) {
+	
+	while (start < end) {
+		var temp = arr[start]
+		arr[start] = arr[end]
+		arr[end] = temp
+		start++
+		end--
+	}
+  
 
 }
 
-rotateRightArray(nums,roundRotate);
- let k= 3/nums.length;
-let next= (0+k)%n;
-console.log(next)
+reverse(nums, 0, nums.length-1)
+reverse(nums, 0, k-1)
+ reverse(nums, k, nums.length-1 )
+
+
+
+// rotateRightArray(nums,roundRotate);
+//  let ans=rotateArrayRight(nums,roundRotate)
+console.log(nums)
 
