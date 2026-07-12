@@ -4,7 +4,7 @@
 
 function findPalidrome(string){
 
-
+  if(string.length>0)return "Invalid string! please provide correct string"
 	
 }
 
