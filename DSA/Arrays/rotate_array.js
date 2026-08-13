@@ -56,7 +56,6 @@ function rotateRightArray(arr,k){
 
 function reverse(arr, start, end) {
 	k= k%arr.length;
-	
 	while (start < end) {
 		var temp = arr[start]
 		arr[start] = arr[end]
@@ -66,9 +65,20 @@ function reverse(arr, start, end) {
 	}
 }
 
+
 reverse(nums, 0, nums.length-1)
 reverse(nums, 0, k-1)
  reverse(nums, k, nums.length-1 )
+
+
+ //  fourth approach  rotate right array
+
+ function rotateRight(arr,start,k){
+
+    let n= arr.length-1;
+
+
+ }
 
 
 
