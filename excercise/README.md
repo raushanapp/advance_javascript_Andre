@@ -434,7 +434,7 @@ flowchart TD
     A[Create bigBrother context] --> B[Create first littleBrother]
     B --> C[Create second littleBrother]
     C --> D[Second declaration replaces first]
-    D --> E[Return "no me!"]
+    D --> E[Return: no me]
 ```
 
 Avoid duplicate function names in the same scope because the result can be confusing and easy to overlook.
