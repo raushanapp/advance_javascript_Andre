@@ -345,3 +345,23 @@ var heyhey = function doodle() {
 heyhey(); // Heyhey
 //  if i run the doodle
 doodle(); // getting reference error doodle is not defined because doodle has own execution context or variable environment
+
+// Function vs scope
+// vs
+// block scope
+//  scope mean's what variable have to access to you
+
+if (5 > 4) {
+  var secret = "12345";
+}
+//  suppose i created using function then still not able to access the secret
+function d() {
+  var secret = "123459899";
+}
+console.log(secret); // in this access we can access the secret
+
+if (6 > 5) {
+  let secret = "123456"; // but this case we can not access the secret
+}
+
+console.log(secret, "2");

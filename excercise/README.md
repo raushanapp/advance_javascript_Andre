@@ -666,6 +666,58 @@ flowchart LR
 
 For a function expression, call the outer variable. The internal function name cannot be called directly from outside.
 
+## 20. Function Scope and Block Scope
+
+Scope describes where a variable can be accessed. `var` is function-scoped, while `let` and `const` are block-scoped.
+
+### `var` is not limited to an `if` block
+
+An `if` statement creates a block, but it does not create a separate function scope. A `var` declared inside the block can therefore be accessed after the block finishes:
+
+```js
+if (5 > 4) {
+  var secret = "12345";
+}
+
+console.log(secret); // "12345"
+```
+
+The function `d` has its own function scope. Its local `secret` is a different variable and cannot be accessed from outside `d`:
+
+```js
+function d() {
+  var secret = "123459899";
+}
+
+// console.log(secret); // does not access d's local variable
+```
+
+### `let` is block-scoped
+
+`let` is available only between the braces where it is declared:
+
+```js
+if (6 > 5) {
+  let secret = "123456";
+  console.log(secret); // "123456"
+}
+
+// console.log(secret); // ReferenceError: secret is not defined
+```
+
+In the current exercise, the final `console.log(secret, "2")` still reads the earlier `var secret`, so it prints `12345 2`. The later `let secret` belongs only to its own `if` block.
+
+```mermaid
+flowchart TD
+    A[Global scope] --> B[var secret from if block]
+    A --> C[Function d scope]
+    C --> D[Private var secret]
+    A --> E[let secret block scope]
+    E --> F[Unavailable after block]
+```
+
+Prefer `let` or `const` for block-specific values. This prevents accidental access outside the block and makes the variable's lifetime easier to understand.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -688,6 +740,8 @@ For a function expression, call the outer variable. The internal function name c
 - Assigning to an undeclared name can leak a global variable in non-strict mode.
 - Strict mode catches accidental global assignments with a `ReferenceError`.
 - A named function expression's internal name is available only inside that function.
+- `var` is function-scoped and can escape an `if` or other block.
+- `let` and `const` are block-scoped and cannot be accessed outside their block.
 
 ## Important Runtime Note
 
