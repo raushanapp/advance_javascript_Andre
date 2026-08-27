@@ -12,6 +12,13 @@
     <script src="index.js"></script>
     <script>
       var z = 1;
+
+      var script1 = (function () {
+        function a() {
+          return 5;
+        }
+        return { a: a };
+      })();
     </script>
     <script>
       var zz = 2;
@@ -21,6 +28,9 @@
     </script>
     <script>
       var z = 10000;
+      function a() {
+        return "hahahah";
+      }
     </script>
   </body>
 </html>

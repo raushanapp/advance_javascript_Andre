@@ -382,3 +382,116 @@ loop();
 //  variable collison
 
 //  IIFE
+
+(function () {
+  // but here we call the function expression
+  var a = 1;
+})();
+
+// function(){}() // we can not called function declaration after next error unexpected token
+
+//  THIS KEYWORD
+//  this is  the object that the function is a property of
+
+const obj = {
+  name: "Zilly",
+  // sing: function () {
+  //   return "lalala" + this.name;
+  // },
+  sing() {
+    return "lalala" + this.name;
+  },
+  singAgain() {
+    return this.sing() + "!";
+  },
+};
+
+obj.sing();
+obj.singAgain();
+
+// two benifit
+//  1:  gives methods acess to their object
+// 2: execute  same code for multiple obejcts
+
+//  example
+
+function importantPerson() {
+  console.log(this.name + "!");
+}
+
+const name = "Sunny";
+
+const obj1 = {
+  name: "Cassy",
+  importantPerson: importantPerson,
+};
+
+const obj3 = {
+  name: "Jacob",
+  importantPerson: importantPerson,
+};
+
+importantPerson();
+
+//  another execrise
+
+const a = function () {
+  console.log("a", this);
+  const b = function () {
+    console.log("b", this);
+    const c = {
+      hi: function () {
+        console.log("c", this);
+      },
+    };
+    c.hi();
+  };
+  b();
+};
+a();
+
+const obj5 = {
+  name: "Billy",
+  sing() {
+    console.log("a", this);
+    var anotherFunc = function () {
+      console.log("b", this);
+    };
+    anotherFunc();
+  },
+};
+
+//  solve
+const obj6 = {
+  name: "Billy",
+  sing() {
+    console.log("a", this);
+    var anotherFunc = () => {
+      console.log("b", self);
+    };
+    anotherFunc();
+  },
+};
+
+const obj7 = {
+  name: "Billy",
+  sing() {
+    console.log("a", this);
+    var anotherFunc = function () {
+      console.log("b", this);
+    };
+    return anotherFunc.bind(this);
+  },
+};
+
+const obj8 = {
+  name: "Billy",
+  sing() {
+    console.log("a", this);
+    var self = this;
+    var anotherFunc = function () {
+      console.log("b", self);
+    };
+    anotherFunc();
+  },
+};

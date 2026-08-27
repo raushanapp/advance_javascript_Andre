@@ -801,6 +801,141 @@ flowchart LR
 
 IIFEs were commonly used before JavaScript modules became widespread. Modern code generally prefers ES modules, but understanding IIFEs helps explain older JavaScript patterns and private scope.
 
+## 23. The `this` Keyword
+
+`this` usually refers to the object used to call a regular function. The call site determines its value; the place where the function is written does not.
+
+### `this` inside an object method
+
+When a method is called through an object, `this` refers to that object:
+
+```js
+const obj = {
+  name: "Zilly",
+  sing() {
+    return "lalala " + this.name;
+  },
+  singAgain() {
+    return this.sing() + "!";
+  },
+};
+
+console.log(obj.sing()); // "lalala Zilly"
+console.log(obj.singAgain()); // "lalala Zilly!"
+```
+
+This lets one method use the data belonging to its object. The same function can also be shared by multiple objects:
+
+```js
+function importantPerson() {
+  console.log(this.name + "!");
+}
+
+const cassy = { name: "Cassy", importantPerson };
+const jacob = { name: "Jacob", importantPerson };
+
+cassy.importantPerson(); // "Cassy!"
+jacob.importantPerson(); // "Jacob!"
+```
+
+Calling `importantPerson()` by itself is a different call site. In strict mode, `this` is `undefined`; in a browser's non-strict script, it may refer to the global object.
+
+### Regular nested functions
+
+A regular nested function gets its own `this` value. It does not automatically inherit the `this` value from the outer method:
+
+```js
+const obj = {
+  name: "Billy",
+  sing() {
+    console.log(this.name); // "Billy"
+
+    function anotherFunction() {
+      console.log(this); // separate this value
+    }
+
+    anotherFunction();
+  },
+};
+
+obj.sing();
+```
+
+### Arrow functions
+
+Arrow functions do not create their own `this`. They capture `this` from the surrounding function:
+
+```js
+const obj = {
+  name: "Billy",
+  sing() {
+    const anotherFunction = () => {
+      console.log(this.name); // "Billy"
+    };
+
+    anotherFunction();
+  },
+};
+
+obj.sing();
+```
+
+The `obj6` example in `index.js` uses an arrow function but refers to `self`, which is not declared there. It should use `this.name`, or declare `const self = this` first.
+
+### `bind`
+
+`bind` creates a new function with a permanently selected `this` value:
+
+```js
+const obj = {
+  name: "Billy",
+  sing() {
+    const anotherFunction = function () {
+      console.log(this.name); // "Billy"
+    };
+
+    return anotherFunction.bind(this);
+  },
+};
+
+const boundFunction = obj.sing();
+boundFunction();
+```
+
+In the `obj7` example, `sing()` returns the bound function, so the returned function must be stored or immediately invoked. `bind` does not execute the function by itself.
+
+### Saving `this` in a variable
+
+Before arrow functions were commonly used, developers often saved the outer `this` in a variable such as `self`:
+
+```js
+const obj = {
+  name: "Billy",
+  sing() {
+    const self = this;
+
+    const anotherFunction = function () {
+      console.log(self.name); // "Billy"
+    };
+
+    anotherFunction();
+  },
+};
+
+obj.sing();
+```
+
+This is the pattern used correctly by `obj8`.
+
+```mermaid
+flowchart TD
+    A[Object method call] --> B[this is the object]
+    C[Regular nested function] --> D[Gets its own this]
+    E[Arrow function] --> F[Captures outer this]
+    G[bind] --> H[Creates function with fixed this]
+    I[self variable] --> J[Stores outer this manually]
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -828,6 +963,9 @@ IIFEs were commonly used before JavaScript modules became widespread. Modern cod
 - The global namespace is shared, so duplicate names can overwrite one another.
 - An IIFE runs immediately and keeps its local variables private.
 - A `var` declared in a `for` loop remains available in the surrounding function scope.
+- For regular functions, `this` is determined by how the function is called.
+- Arrow functions capture `this` from their surrounding scope.
+- `bind` creates a new function with a fixed `this` value but does not call it.
 
 ## Important Runtime Note
 
