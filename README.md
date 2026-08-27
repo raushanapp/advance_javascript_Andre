@@ -176,6 +176,76 @@ console.log("D");
 
 Microtasks can starve timers if code continually schedules more microtasks. See [interview_question.js](interview_question.js).
 
+#### Promise callbacks versus `setTimeout`
+
+Promise handlers registered with `.then()` and callbacks registered with `queueMicrotask()` go into the **microtask queue**. A `setTimeout` callback goes into the **task queue** (also called the macrotask or callback queue). After the current synchronous code finishes, the event loop drains all available microtasks before it starts the next timer task.
+
+```mermaid
+flowchart TD
+    A[Run synchronous code] --> B[Current call stack is empty]
+    B --> C[Drain microtask queue]
+    C --> D{More microtasks?}
+    D -- Yes --> C
+    D -- No --> E[Run one setTimeout task]
+    E --> C
+```
+
+Example from [challenge.js](challenge.js):
+
+```js
+console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+queueMicrotask(() => console.log("4"));
+setTimeout(() => {
+  console.log("5");
+  Promise.resolve().then(() => console.log("6"));
+}, 0);
+console.log("7");
+
+// Output:
+// 1
+// 7
+// 3
+// 4
+// 2
+// 5
+// 6
+```
+
+Why this order occurs:
+
+1. `1` and `7` run synchronously.
+2. Promise callback `3` and microtask callback `4` run next, in registration order.
+3. The first timer prints `2`.
+4. The second timer prints `5`, then schedules Promise callback `6`.
+5. The event loop drains `6` before it starts another task.
+
+The same rule explains [interview_question.js](interview_question.js):
+
+```js
+console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+Promise.resolve().then(() => {
+  console.log("5");
+  setTimeout(() => console.log("6"), 0);
+});
+console.log("7");
+
+// Output:
+// 1
+// 4
+// 7
+// 3
+// 5
+// 2
+// 6
+```
+
+Important: `setTimeout(..., 0)` does not mean "run immediately." It means "place this callback in the task queue after the timer is ready." Pending microtasks get priority before that task runs.
+
 ### 16. What does `async/await` do?
 
 An `async` function always returns a promise. `await` pauses that function until the awaited promise settles, allowing other work on the event loop to continue; it does not block the JavaScript thread. Rejected promises become thrown errors at the await point and can be handled with `try/catch`.

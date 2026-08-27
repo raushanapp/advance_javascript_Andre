@@ -563,3 +563,13 @@ var g = {
     return () => console.log(this);
   },
 };
+
+//  Types of Javascript
+// number
+//  boolean
+//  string
+// undefined
+// null
+//  Symbol("just me")
+// {}
+//  lucky javascript have  operators typeof
