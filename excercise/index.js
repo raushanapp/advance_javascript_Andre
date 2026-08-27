@@ -91,3 +91,17 @@ element.addEventListener("click", onClick);
 // setInterval
 
 setInterval(() => {}, 0);
+
+//  single thread  synchronous running javacripts
+
+//  javascript runtime
+//  Call stack  and Memory Heap
+//  Web API ==> DOM , Fetch(), setTimeOut(),
+// Event Loop
+//  Callback queue
+
+console.log("1");
+setTimeout(() => {
+  console.log("2");
+}, 1000);
+console.log("3");
