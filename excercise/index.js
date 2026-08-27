@@ -170,7 +170,7 @@ console.log("1----------");
 
 console.log(teddy);
 console.log(sing());
-console.log(sing2()); // getting error
+// console.log(sing2()); // getting error Uncaught TypeError: sing2 is not a function
 //  only console .log sing2 not execute then get undefined
 console.log(sing2); // undefined
 
@@ -197,16 +197,16 @@ var one = 2;
 
 console.log(one); // 2
 
-a();
+// aa();
 
-function a() {
-  console.log("hi");
-}
+// function aa() {
+//   console.log("hi");
+// }
 
-function a() {
-  // re-write in the memory
-  console.log("Bye");
-}
+// function aa() {
+//   // re-write in the memory
+//   console.log("Bye");
+// }
 
 var favouritedFood = undefined; // this hoisted
 var foodThoughts = undefined; // this is hoisted
@@ -233,9 +233,53 @@ function bigBrother() {
   }
   return littleBrother();
 
-  function littleBrother() {
-    return "no me!";
-  }
+  // function littleBrother() {
+  //   return "no me!";
+  // }
 }
 
+bigBrother();
+
 console.log(bigBrother());
+
+//  Function Expression
+var canada = () => {
+  console.log("Clod");
+};
+
+//  Function Declaration
+
+function india() {
+  console.log("Warm");
+}
+
+// Function
+// Invocation / Call / Execution
+canada();
+india();
+
+function marry(person1, person2) {
+  console.log("Arguments", arguments);
+  console.log(Array.from(arguments));
+  return `${person1} is now married to ${person2}`;
+}
+
+marry("Tim", "Tina");
+
+//  varoable environment
+
+function two() {
+  var isValid; // this remain undefined
+}
+
+function one() {
+  var isValid = true; // local environment or variable env
+  two(); // new EC
+}
+
+var isValid = false;
+one();
+// two --- undefined  first pop up off  and also memory space gone
+//  we just created new execution context one () --- true second popup off   and also memory space gone
+//  global EC -- false third pop off  and also memory space gone
+//  each execution have own variable environment

@@ -437,7 +437,75 @@ flowchart TD
     D --> E[Return: no me]
 ```
 
-Avoid duplicate function names in the same scope because the result can be confusing and easy to overlook.
+In the current `index.js`, the second declaration is commented out, so the active `littleBrother` returns `"it is me!"`. The replacement behavior remains a useful hoisting exercise. Avoid duplicate function names in the same scope because the result can be confusing and easy to overlook.
+
+## 13. Function Expressions and Invocation
+
+A function can be created with a function expression, an arrow function, or a function declaration:
+
+```js
+// Function expression using an arrow function
+var canada = () => {
+  console.log("Cold");
+};
+
+// Function declaration
+function india() {
+  console.log("Warm");
+}
+
+// Invocation, call, and execution all mean running a function
+canada();
+india();
+```
+
+An arrow function assigned to a variable is a value stored in that variable. A function declaration is registered during the creation phase and can be called before its declaration.
+
+## 14. Parameters and the `arguments` Object
+
+Function parameters receive values passed at the call site. Inside a regular function, the special `arguments` object contains the values that were passed:
+
+```js
+function marry(person1, person2) {
+  console.log(arguments); // array-like object of passed values
+  console.log(Array.from(arguments)); // real array
+  return `${person1} is now married to ${person2}`;
+}
+
+console.log(marry("Tim", "Tina"));
+// Tim is now married to Tina
+```
+
+`arguments` is array-like, not a real array. `Array.from(arguments)` converts it into an array so array methods can be used. Arrow functions do not have their own `arguments` object.
+
+## 15. Variable Environment
+
+Every function execution context has its own variable environment. A local variable can have the same name as a global variable without changing the global value:
+
+```js
+function two() {
+  var isValid; // undefined in two's environment
+}
+
+function one() {
+  var isValid = true; // one has its own value
+  two();
+}
+
+var isValid = false; // global value
+one();
+```
+
+The three `isValid` variables belong to three different environments:
+
+```mermaid
+flowchart TD
+    A[Global environment: isValid = false] --> B[one context: isValid = true]
+    B --> C[two context: isValid = undefined]
+    C --> D[Return from two, then one]
+```
+
+When a function finishes, its execution context is removed from the call stack. Its local variables are no longer available unless another reference, such as a closure, keeps them reachable.
 
 ## Quick Review
 
@@ -451,6 +519,9 @@ Avoid duplicate function names in the same scope because the result can be confu
 - Lexical environments come from where code is written and form nested scopes.
 - Hoisting processes declarations before execution, with different behavior for `var`, functions, `let`, and `const`.
 - When function declarations have the same name, the later declaration replaces the earlier one.
+- Function expressions, arrow functions, and function declarations are different ways to create functions.
+- `arguments` contains values passed to a regular function and can be converted into an array.
+- Each function execution context has its own variable environment.
 
 ## Important Runtime Note
 
