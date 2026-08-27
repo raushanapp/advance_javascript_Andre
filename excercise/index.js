@@ -365,3 +365,14 @@ if (6 > 5) {
 }
 
 console.log(secret, "2");
+
+// execise
+
+function loop() {
+  //  if i use here let keyword this not allow you to access out side of scope because only inside curly brace and function and if statement
+  for (var i = 0; i < 5; i++) {
+    console.log(i);
+  }
+  console.log("Final", i);
+}
+loop();

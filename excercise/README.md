@@ -718,6 +718,42 @@ flowchart TD
 
 Prefer `let` or `const` for block-specific values. This prevents accidental access outside the block and makes the variable's lifetime easier to understand.
 
+### `var` inside a `for` loop
+
+A `for` loop also creates a block, but `var` ignores block boundaries and belongs to the surrounding function scope:
+
+```js
+function loop() {
+  for (var i = 0; i < 5; i++) {
+    console.log(i); // 0, 1, 2, 3, 4
+  }
+
+  console.log("Final", i); // Final 5
+}
+
+loop();
+```
+
+The loop stops when `i` becomes `5`, so that value is available after the loop. With `let`, `i` would exist only inside the `for` block:
+
+```js
+function saferLoop() {
+  for (let i = 0; i < 5; i++) {
+    console.log(i);
+  }
+
+  // console.log(i); // ReferenceError: i is not defined
+}
+```
+
+```mermaid
+flowchart TD
+    A[for block] --> B[var i belongs to function scope]
+    B --> C[i is available after loop]
+    D[for block] --> E[let i belongs to block scope]
+    E --> F[i unavailable after loop]
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -742,6 +778,7 @@ Prefer `let` or `const` for block-specific values. This prevents accidental acce
 - A named function expression's internal name is available only inside that function.
 - `var` is function-scoped and can escape an `if` or other block.
 - `let` and `const` are block-scoped and cannot be accessed outside their block.
+- A `var` declared in a `for` loop remains available in the surrounding function scope.
 
 ## Important Runtime Note
 
