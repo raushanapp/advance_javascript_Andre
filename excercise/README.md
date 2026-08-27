@@ -754,6 +754,53 @@ flowchart TD
     E --> F[i unavailable after loop]
 ```
 
+## 21. Global Namespace and Variable Collisions
+
+The global namespace is the shared space where top-level variables and functions are stored. Adding many names to it can cause collisions, where one variable or function accidentally overwrites another with the same name.
+
+```js
+var userName = "Raushan";
+
+// Later code reuses the same global name.
+var userName = "Andre";
+
+console.log(userName); // "Andre"
+```
+
+The global namespace is like a shared table: every global name must be unique enough not to conflict with names from other scripts. Prefer modules, functions, or block-scoped `let` and `const` to keep implementation details private.
+
+```mermaid
+flowchart TD
+  A[Script 1: userName] --> C[Global namespace]
+  B[Script 2: userName] --> C
+  C --> D[Collision or overwritten value]
+  E[Module or function scope] --> F[Private names]
+```
+
+## 22. IIFE
+
+An IIFE, or Immediately Invoked Function Expression, is a function expression that is created and called immediately. It creates a private function scope without adding its internal variables to the global namespace:
+
+```js
+(function () {
+  const privateValue = "hidden";
+  console.log(privateValue); // "hidden"
+})();
+
+// console.log(privateValue); // ReferenceError
+```
+
+The extra parentheses turn the function declaration into an expression, and the final `()` invokes it immediately:
+
+```mermaid
+flowchart LR
+  A[Create function expression] --> B[Create private scope]
+  B --> C[Invoke immediately]
+  C --> D[Private variables are discarded or released]
+```
+
+IIFEs were commonly used before JavaScript modules became widespread. Modern code generally prefers ES modules, but understanding IIFEs helps explain older JavaScript patterns and private scope.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -778,6 +825,8 @@ flowchart TD
 - A named function expression's internal name is available only inside that function.
 - `var` is function-scoped and can escape an `if` or other block.
 - `let` and `const` are block-scoped and cannot be accessed outside their block.
+- The global namespace is shared, so duplicate names can overwrite one another.
+- An IIFE runs immediately and keeps its local variables private.
 - A `var` declared in a `for` loop remains available in the surrounding function scope.
 
 ## Important Runtime Note

@@ -376,3 +376,9 @@ function loop() {
   console.log("Final", i);
 }
 loop();
+
+//  global variable or global lexical environment
+//  waht be called populating the global name space
+//  variable collison
+
+//  IIFE
