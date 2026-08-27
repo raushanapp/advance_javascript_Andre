@@ -324,3 +324,24 @@ function sayMyName1() {
 
 sayMyName1();
 //  undefind mean's we have variable but not asign anythigs now
+
+//  exercise
+// we can use use stirct weired things
+function weird() {
+  height = 50; // this is called leakage of global variable and but waht javascript does here under the hood see the is't create any variable either local and global
+  //  so see that and create variable
+  return height;
+}
+
+weird();
+
+var heyhey = function doodle() {
+  //  do something
+  //  here we can access the doodle
+  // doodle();
+  return "Heyhey";
+};
+
+heyhey(); // Heyhey
+//  if i run the doodle
+doodle(); // getting reference error doodle is not defined because doodle has own execution context or variable environment

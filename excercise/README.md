@@ -589,6 +589,83 @@ var existingVariable;
 // console.log(missingVariable); // ReferenceError
 ```
 
+## 18. Accidental Global Variables
+
+In non-strict JavaScript, assigning to a name that was never declared can create a property on the global object:
+
+```js
+function weird() {
+  height = 50; // accidental global in non-strict mode
+  return height;
+}
+
+console.log(weird()); // 50
+```
+
+This is called global-variable leakage. The assignment does not create a local variable inside `weird`; instead, it creates a global value. Global values can cause name collisions and remain in memory longer than needed.
+
+Use strict mode to catch this mistake:
+
+```js
+"use strict";
+
+function safeFunction() {
+  height = 50; // ReferenceError: height was not declared
+}
+```
+
+The safer fix is to declare the variable explicitly:
+
+```js
+function safeFunction() {
+  const height = 50;
+  return height;
+}
+```
+
+```mermaid
+flowchart TD
+    A[Assignment inside function] --> B{Was the variable declared?}
+    B -- Yes --> C[Use local or outer variable]
+    B -- No, non-strict mode --> D[Create accidental global]
+    B -- No, strict mode --> E[Throw ReferenceError]
+```
+
+## 19. Named Function Expressions
+
+A named function expression stores a function in a variable while giving the function its own internal name:
+
+```js
+var heyhey = function doodle() {
+  return "Heyhey";
+};
+
+console.log(heyhey()); // "Heyhey"
+```
+
+The name `doodle` is available inside the function body, which is useful for recursion or self-reference. It is not available in the surrounding scope:
+
+```js
+var heyhey = function doodle() {
+  return "Heyhey";
+};
+
+heyhey(); // works
+// doodle(); // ReferenceError: doodle is not defined
+```
+
+The outside scope knows the variable `heyhey`; the function's internal scope knows the name `doodle`:
+
+```mermaid
+flowchart LR
+    A[Outer scope] --> B[heyhey variable]
+    B --> C[Named function expression]
+    C --> D[Internal name: doodle]
+    D --> E[Available inside function only]
+```
+
+For a function expression, call the outer variable. The internal function name cannot be called directly from outside.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -608,6 +685,9 @@ var existingVariable;
 - Static scope is determined by where a function is written, not where it is called.
 - A closure allows a nested function to keep using variables from its outer environment.
 - `undefined` means a declared value has not been assigned; an undeclared name causes an error.
+- Assigning to an undeclared name can leak a global variable in non-strict mode.
+- Strict mode catches accidental global assignments with a `ReferenceError`.
+- A named function expression's internal name is available only inside that function.
 
 ## Important Runtime Note
 
