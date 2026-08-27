@@ -70,10 +70,10 @@ calculate();
 
 // memory leaks
 
-let array = [];
-for (let i = 5; i > 1; i++) {
-  array.push(i - 1);
-}
+// let array = [];
+// for (let i = 5; i > 1; i++) {
+//   array.push(i - 1);
+// }
 
 //  1. global variable
 
@@ -85,7 +85,7 @@ var c = 1;
 
 var element = document.getElementById("button");
 
-element.addEventListener("click", onClick);
+// element.addEventListener("click", onClick);
 //  but never removed the event listener than happen memory leak because user goes back fourth and again and again
 
 // setInterval
@@ -105,3 +105,53 @@ setTimeout(() => {
   console.log("2");
 }, 1000);
 console.log("3");
+
+// How to prevent stack overflow using recursion?
+//fill array with 60000 elements
+
+const list = new Array(60000).join("1.1").split(".");
+
+function removeItemsFromList() {
+  var item = list.pop();
+  if (item) {
+    setTimeout(removeItemsFromList, 0);
+  } else {
+    console.log("END = " + list.length);
+  }
+}
+
+removeItemsFromList();
+
+console.log("END => " + list.length);
+
+// Execution Context
+
+function printName() {
+  return "Deepak Kumar";
+}
+
+function findName() {
+  return printName();
+}
+
+function sayMyName() {
+  return findName();
+}
+
+sayMyName();
+
+//  printName
+// findName()
+//  sayMyName()
+//  global() execution context
+
+// Lexical Environment
+//  where we write the code it's simply means
+//  lexical means where the code rin and
+
+//  execution context tell you which lexical environment we  are running
+//  very first thing have lexical environment called global lexical environment
+
+function test() {
+  function a() {}
+}
