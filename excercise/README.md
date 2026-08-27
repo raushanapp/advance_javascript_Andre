@@ -330,6 +330,83 @@ flowchart TD
     C --> D[Can look outward for variables]
 ```
 
+## 12. Hoisting
+
+Hoisting describes how JavaScript handles declarations during the creation phase of an execution context. Declarations are processed before the code runs, but different declaration types behave differently:
+
+- **Function declarations** are available before their line appears in the source code.
+- **`var` declarations** are hoisted and initialized with `undefined`.
+- **Function expressions assigned to `var`** are hoisted only as `undefined`; the function value is assigned later.
+- **`let` and `const`** are hoisted internally but remain in the temporal dead zone until their declaration is reached, so reading them early throws an error.
+
+```mermaid
+flowchart TD
+    A[Creation phase] --> B[Function declaration: usable]
+    A --> C[var: undefined]
+    A --> D[let/const: temporal dead zone]
+    E[Execution phase] --> F[Assignments happen in source order]
+```
+
+### Function declaration versus function expression
+
+```js
+console.log(sing()); // "ohhh la la la"
+
+function sing() {
+  return "ohhh la la la";
+}
+```
+
+The function declaration can be called before its declaration. This function expression cannot be called before assignment:
+
+```js
+console.log(sing2); // undefined
+// sing2();          // TypeError: sing2 is not a function
+
+var sing2 = function () {
+  return "uhhhh la la la";
+};
+```
+
+### `var` redeclaration and function replacement
+
+The file also shows that `var` can be declared more than once, and a later function declaration replaces an earlier one:
+
+```js
+var one = 1;
+var one = 2;
+console.log(one); // 2
+
+a(); // "Bye"
+
+function a() {
+  console.log("Hi");
+}
+
+function a() {
+  console.log("Bye");
+}
+```
+
+Prefer `let` and `const` for new code because they prevent accidental redeclaration in the same scope and make access-before-declaration errors visible.
+
+### Local scope during a function call
+
+Each function call gets its own local environment. The local `favouritedFood` below starts as `undefined`, so it shadows the outer variable:
+
+```js
+var favouritedFood = "grapes";
+
+var foodThoughts = function () {
+  var favouritedFood;
+  console.log(favouritedFood); // undefined
+  favouritedFood = "Sushi";
+  console.log(favouritedFood); // "Sushi"
+};
+
+foodThoughts();
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -340,6 +417,7 @@ flowchart TD
 - `setTimeout` can defer work and help avoid building a deeply recursive call stack.
 - Execution contexts describe the current global or function execution environment.
 - Lexical environments come from where code is written and form nested scopes.
+- Hoisting processes declarations before execution, with different behavior for `var`, functions, `let`, and `const`.
 
 ## Important Runtime Note
 

@@ -155,3 +155,72 @@ sayMyName();
 function test() {
   function a() {}
 }
+
+//  Hoisting
+//  Hoisting is behaviour of moving variable and function declaration to the top of the respective environment during compilation phase.
+//  variable are partially hoisted but functions are full hoisted
+
+console.log("1----------");
+
+// var teddy = undefined;
+//  the function move uped
+// function sing() { adding to the memory
+//   console.log("ohhh la la la");
+// }
+
+console.log(teddy);
+console.log(sing());
+console.log(sing2()); // getting error
+//  only console .log sing2 not execute then get undefined
+console.log(sing2); // undefined
+
+var teddy = "bear";
+// function expression
+var sing2 = function () {
+  console.log("uhhhh la la la");
+};
+
+//  function declaration
+function sing() {
+  console.log("ohhh la la la");
+}
+
+//  const keyword and let keyword does not hoisted in javascript only var and function keyword hoisted
+
+// Exercise
+//  during hoisting time
+one = undefined;
+//  second one ignore
+
+var one = 1;
+var one = 2;
+
+console.log(one); // 2
+
+a();
+
+function a() {
+  console.log("hi");
+}
+
+function a() {
+  // re-write in the memory
+  console.log("Bye");
+}
+
+var favouritedFood = undefined; // this hoisted
+var foodThoughts = undefined; // this is hoisted
+
+// favouritedFood = "grapes"
+
+var favouritedFood = "grapes";
+
+var foodThoughts = function () {
+  //  here execution context created and hoisted variable and function
+  var favouritedFood = undefined;
+  console.log("Original favourite food : " + favouritedFood);
+  var favouritedFood = "Sushi";
+  console.log("New favourite food : " + favouritedFood);
+};
+
+foodThoughts();
