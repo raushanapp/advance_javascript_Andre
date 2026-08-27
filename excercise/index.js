@@ -283,3 +283,44 @@ one();
 //  we just created new execution context one () --- true second popup off   and also memory space gone
 //  global EC -- false third pop off  and also memory space gone
 //  each execution have own variable environment
+
+//  Scope Chain and static scope
+
+var x = "x";
+
+function findName() {
+  console.log(x);
+  var b = "b";
+  return printName();
+}
+
+function printName() {
+  var c = "c";
+  console.log(x);
+  return "Rohan shekhar";
+}
+
+function sayMyName() {
+  var a = "a";
+  return findName();
+}
+
+sayMyName();
+
+//  this function rin lexical different way
+
+function sayMyName1() {
+  // know as function lexical environment link each other
+  var a = "a";
+  return function findName() {
+    var a = "a";
+    console.log(c);
+    return function printName() {
+      var c = "c";
+      return "Maa ";
+    };
+  };
+}
+
+sayMyName1();
+//  undefind mean's we have variable but not asign anythigs now

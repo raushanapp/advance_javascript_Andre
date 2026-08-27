@@ -507,6 +507,88 @@ flowchart TD
 
 When a function finishes, its execution context is removed from the call stack. Its local variables are no longer available unless another reference, such as a closure, keeps them reachable.
 
+## 16. Scope Chain and Static Scope
+
+The scope chain is the path JavaScript follows when it looks for a variable. JavaScript first checks the current function, then moves outward through the lexical environments until it finds the name or reaches the global environment.
+
+```js
+var x = "x";
+
+function findName() {
+  console.log(x); // found in the global environment
+  var b = "b";
+  return printName();
+}
+
+function printName() {
+  var c = "c";
+  console.log(x); // also found in the global environment
+  return "Rohan shekhar";
+}
+
+function sayMyName() {
+  var a = "a";
+  return findName();
+}
+
+sayMyName();
+```
+
+`findName` cannot access the local variable `a` from `sayMyName`, because the functions are not nested in the source code. This is called static scope or lexical scope: a function's available outer variables are determined where the function is written, not where it is called.
+
+```mermaid
+flowchart TD
+    A[sayMyName scope: a] --> B[Calls findName]
+    B --> C[findName scope: b]
+    C --> D[Calls printName]
+    D --> E[printName scope: c]
+    C --> F[Global scope: x]
+    E --> F
+```
+
+### Nested functions and closures
+
+When a function is written inside another function, the inner function gets a link to the outer lexical environment. This link allows it to access variables from the place where it was created:
+
+```js
+function sayMyName1() {
+  var name = "Rohan";
+
+  return function findName() {
+    return function printName() {
+      return name;
+    };
+  };
+}
+
+const findName = sayMyName1();
+const printName = findName();
+console.log(printName()); // "Rohan"
+```
+
+The returned functions keep access to `name` even after `sayMyName1` has finished. This behavior is called a closure.
+
+## 17. `undefined`
+
+`undefined` means a variable exists but currently has no assigned value. It commonly appears when a variable is declared without an initializer or when a function does not return a value:
+
+```js
+var value;
+console.log(value); // undefined
+
+function doNothing() {}
+console.log(doNothing()); // undefined
+```
+
+`undefined` is different from an undeclared variable. Reading an undeclared variable throws a `ReferenceError`:
+
+```js
+console.log(existingVariable); // undefined
+var existingVariable;
+
+// console.log(missingVariable); // ReferenceError
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -522,6 +604,10 @@ When a function finishes, its execution context is removed from the call stack. 
 - Function expressions, arrow functions, and function declarations are different ways to create functions.
 - `arguments` contains values passed to a regular function and can be converted into an array.
 - Each function execution context has its own variable environment.
+- The scope chain searches from the current function outward through lexical environments.
+- Static scope is determined by where a function is written, not where it is called.
+- A closure allows a nested function to keep using variables from its outer environment.
+- `undefined` means a declared value has not been assigned; an undeclared name causes an error.
 
 ## Important Runtime Note
 
