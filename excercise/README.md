@@ -407,6 +407,38 @@ var foodThoughts = function () {
 foodThoughts();
 ```
 
+### Duplicate function declarations
+
+Function declarations with the same name are stored in the same environment. When the code is created, the later declaration replaces the earlier one:
+
+```js
+function bigBrother() {
+  function littleBrother() {
+    return "it is me!";
+  }
+
+  function littleBrother() {
+    return "no me!";
+  }
+
+  return littleBrother();
+}
+
+console.log(bigBrother()); // "no me!"
+```
+
+The second `littleBrother` declaration is the one that `bigBrother` calls:
+
+```mermaid
+flowchart TD
+    A[Create bigBrother context] --> B[Create first littleBrother]
+    B --> C[Create second littleBrother]
+    C --> D[Second declaration replaces first]
+    D --> E[Return "no me!"]
+```
+
+Avoid duplicate function names in the same scope because the result can be confusing and easy to overlook.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -418,6 +450,7 @@ foodThoughts();
 - Execution contexts describe the current global or function execution environment.
 - Lexical environments come from where code is written and form nested scopes.
 - Hoisting processes declarations before execution, with different behavior for `var`, functions, `let`, and `const`.
+- When function declarations have the same name, the later declaration replaces the earlier one.
 
 ## Important Runtime Note
 
