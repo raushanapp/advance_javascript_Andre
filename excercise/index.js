@@ -495,3 +495,71 @@ const obj8 = {
     anotherFunc();
   },
 };
+
+//  Call Apply and Bind
+
+const wizard = {
+  name: "Merlin",
+  health: 50,
+  heal(num1, num2) {
+    return (this.health += num1 + num2);
+  },
+};
+
+const archer = {
+  name: "Robin Hood",
+  health: 30,
+};
+
+wizard.heal();
+//  here call
+wizard.heal.call(archer, 50, 30);
+// apply
+wizard.heal.apply(archer, [50, 40]);
+//  call and apply for usefull for browring methods
+
+//  bind ==> return new function with parameter
+// useful for calling later when we  need
+const healArcher = wizard.heal.bind(archer, 100, 40);
+healArcher();
+
+// bind and currying
+
+//  function currying
+
+function multiply(a, b) {
+  return a * b;
+}
+
+let multiplyByTwo = multiply.bind(this, 2);
+console.log(multiplyByTwo(4));
+
+let multiplyByTen = multiply.bind(this, 10);
+console.log(multiplyByTen(4));
+
+// exercise
+
+var e = {
+  name: "Jay",
+  say() {
+    console.log(this);
+  },
+};
+
+var f = {
+  name: "Jay",
+  say() {
+    return {
+      function() {
+        console.log(this);
+      },
+    };
+  },
+};
+
+var g = {
+  name: "Jay",
+  say() {
+    return () => console.log(this);
+  },
+};

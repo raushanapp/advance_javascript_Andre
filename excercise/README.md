@@ -936,6 +936,104 @@ flowchart TD
     I[self variable] --> J[Stores outer this manually]
 ```
 
+## 24. `call`, `apply`, and `bind`
+
+These methods let you choose the `this` value for a regular function:
+
+- **`call`** invokes the function immediately and receives arguments separately.
+- **`apply`** invokes the function immediately and receives arguments as an array.
+- **`bind`** returns a new function that can be called later.
+
+```js
+const wizard = {
+  name: "Merlin",
+  health: 50,
+  heal(amountOne, amountTwo) {
+    return (this.health += amountOne + amountTwo);
+  },
+};
+
+const archer = {
+  name: "Robin Hood",
+  health: 30,
+};
+
+wizard.heal.call(archer, 50, 30);
+console.log(archer.health); // 110
+
+wizard.heal.apply(archer, [50, 40]);
+console.log(archer.health); // 200
+
+const healArcher = wizard.heal.bind(archer, 100, 40);
+healArcher();
+console.log(archer.health); // 340
+```
+
+The method originally belongs to `wizard`, but these methods allow it to work with `archer` too.
+
+```mermaid
+flowchart LR
+    A[Function] --> B[call: invoke now]
+    A --> C[apply: invoke now]
+    A --> D[bind: return new function]
+    D --> E[Invoke later]
+```
+
+## 25. Currying with `bind`
+
+Currying creates a new function by fixing one or more arguments of an existing function. `bind` can do this while also fixing `this`:
+
+```js
+function multiply(firstNumber, secondNumber) {
+  return firstNumber * secondNumber;
+}
+
+const multiplyByTwo = multiply.bind(null, 2);
+const multiplyByTen = multiply.bind(null, 10);
+
+console.log(multiplyByTwo(4)); // 8
+console.log(multiplyByTen(4)); // 40
+```
+
+The first argument to `bind` is the future `this` value. `multiply` does not use `this`, so `null` communicates that no object context is needed. The next argument becomes the first parameter of the new function.
+
+## 26. `this` in Returned Functions
+
+A returned regular function gets `this` from the way it is later called. A returned arrow function captures `this` from the surrounding method:
+
+```js
+const regularObject = {
+  name: "Jay",
+  say() {
+    return function () {
+      console.log(this);
+    };
+  },
+};
+
+const arrowObject = {
+  name: "Jay",
+  say() {
+    return () => console.log(this);
+  },
+};
+
+const regularFunction = regularObject.say();
+const arrowFunction = arrowObject.say();
+
+regularFunction(); // its call site determines this
+arrowFunction(); // keeps arrowObject as this
+```
+
+```mermaid
+flowchart TD
+    A[say method called as object.say] --> B[this is the object]
+    B --> C[Return regular function]
+    B --> D[Return arrow function]
+    C --> E[Later call decides this]
+    D --> F[Arrow keeps outer this]
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -966,6 +1064,10 @@ flowchart TD
 - For regular functions, `this` is determined by how the function is called.
 - Arrow functions capture `this` from their surrounding scope.
 - `bind` creates a new function with a fixed `this` value but does not call it.
+- `call` invokes immediately with separate arguments; `apply` invokes immediately with an argument array.
+- `bind` can fix `this` and preset arguments for a later call.
+- Currying creates specialized functions by fixing some arguments in advance.
+- A returned regular function gets `this` from its later call site, while a returned arrow keeps the outer `this`.
 
 ## Important Runtime Note
 
