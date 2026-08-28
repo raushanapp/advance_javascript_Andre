@@ -1637,6 +1637,100 @@ const sayThree = (first) => (second) => (third) =>
   `${first} > ${second} > ${third}`;
 ```
 
+## 43. Run-Once Initialization with a Closure
+
+Calling a normal initialization function several times repeats its work:
+
+```js
+let view;
+
+function initialize() {
+  view = "View";
+  console.log("view has been set!");
+}
+
+initialize();
+initialize();
+// "view has been set!" is printed twice
+```
+
+A closure can keep a private flag that remembers whether initialization has already happened:
+
+```js
+function createInitializer() {
+  let hasInitialized = false;
+
+  return function initializeOnce() {
+    if (hasInitialized) return;
+
+    hasInitialized = true;
+    console.log("view has been set!");
+  };
+}
+
+const startOnce = createInitializer();
+startOnce(); // sets the view
+startOnce(); // does nothing
+startOnce(); // does nothing
+```
+
+`hasInitialized` is private to the closure. The caller cannot reset it directly, so the returned function controls the one-time behavior.
+
+```mermaid
+flowchart TD
+    A[createInitializer] --> B[hasInitialized = false]
+    B --> C[Return initializeOnce]
+    C --> D{Called before?}
+    D -- No --> E[Initialize and set flag true]
+    D -- Yes --> F[Return without repeating work]
+```
+
+This pattern is useful for one-time setup, lazy initialization, and guarding an operation against duplicate execution.
+
+## 44. Closures in Delayed Loop Callbacks
+
+When callbacks run later, they need to remember which loop value belongs to them. With `let`, each loop iteration receives its own binding:
+
+```js
+const numbers = [1, 2, 3, 4];
+
+for (let index = 0; index < numbers.length; index += 1) {
+  setTimeout(() => {
+    console.log("Value:", numbers[index]);
+  }, 3000);
+}
+```
+
+After three seconds, the callbacks print `1`, `2`, `3`, and `4`. The callbacks close over their individual `index` bindings.
+
+Before block-scoped `let` was available, an IIFE could create a separate parameter for each iteration:
+
+```js
+const numbers = [1, 2, 3, 4];
+
+for (var index = 0; index < numbers.length; index += 1) {
+  (function (closureIndex) {
+    setTimeout(() => {
+      console.log("Value:", numbers[closureIndex]);
+    }, 3000);
+  })(index);
+}
+```
+
+The IIFE receives the current `index` as `closureIndex`. Each invocation gets a separate function scope, so every timer remembers a different value.
+
+```mermaid
+flowchart LR
+    A[Loop index] --> B[let: new binding per iteration]
+    A --> C[var: one shared binding]
+    C --> D[IIFE receives current value]
+    B --> E[Callback remembers index]
+    D --> E
+    E --> F[Timer prints correct array item]
+```
+
+The `let` version is shorter and is preferred in modern JavaScript. The IIFE version is still important because it demonstrates how a closure can capture a value through a function parameter.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.

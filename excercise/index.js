@@ -821,3 +821,57 @@ const makeNuclearButton = () => {
 let ohno = makeNuclearButton();
 console.log(ohno); // nothing happen getting undefined
 ohno.totalPeaceTime();
+
+// Exercise
+
+let view;
+
+function initialize() {
+  view = "View";
+  console.log("view has been set!");
+}
+
+initialize();
+initialize();
+initialize();
+initialize();
+console.log(view); // this called fourt times
+
+//  solve this use closures
+let views;
+function initialize() {
+  let called = 0;
+  return () => {
+    if (called > 0) {
+      return;
+    } else {
+      views = "View";
+      called++;
+      console.log("view has been set!");
+    }
+  };
+}
+
+const startOnce = initialize();
+startOnce();
+startOnce();
+startOnce();
+console.log(views);
+
+//  Exercise
+//  first1
+const arr = [1, 2, 3, 4];
+
+for (let i = 0; i < arr.length; i++) {
+  setTimeout(() => {
+    console.log("I am at index : " + arr[i]);
+  }, 3000);
+}
+
+for (var i = 0; i < arr.length; i++) {
+  (function (closureI) {
+    setTimeout(() => {
+      console.log("I am at index : " + arr[closureI]);
+    }, 3000);
+  })(i);
+}
