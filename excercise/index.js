@@ -629,3 +629,8 @@ false == {}; // true
 0 == []; // true
 0 == {}; // false
 0 == null; // false
+
+//  JTS : Dynamic vs Static type explain better with digram and code example
+//  Weakly vs Strong typed   explain better with digram and code example
+
+// JTS: Static Typing in javascript

@@ -1223,6 +1223,98 @@ flowchart TD
   B -- Object.is --> E[Special NaN and signed-zero rules]
 ```
 
+## 31. Dynamic and Static Typing
+
+Typing describes when and how a language checks the types of values.
+
+- **Dynamic typing:** types are checked while the program runs. A variable can hold values of different types at different times.
+- **Static typing:** types are checked before the program runs, usually during compilation or a type-checking step.
+
+JavaScript is dynamically typed:
+
+```js
+let value = 10;
+value = "ten"; // allowed at runtime
+value = true; // also allowed
+```
+
+The value has a type; the variable name does not have one permanent type. This flexibility is convenient, but type mistakes may appear only when a particular line executes.
+
+```mermaid
+flowchart LR
+    A[Dynamic typing] --> B[Check types at runtime]
+    B --> C[Variable can hold different types]
+    D[Static typing] --> E[Check types before running]
+    E --> F[Errors can be found earlier]
+```
+
+TypeScript adds static analysis to JavaScript development:
+
+```ts
+let age: number = 30;
+// age = "thirty"; // Type error before runtime
+```
+
+TypeScript types are removed when code is compiled to JavaScript. The JavaScript runtime still performs the actual runtime behavior, so external input should still be validated.
+
+## 32. Weak and Strong Typing
+
+Weak and strong typing describe how freely a language converts values between types. These terms are informal and do not have one universally accepted definition.
+
+- A **weakly typed** language commonly allows more implicit conversions.
+- A **strongly typed** language generally requires more explicit conversions and rejects incompatible operations earlier.
+
+JavaScript is often called weakly typed because operators may coerce values:
+
+```js
+console.log("5" + 1); // "51"
+console.log("5" - 1); // 4
+console.log(false == 0); // true
+```
+
+The same string participates in string concatenation with `+` and numeric subtraction with `-`. This is why implicit coercion can make code difficult to predict.
+
+Use explicit conversion and strict equality when clarity matters:
+
+```js
+const input = "5";
+const number = Number(input);
+
+console.log(number + 1); // 6
+console.log(input === 5); // false
+```
+
+```mermaid
+flowchart TD
+    A[Operation] --> B{Do types match?}
+    B -- Yes --> C[Perform operation]
+    B -- No --> D[JavaScript may coerce values]
+    D --> E[Result can be surprising]
+    F[Explicit conversion] --> G[Intent is clear]
+```
+
+Strong versus weak typing is separate from static versus dynamic typing. A language can be dynamically typed and still reject many incompatible operations, or statically typed while allowing some conversions.
+
+## 33. Practical Type Safety in JavaScript
+
+JavaScript does not enforce types automatically at boundaries such as form fields, API responses, or local storage. Validate and normalize untrusted values before using them:
+
+```js
+function parseAge(input) {
+  const age = Number(input);
+
+  if (!Number.isInteger(age) || age < 0) {
+    throw new TypeError("Age must be a non-negative integer");
+  }
+
+  return age;
+}
+
+console.log(parseAge("30")); // 30
+```
+
+Static tools such as TypeScript, JSDoc checking, and ESLint can catch many mistakes before runtime. Runtime validation is still necessary for data coming from outside the program.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1264,6 +1356,10 @@ flowchart TD
 - `===` avoids implicit type coercion; `==` can convert values before comparing them.
 - `Object.is` treats `NaN` as equal to itself and distinguishes `-0` from `+0`.
 - Arrays and objects can convert to primitives during loose equality comparisons.
+- JavaScript is dynamically typed; TypeScript can add static type checking during development.
+- JavaScript is often described as weakly typed because it performs implicit coercion.
+- Static versus dynamic typing is different from strong versus weak typing.
+- Validate external data at runtime even when using static type tools.
 
 ## Important Runtime Note
 
