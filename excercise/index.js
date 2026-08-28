@@ -612,3 +612,20 @@ console.log(obj10);
 console.log(clone);
 console.log(clone2);
 console.log(superClone);
+
+// Type coercoin
+1 == "1"; // true check is 1==1
+-0 === +0; // ==> true but technically
+Object.is(-0, +0);
+NaN === NaN;
+
+//  exercise we need explain why this happen
+false == ""; // true
+false == []; // true
+false == {}; // true
+"" == 0; // // true
+"" == []; // true
+"" == {}; // true
+0 == []; // true
+0 == {}; // false
+0 == null; // false

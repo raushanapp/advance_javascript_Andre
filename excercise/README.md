@@ -1159,6 +1159,70 @@ flowchart LR
     E --> F[Independent nested data]
 ```
 
+The current exercise contains this sequence:
+
+```js
+obj10.c = 5;
+obj10.c.deep = "hahaha hahah";
+```
+
+After the first line, `obj10.c` is a number. The second line therefore throws a `TypeError`; it cannot assign a property named `deep` to the number `5`. To update the nested property instead, use:
+
+```js
+obj10.c.deep = "hahaha hahah";
+```
+
+To replace the nested object with a number, remove the second assignment:
+
+```js
+obj10.c = 5;
+```
+
+## 30. Type Coercion and Equality
+
+Type coercion is JavaScript converting one value into another type during an operation. The loose equality operator `==` allows coercion, while strict equality `===` compares values without converting their types.
+
+```js
+1 == "1"; // true: the string is converted for comparison
+1 === "1"; // false: number and string are different types
+```
+
+Prefer `===` in normal application code because its behavior is easier to predict. Use `Object.is` when you need its special handling of `NaN` and signed zero:
+
+```js
+-0 === +0; // true
+Object.is(-0, +0); // false
+
+NaN === NaN; // false
+Object.is(NaN, NaN); // true
+```
+
+### Common loose-equality conversions
+
+Some comparisons from the exercise are useful for seeing how coercion works:
+
+| Expression    | Result  | Reason                                                           |
+| ------------- | ------- | ---------------------------------------------------------------- |
+| `false == ""` | `true`  | Both are converted to a falsy numeric value.                     |
+| `false == []` | `true`  | The array becomes an empty string, then a falsy numeric value.   |
+| `false == {}` | `false` | A plain object becomes `"[object Object]"`, not an empty string. |
+| `"" == 0`     | `true`  | The empty string becomes `0`.                                    |
+| `"" == []`    | `true`  | The empty array becomes an empty string.                         |
+| `"" == {}`    | `false` | A plain object does not become an empty string.                  |
+| `0 == []`     | `true`  | The empty array becomes `0`.                                     |
+| `0 == {}`     | `false` | A plain object does not become `0`.                              |
+| `0 == null`   | `false` | `null` loosely equals only `null` or `undefined`.                |
+
+Objects and arrays can be converted to primitive values through their `valueOf` and `toString` behavior. This is why loose equality involving objects can be surprising. When checking for `null` or `undefined` intentionally, `value == null` is one of the few common uses of `==`; otherwise prefer strict equality.
+
+```mermaid
+flowchart TD
+  A[Equality comparison] --> B{Which operator?}
+  B -- === --> C[No type coercion]
+  B -- == --> D[Possible type coercion]
+  B -- Object.is --> E[Special NaN and signed-zero rules]
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1197,6 +1261,9 @@ flowchart LR
 - JavaScript passes values by value, including copied references to objects.
 - `Object.assign` and spread create shallow copies, so nested objects remain shared.
 - `structuredClone` can create deep copies for supported data; JSON cloning has important limitations.
+- `===` avoids implicit type coercion; `==` can convert values before comparing them.
+- `Object.is` treats `NaN` as equal to itself and distinguishes `-0` from `+0`.
+- Arrays and objects can convert to primitives during loose equality comparisons.
 
 ## Important Runtime Note
 
