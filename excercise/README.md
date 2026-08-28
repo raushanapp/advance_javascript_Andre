@@ -1731,6 +1731,69 @@ flowchart LR
 
 The `let` version is shorter and is preferred in modern JavaScript. The IIFE version is still important because it demonstrates how a closure can capture a value through a function parameter.
 
+## 45. Prototypal Inheritance
+
+JavaScript objects can inherit properties and methods from another object through a prototype chain. When a property is not found on the object itself, JavaScript searches its prototype, then continues upward through the chain.
+
+```js
+const dragon = {
+  name: "Tanya",
+  fire: true,
+  fight() {
+    return 5;
+  },
+  sing() {
+    return `I am ${this.name}, the breather of fire`;
+  },
+};
+
+const lizard = {
+  name: "Kiki",
+  fight() {
+    return 1;
+  },
+};
+
+Object.setPrototypeOf(lizard, dragon);
+
+console.log(lizard.sing()); // "I am Kiki, the breather of fire"
+console.log(lizard.fire); // true, inherited from dragon
+console.log(lizard.fight()); // 1, lizard's own method wins
+```
+
+The `this` value is still the object used for the call. Therefore, inherited `sing()` uses `lizard.name`, not `dragon.name`. The local `fight()` method shadows the inherited `dragon.fight()` method.
+
+```mermaid
+flowchart TD
+    A[lizard own properties] --> B[name = Kiki]
+    A --> C[fight returns 1]
+    A --> D[Prototype: dragon]
+    D --> E[fire = true]
+    D --> F[sing method]
+    D --> G[fight returns 5]
+    C --> H[Own property wins lookup]
+```
+
+### Prototype lookup
+
+```js
+console.log(lizard.hasOwnProperty("name")); // true
+console.log(lizard.hasOwnProperty("fire")); // false
+console.log(dragon.isPrototypeOf(lizard)); // true
+```
+
+`hasOwnProperty` checks only the object's own properties; it does not count inherited properties. In the loop from `index.js`, this means only `name` and `fight` are printed for `lizard`, not inherited `fire` or `sing`.
+
+`__proto__` can demonstrate inheritance, but it is legacy accessor syntax and should not be used for routine mutation. Prefer `Object.create(prototype)` when creating an object with a prototype, or `Object.setPrototypeOf` only when a change is genuinely necessary:
+
+```js
+const lizardWithPrototype = Object.create(dragon);
+lizardWithPrototype.name = "Kiki";
+lizardWithPrototype.fight = () => 1;
+```
+
+For many objects, use a constructor or class so the prototype is established during creation rather than changed afterward.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1781,6 +1844,9 @@ The `let` version is shorter and is preferred in modern JavaScript. The IIFE ver
 - Currying fixes arguments gradually and returns specialized functions.
 - Default parameters apply for omitted arguments or `undefined`, but not `null`.
 - Reading an undeclared name throws a `ReferenceError`.
+- Prototypes provide inherited properties; an object's own property takes precedence during lookup.
+- `hasOwnProperty` distinguishes own properties from inherited properties.
+- Prefer `Object.create`, constructors, or classes over changing `__proto__` directly.
 - Nested closures can access variables from multiple outer environments.
 - Timer callbacks can keep outer variables alive after the creating function returns.
 - Closures can reuse expensive data, but they also retain captured memory.
