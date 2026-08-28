@@ -573,3 +573,42 @@ var g = {
 //  Symbol("just me")
 // {}
 //  lucky javascript have  operators typeof
+
+//  Primitive type
+// 1 number
+// 2 boolean
+// 3 string
+// 4 undefined
+// 5 null
+//  6 Symbol("just me")
+
+//  Non Primitive
+//  1 {}
+// 2 []
+//  function() {}
+
+//  Pass by value and Pass By Reference
+
+var a = 5;
+var b = a;
+b++;
+// array
+var c = [1, 2, 3, 4, 5];
+var d = [].concat(c);
+
+d.push(198348);
+console.log(c);
+
+//  Object
+
+let obj10 = { a: "a", b: "b", c: { deep: "try at copay me" } };
+let clone = Object.assign({}, obj10);
+let clone2 = { ...obj10 }; // this called shallow clone
+let superClone = JSON.parse(JSON.stringify(obj10));
+
+obj10.c = 5;
+obj10.c.deep = "hahaha hahah";
+console.log(obj10);
+console.log(clone);
+console.log(clone2);
+console.log(superClone);

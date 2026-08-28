@@ -1034,6 +1034,131 @@ flowchart TD
     D --> F[Arrow keeps outer this]
 ```
 
+## 27. JavaScript Types
+
+JavaScript values can be grouped into primitive and non-primitive values.
+
+### Primitive values
+
+Primitive values are immutable and are copied independently when assigned:
+
+- `number`
+- `string`
+- `boolean`
+- `undefined`
+- `null`
+- `symbol`
+- `bigint`
+
+### Non-primitive values
+
+Objects, arrays, and functions are objects. Variables holding them contain a reference to an object, but that reference is still passed by value.
+
+```mermaid
+flowchart TD
+    A[JavaScript values] --> B[Primitive values]
+    A --> C[Objects]
+    B --> D[number, string, boolean]
+    B --> E[undefined, null, symbol, bigint]
+    C --> F[object, array, function]
+```
+
+`typeof` can help inspect a value, but it has historical quirks: `typeof null` is `"object"`, and arrays also report `"object"`. Use `Array.isArray(value)` when you need to identify an array.
+
+## 28. Pass-by-Value and Object References
+
+JavaScript is pass-by-value. With a primitive, assignment creates an independent value:
+
+```js
+let firstNumber = 5;
+let secondNumber = firstNumber;
+
+secondNumber++;
+
+console.log(firstNumber); // 5
+console.log(secondNumber); // 6
+```
+
+With an object, the copied value is a reference to the same object. Mutating through either variable changes that shared object:
+
+```js
+const firstObject = { name: "Raushan" };
+const secondObject = firstObject;
+
+secondObject.name = "Updated";
+
+console.log(firstObject.name); // "Updated"
+console.log(secondObject.name); // "Updated"
+```
+
+Reassigning one variable does not reassign the other variable:
+
+```js
+let original = { count: 1 };
+let copy = original;
+
+copy = { count: 2 };
+
+console.log(original.count); // 1
+console.log(copy.count); // 2
+```
+
+The variables originally pointed to the same object, but `copy` now points to a different object.
+
+## 29. Shallow and Deep Cloning
+
+A shallow clone creates a new outer object while keeping the same references for nested objects:
+
+```js
+const source = {
+  a: "a",
+  b: "b",
+  nested: { value: 1 },
+};
+
+const assignClone = Object.assign({}, source);
+const spreadClone = { ...source };
+
+source.nested.value = 2;
+
+console.log(assignClone.nested.value); // 2
+console.log(spreadClone.nested.value); // 2
+```
+
+Both `Object.assign` and object spread copy only the first level. Their `nested` property still points to the same nested object as `source`.
+
+The exercise creates a separate nested structure with JSON serialization:
+
+```js
+const source = {
+  a: "a",
+  b: "b",
+  nested: { value: 1 },
+};
+
+const deepClone = JSON.parse(JSON.stringify(source));
+
+source.nested.value = 2;
+console.log(deepClone.nested.value); // 1
+```
+
+For supported data, `structuredClone(source)` is usually a safer modern deep-copy option:
+
+```js
+const deepClone = structuredClone(source);
+```
+
+JSON cloning is limited. It cannot correctly preserve values such as `undefined`, functions, symbols, `Date`, `Map`, `Set`, circular references, or object identity. Choose the cloning method based on the data being copied rather than deep-cloning everything automatically.
+
+```mermaid
+flowchart LR
+    A[Source object] --> B[Object.assign or spread]
+    B --> C[New outer object]
+    B --> D[Same nested references]
+    A --> E[structuredClone or JSON serialization]
+    E --> F[Independent nested data]
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1068,6 +1193,10 @@ flowchart TD
 - `bind` can fix `this` and preset arguments for a later call.
 - Currying creates specialized functions by fixing some arguments in advance.
 - A returned regular function gets `this` from its later call site, while a returned arrow keeps the outer `this`.
+- JavaScript has seven primitive types; objects, arrays, and functions are non-primitive objects.
+- JavaScript passes values by value, including copied references to objects.
+- `Object.assign` and spread create shallow copies, so nested objects remain shared.
+- `structuredClone` can create deep copies for supported data; JSON cloning has important limitations.
 
 ## Important Runtime Note
 
