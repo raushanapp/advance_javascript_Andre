@@ -634,3 +634,90 @@ false == {}; // true
 //  Weakly vs Strong typed   explain better with digram and code example
 
 // JTS: Static Typing in javascript
+
+//  Function are Objects in javascript
+
+const ob = {
+  two() {
+    return 2;
+  },
+};
+
+ob.two();
+
+//  another  creating a function
+
+const four = new Function("num", "return num");
+
+four(4);
+
+// Function are first class citizens in JS
+// 1
+
+var stuff = function () {};
+
+// 2
+function g(fn) {
+  fn();
+}
+
+g(function () {
+  console.log("hi there");
+});
+
+//  3
+
+function h() {
+  return function f() {
+    console.log("Bye");
+  };
+}
+
+var i = h();
+i();
+
+// Extra bit care ful when using inside loop function
+
+//  bad way
+
+for (let i = 0; i < 5; i++) {
+  function a() {}
+  a();
+}
+
+//  write way
+
+function t() {}
+for (let i = 0; i < 5; i++) {
+  t();
+}
+
+//  Reference error
+function z() {
+  return param;
+}
+
+z();
+
+function v(param = 6) {
+  return param;
+}
+
+v();
+v(6);
+
+//  Higher order function explain with code
+
+const multiplyBy = (num1) => {
+  return (num2) => {
+    return num1 * num2;
+  };
+};
+
+//  one liner
+const multiplyBy2 = (num1) => (num2) => num1 * num2;
+
+const multiplyByTwo1 = multiplyBy(2);
+const multiplayBySix = multiplyBy(6);
+multiplyByTwo1(4);
+multiplayBySix(6);

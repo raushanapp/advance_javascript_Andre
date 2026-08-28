@@ -1315,6 +1315,124 @@ console.log(parseAge("30")); // 30
 
 Static tools such as TypeScript, JSDoc checking, and ESLint can catch many mistakes before runtime. Runtime validation is still necessary for data coming from outside the program.
 
+## 34. Functions Are Objects
+
+Functions are callable objects in JavaScript. They can be stored in variables, passed to other functions, returned from functions, and created with the `Function` constructor.
+
+```js
+const objectWithMethod = {
+  two() {
+    return 2;
+  },
+};
+
+console.log(objectWithMethod.two()); // 2
+
+const four = new Function("number", "return number");
+console.log(four(4)); // 4
+```
+
+The `Function` constructor is rarely recommended because it creates code from strings and makes static analysis harder. Prefer function declarations, expressions, or arrow functions.
+
+## 35. First-Class Functions
+
+JavaScript treats functions as first-class values. A function can be:
+
+1. Assigned to a variable.
+2. Passed as an argument.
+3. Returned from another function.
+
+```js
+// 1. Store a function in a variable.
+const doSomething = function () {};
+
+// 2. Pass a function to another function.
+function runFunction(callback) {
+  callback();
+}
+
+runFunction(() => console.log("Hello"));
+
+// 3. Return a function from another function.
+function createFunction() {
+  return function () {
+    console.log("Goodbye");
+  };
+}
+
+const returnedFunction = createFunction();
+returnedFunction();
+```
+
+This ability is the foundation for callbacks, event handlers, closures, function composition, and higher-order functions.
+
+## 36. Higher-Order Functions and Currying
+
+A higher-order function accepts a function, returns a function, or does both. Currying is a pattern that fixes arguments one at a time and returns a more specialized function:
+
+```js
+const multiplyBy = (firstNumber) => {
+  return (secondNumber) => firstNumber * secondNumber;
+};
+
+const multiplyByTwo = multiplyBy(2);
+const multiplyBySix = multiplyBy(6);
+
+console.log(multiplyByTwo(4)); // 8
+console.log(multiplyBySix(6)); // 36
+```
+
+The shorter equivalent is:
+
+```js
+const multiplyBy = (firstNumber) => (secondNumber) =>
+  firstNumber * secondNumber;
+```
+
+The first call stores `firstNumber` in a closure. The returned function later receives `secondNumber`:
+
+```mermaid
+flowchart LR
+    A[multiplyBy 2] --> B[Remember firstNumber = 2]
+    B --> C[Return function]
+    C --> D[Call with 4]
+    D --> E[Return 8]
+```
+
+Currying is useful for reusable configuration, validation, logging, and composing small functions.
+
+## 37. Default Parameters and Reference Errors
+
+A default parameter supplies a value when the caller passes `undefined` or omits the argument:
+
+```js
+function showValue(value = 6) {
+  return value;
+}
+
+console.log(showValue()); // 6
+console.log(showValue(6)); // 6
+console.log(showValue(undefined)); // 6
+```
+
+Passing `null` does not use the default because `null` is an intentional value:
+
+```js
+console.log(showValue(null)); // null
+```
+
+Reading a name that was never declared causes a `ReferenceError`:
+
+```js
+function brokenFunction() {
+  return missingParameter;
+}
+
+// brokenFunction(); // ReferenceError
+```
+
+The `z()` example in `index.js` intentionally demonstrates this error. Because it is called directly, execution stops at that point in a normal script, so later examples should be run separately or the failing call should remain commented out.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1360,6 +1478,11 @@ Static tools such as TypeScript, JSDoc checking, and ESLint can catch many mista
 - JavaScript is often described as weakly typed because it performs implicit coercion.
 - Static versus dynamic typing is different from strong versus weak typing.
 - Validate external data at runtime even when using static type tools.
+- Functions are callable objects and can be stored, passed, or returned.
+- First-class functions enable callbacks, closures, and higher-order functions.
+- Currying fixes arguments gradually and returns specialized functions.
+- Default parameters apply for omitted arguments or `undefined`, but not `null`.
+- Reading an undeclared name throws a `ReferenceError`.
 
 ## Important Runtime Note
 
