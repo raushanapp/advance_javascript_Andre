@@ -721,3 +721,34 @@ const multiplyByTwo1 = multiplyBy(2);
 const multiplayBySix = multiplyBy(6);
 multiplyByTwo1(4);
 multiplayBySix(6);
+
+// Closures
+
+function j() {
+  let g = "grandpa";
+  return function k() {
+    let f = "father";
+    return function l() {
+      let s = "son";
+      return `${g} > ${f} > ${s}`;
+    };
+  };
+}
+
+j()()();
+
+function boo(s) {
+  return (n) => {
+    return (n2) => {
+      console.log(`${s} > ${n} > ${n2}`);
+    };
+  };
+}
+boo("hi")("Tim")("becca");
+// one liner
+
+const booo = (s) => (n) => (n1) => console.log(`${s} > ${n} > ${n2}`);
+
+//  5 years
+
+boo("one")("two")("three");

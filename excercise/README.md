@@ -568,6 +568,77 @@ console.log(printName()); // "Rohan"
 
 The returned functions keep access to `name` even after `sayMyName1` has finished. This behavior is called a closure.
 
+### How a closure remembers data
+
+A closure is created when an inner function uses a variable from an outer function. The inner function keeps a reference to that lexical environment, so the variable remains available after the outer function returns:
+
+```js
+function createCounter() {
+  let count = 0;
+
+  return function increment() {
+    count += 1;
+    return count;
+  };
+}
+
+const firstCounter = createCounter();
+console.log(firstCounter()); // 1
+console.log(firstCounter()); // 2
+```
+
+`count` is private. Code outside `createCounter` cannot change it directly; it can only use the returned function. Each call to `createCounter` creates a separate environment:
+
+```js
+const secondCounter = createCounter();
+
+console.log(secondCounter()); // 1
+console.log(firstCounter()); // 3
+```
+
+The two counters do not share `count` because each closure points to a different invocation environment.
+
+```mermaid
+flowchart TD
+    A[createCounter call 1] --> B[count = 0]
+    B --> C[firstCounter closure]
+    C --> D[firstCounter call changes count to 1]
+    E[createCounter call 2] --> F[count = 0]
+    F --> G[secondCounter closure]
+```
+
+### Closures in loops
+
+Use `let` when creating callbacks in a loop if each callback should remember its own iteration value. `let` creates a new binding for each iteration:
+
+```js
+const callbacks = [];
+
+for (let index = 0; index < 3; index += 1) {
+  callbacks.push(() => index);
+}
+
+console.log(callbacks[0]()); // 0
+console.log(callbacks[1]()); // 1
+console.log(callbacks[2]()); // 2
+```
+
+With `var`, all callbacks would share one function-scoped variable, whose final value after the loop is `3`:
+
+```js
+const callbacks = [];
+
+for (var index = 0; index < 3; index += 1) {
+  callbacks.push(() => index);
+}
+
+console.log(callbacks[0]()); // 3
+console.log(callbacks[1]()); // 3
+console.log(callbacks[2]()); // 3
+```
+
+Closures are useful for private state, factories, event handlers, timers, and currying. They can also retain large objects, so remove long-lived listeners and callbacks when they are no longer needed.
+
 ## 17. `undefined`
 
 `undefined` means a variable exists but currently has no assigned value. It commonly appears when a variable is declared without an initializer or when a function does not return a value:
