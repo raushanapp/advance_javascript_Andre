@@ -1794,6 +1794,67 @@ lizardWithPrototype.fight = () => 1;
 
 For many objects, use a constructor or class so the prototype is established during creation rather than changed afterward.
 
+## 46. Constructor Functions and the `.prototype` Property
+
+Only functions have a `.prototype` property. This special property is used when a function is called with the `new` keyword to set up the prototype chain for the new instance.
+
+```js
+function Animal(name) {
+  this.name = name;
+}
+
+Animal.prototype.speak = function () {
+  return `${this.name} makes a sound`;
+};
+
+const dog = new Animal("Dog");
+console.log(dog.name); // "Dog"
+console.log(dog.speak()); // "Dog makes a sound"
+console.log(Animal.isPrototypeOf(dog)); // false
+console.log(Animal.prototype.isPrototypeOf(dog)); // true
+```
+
+When `new Animal()` runs, JavaScript:
+
+1. Creates a new empty object.
+2. Sets the object's `[[Prototype]]` (accessible as `__proto__`) to `Animal.prototype`.
+3. Calls `Animal` with `this` bound to the new object.
+4. Returns the new object.
+
+```mermaid
+flowchart TD
+    A[new Animal name] --> B[Create empty object]
+    B --> C[Set proto to Animal.prototype]
+    C --> D[Call Animal with this bound]
+    D --> E[Return new object]
+    E --> F[Instance has inherited methods]
+```
+
+The difference between instances and prototypes:
+
+- `dog.__proto__ === Animal.prototype` (true)
+- `dog === Animal.prototype` (false)
+- `Animal.isPrototypeOf(dog)` (false)
+- `Animal.prototype.isPrototypeOf(dog)` (true)
+
+Constructor functions are an older pattern. Modern JavaScript prefers classes, which provide clearer syntax for the same mechanism:
+
+```js
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+
+  speak() {
+    return `${this.name} makes a sound`;
+  }
+}
+
+const dog = new Animal("Dog");
+```
+
+Classes are syntactic sugar over constructor functions and the prototype chain. Under the hood, they work the same way.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1852,6 +1913,10 @@ For many objects, use a constructor or class so the prototype is established dur
 - Closures can reuse expensive data, but they also retain captured memory.
 - Closures can encapsulate private state and expose controlled operations.
 - Curried functions remember earlier arguments through closures.
+- Only functions have a `.prototype` property.
+- The `new` keyword creates an instance and sets its `[[Prototype]]` to the constructor's `.prototype`.
+- Constructor functions establish the prototype chain when a new instance is created.
+- Classes provide cleaner syntax but work the same way as constructor functions under the hood.
 
 ## Important Runtime Note
 

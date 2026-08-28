@@ -916,3 +916,16 @@ for (let prop in lizard) {
     console.log(prop);
   }
 }
+
+//  inheritance
+
+let humans = {
+  mortal: true,
+};
+
+let socrates = Object.create(humans);
+socrates.age = 45;
+console.log(humans.isPrototypeOf(socrates));
+
+//  Only functions have the prototype property
+//  what does means
