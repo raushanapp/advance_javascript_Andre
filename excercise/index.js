@@ -752,3 +752,72 @@ const booo = (s) => (n) => (n1) => console.log(`${s} > ${n} > ${n2}`);
 //  5 years
 
 boo("one")("two")("three");
+
+// Exercise
+
+function callMeMaybe() {
+  const cm = "Hi! I am now here";
+  setTimeout(() => {
+    console.log(cm);
+  }, 4000);
+}
+callMeMaybe();
+
+function callMeMaybe1() {
+  setTimeout(() => {
+    console.log(cm);
+  }, 4000);
+  const cm = "Hi! I am now here";
+}
+
+callMeMaybe1();
+
+// Closures and Memory
+
+// Memory efficient
+function heavyDuty(idex) {
+  const bA = new Array(7000).fill("2");
+  console.log("created!");
+  return bA[idex];
+}
+
+heavyDuty(688);
+//  call function many time many times
+heavyDuty(688);
+heavyDuty(688);
+heavyDuty(688);
+
+const getHeavyDuty = heavyDuty2();
+getHeavyDuty(688);
+getHeavyDuty(700);
+getHeavyDuty(800);
+
+function heavyDuty2() {
+  const bA = new Array(7000).fill("2");
+  console.log("created! Again!");
+  return function (i) {
+    return bA[i];
+  };
+}
+
+//  Encapsulation
+
+const makeNuclearButton = () => {
+  let timerWithoutDestruction = 0;
+  const passTime = () => timerWithoutDestruction++;
+  const totalPeaceTime = () => timerWithoutDestruction;
+  const l = () => {
+    timerWithoutDestruction = -1;
+    return "BOOM";
+  };
+  setInterval(passTime, 1000);
+
+  return {
+    // launch: l,  i do not want to launch function
+    totalPeaceTime: totalPeaceTime,
+  };
+};
+
+let ohno = makeNuclearButton();
+console.log(ohno); // nothing happen getting undefined
+ohno.totalPeaceTime();

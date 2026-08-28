@@ -1504,6 +1504,139 @@ function brokenFunction() {
 
 The `z()` example in `index.js` intentionally demonstrates this error. Because it is called directly, execution stops at that point in a normal script, so later examples should be run separately or the failing call should remain commented out.
 
+## 38. Nested Closures
+
+Closures can be nested several levels deep. Each inner function can access variables from all of its outer lexical environments:
+
+```js
+function family() {
+  const grandparent = "grandpa";
+
+  return function () {
+    const parent = "father";
+
+    return function () {
+      const child = "son";
+      return `${grandparent} > ${parent} > ${child}`;
+    };
+  };
+}
+
+console.log(family()()()); // "grandpa > father > son"
+```
+
+The innermost function can read `grandparent` and `parent` even though they were declared in functions that have already returned. This is the same closure mechanism used by the `j` example in `index.js`.
+
+## 39. Closures and Timers
+
+A callback passed to `setTimeout` can keep access to variables from the function that created it:
+
+```js
+function callMeLater() {
+  const message = "Hi! I am now here";
+
+  setTimeout(() => {
+    console.log(message);
+  }, 4000);
+}
+
+callMeLater();
+```
+
+The callback closes over `message`. In the `callMeMaybe1` example, `cm` is declared after `setTimeout`, but this is still safe because the callback does not run until the current function has finished and `cm` has been initialized. The callback captures the binding, not an early snapshot of its value.
+
+```mermaid
+sequenceDiagram
+    participant Function as callMeLater()
+    participant Timer as setTimeout
+    participant Callback as Callback closure
+    Function->>Timer: Register callback
+    Function->>Function: Finish and return
+    Timer-->>Callback: Run after delay
+    Callback->>Callback: Read message from outer scope
+```
+
+## 40. Memory-Efficient Closures
+
+Creating a large array every time a function runs repeats allocation work:
+
+```js
+function heavyDuty(index) {
+  const values = new Array(7000).fill("2");
+  return values[index];
+}
+```
+
+A closure can create the array once and reuse it for later calls:
+
+```js
+function createHeavyDutyReader() {
+  const values = new Array(7000).fill("2");
+
+  return function readValue(index) {
+    return values[index];
+  };
+}
+
+const readHeavyValue = createHeavyDutyReader();
+readHeavyValue(688);
+readHeavyValue(700);
+readHeavyValue(800);
+```
+
+This can reduce repeated allocation, but the closure keeps `values` alive as long as `readHeavyValue` remains reachable. Do not retain large closures longer than their useful lifetime.
+
+## 41. Encapsulation with Closures
+
+Closures can hide state and expose only the operations that other code should use:
+
+```js
+function createTimer() {
+  let elapsedSeconds = 0;
+
+  const intervalId = setInterval(() => {
+    elapsedSeconds += 1;
+  }, 1000);
+
+  return {
+    getElapsedSeconds() {
+      return elapsedSeconds;
+    },
+    stop() {
+      clearInterval(intervalId);
+    },
+  };
+}
+
+const timer = createTimer();
+timer.getElapsedSeconds();
+timer.stop();
+```
+
+The caller cannot directly change `elapsedSeconds`; it can use the returned methods. The current `makeNuclearButton` example follows this pattern, but its interval is never cleared and its launch function is intentionally not exposed. A production version should provide cleanup, such as a `stop` method, to avoid keeping the closure and interval alive indefinitely.
+
+## 42. Curried Closures
+
+The `boo` example combines currying and closures by remembering one argument at each level:
+
+```js
+function sayThree(first) {
+  return (second) => {
+    return (third) => `${first} > ${second} > ${third}`;
+  };
+}
+
+console.log(sayThree("hi")("Tim")("becca"));
+// "hi > Tim > becca"
+```
+
+The one-line version in `index.js` names its last parameter `n1` but refers to `n2`. It should use the same name consistently:
+
+```js
+const sayThree = (first) => (second) => (third) =>
+  `${first} > ${second} > ${third}`;
+```
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1554,6 +1687,11 @@ The `z()` example in `index.js` intentionally demonstrates this error. Because i
 - Currying fixes arguments gradually and returns specialized functions.
 - Default parameters apply for omitted arguments or `undefined`, but not `null`.
 - Reading an undeclared name throws a `ReferenceError`.
+- Nested closures can access variables from multiple outer environments.
+- Timer callbacks can keep outer variables alive after the creating function returns.
+- Closures can reuse expensive data, but they also retain captured memory.
+- Closures can encapsulate private state and expose controlled operations.
+- Curried functions remember earlier arguments through closures.
 
 ## Important Runtime Note
 
