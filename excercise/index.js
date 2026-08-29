@@ -969,3 +969,28 @@ Function.prototype.bind = function (callmeLater) {
     return self.apply(callmeLater, arguments);
   };
 };
+
+//  OOP Object orirented Programming in javascripts
+
+//  Factory function
+
+const elf = {
+  name: "Orwell",
+  weapon: "bow",
+  attack() {
+    return "Attack with " + elf.weapon;
+  },
+};
+
+elf.attack();
+
+const elf2 = {
+  name: "Sally",
+  weapon: "bow",
+  attack() {
+    return "Attack with " + elf.weapon;
+  },
+};
+
+elf.attack();
+elf2.attack();
