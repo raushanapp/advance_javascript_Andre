@@ -467,7 +467,7 @@ const obj6 = {
   sing() {
     console.log("a", this);
     var anotherFunc = () => {
-      console.log("b", self);
+      console.log("b", self.name);
     };
     anotherFunc();
   },
@@ -929,3 +929,43 @@ console.log(humans.isPrototypeOf(socrates));
 
 //  Only functions have the prototype property
 //  what does means
+
+// Exercise - extend the functionality of built in object
+
+// #1
+//  Data object => to have new method .lastyear()
+//  which shows you last 'YYYY' format.
+
+Date.prototype.lastYear = function () {
+  return this.getFullYear() - 1;
+};
+
+new Date("1900-10-10").lastYear();
+
+// Result 1899
+
+// #Bouns
+// Mofify .map() to print "HAHAHA" at the end of each item
+
+Array.prototype.map = function () {
+  let arr = [];
+  for (let i = 0; i < this.length; i++) {
+    arr.push(this[i] + "HAHA");
+  }
+  return arr;
+};
+
+console.log([1, 2, 3].map());
+
+// How would you be able to create your own .bind() method using call or apply.
+// Hint:
+// Function.prototype.bind = function(){
+// }
+// See the attached solution when you are ready!
+
+Function.prototype.bind = function (callmeLater) {
+  const self = this;
+  return function () {
+    return self.apply(callmeLater, arguments);
+  };
+};

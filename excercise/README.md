@@ -1855,6 +1855,129 @@ const dog = new Animal("Dog");
 
 Classes are syntactic sugar over constructor functions and the prototype chain. Under the hood, they work the same way.
 
+## 47. Extending Built-in Prototypes
+
+Every built-in object like `Date`, `Array`, and `String` has a `.prototype` property that can be extended with new methods. Adding a method to a built-in prototype makes it available to all instances of that type.
+
+```js
+Date.prototype.lastYear = function () {
+  return this.getFullYear() - 1;
+};
+
+new Date("1900-10-10").lastYear(); // 1899
+```
+
+The new method `lastYear()` is now available on every `Date` instance. The method runs with `this` bound to the specific date instance being called.
+
+```mermaid
+flowchart TD
+    A[Date.prototype] --> B[Built-in methods]
+    A --> C[lastYear added]
+    D[new Date instance] --> E[Inherits from Date.prototype]
+    E --> B
+    E --> C
+    C --> F[this = specific Date]
+```
+
+Be cautious when extending built-in prototypes:
+
+- **Name collisions**: A future JavaScript version might add a method with the same name, overwriting your extension.
+- **Unexpected behavior**: Code expecting the original behavior may break.
+- **Testing complexity**: Extensions affect all instances globally.
+
+Extending prototypes is generally avoided in production code. Instead, wrap the built-in in a helper function or class:
+
+```js
+class EnhancedDate extends Date {
+  lastYear() {
+    return this.getFullYear() - 1;
+  }
+}
+
+new EnhancedDate("1900-10-10").lastYear(); // 1899
+```
+
+This keeps your logic isolated and avoids polluting the global prototype.
+
+## 48. Overriding Built-in Methods
+
+You can also override existing methods on built-in prototypes, though this is even riskier than adding new methods.
+
+```js
+Array.prototype.map = function () {
+  let arr = [];
+  for (let i = 0; i < this.length; i++) {
+    arr.push(this[i] + "HAHA");
+  }
+  return arr;
+};
+
+console.log([1, 2, 3].map()); // ["1HAHA", "2HAHA", "3HAHA"]
+```
+
+This completely replaces the native `Array.prototype.map`. Now every array uses the custom version, losing the original behavior of applying a callback to each element.
+
+```mermaid
+flowchart TD
+    A[Array instance] --> B[Call .map]
+    B --> C{Lookup chain}
+    C --> D[Own properties - no map]
+    D --> E[Prototype - custom map found]
+    E --> F[Execute custom implementation]
+```
+
+Overriding built-in methods is **strongly discouraged** because:
+
+- Other code depends on the original behavior.
+- Bugs in your implementation affect all arrays in the program.
+- Future maintenance is difficult and risky.
+
+If you need custom array behavior, use a wrapper function or a subclass instead.
+
+## 49. Implementing Custom Methods on Function.prototype
+
+You can add custom methods to the `Function` prototype to extend all functions. A classic example is re-implementing `.bind()` using `.call()` or `.apply()`.
+
+```js
+Function.prototype.bind = function (callmeLater) {
+  const self = this;
+  return function () {
+    return self.apply(callmeLater, arguments);
+  };
+};
+
+function greet(greeting) {
+  return `${greeting}, ${this.name}`;
+}
+
+const person = { name: "Alice" };
+const boundGreet = greet.bind(person);
+boundGreet("Hello"); // "Hello, Alice"
+```
+
+How it works:
+
+1. `this` inside the custom `bind` method refers to the original function being called (`greet`).
+2. `self = this` captures the original function in a closure.
+3. A new function is returned that closes over `self` and the `callmeLater` context.
+4. When the returned function is invoked, it calls the original function with `.apply(callmeLater, arguments)`.
+
+```mermaid
+sequenceDiagram
+    participant code as Code
+    participant bind as Custom bind
+    participant returned as Returned function
+    participant orig as Original greet
+    code->>bind: greet.bind(person)
+    bind->>bind: Capture self = greet
+    bind->>returned: Return new function
+    code->>returned: boundGreet("Hello")
+    returned->>orig: self.apply(person, ["Hello"])
+    orig->>code: "Hello, Alice"
+```
+
+The native `.bind()` is a built-in method and works the same way but optimized by the JavaScript engine. Understanding how to implement it helps clarify how `this` and closures interact with function binding.
+
 ## Quick Review
 
 - Repeated code can be optimized by the JavaScript engine.
@@ -1917,6 +2040,12 @@ Classes are syntactic sugar over constructor functions and the prototype chain. 
 - The `new` keyword creates an instance and sets its `[[Prototype]]` to the constructor's `.prototype`.
 - Constructor functions establish the prototype chain when a new instance is created.
 - Classes provide cleaner syntax but work the same way as constructor functions under the hood.
+- Built-in prototypes like `Date.prototype`, `Array.prototype`, and `Function.prototype` can be extended.
+- Extending built-in prototypes affects all instances globally and risks name collisions with future versions.
+- Subclassing or wrapper functions are safer alternatives to extending built-in prototypes.
+- Overriding built-in methods is strongly discouraged because it breaks expected behavior throughout the program.
+- Custom `bind()` uses a closure to capture the original function and `.apply()` to invoke it with the correct `this`.
+- Any function can have custom methods added to `Function.prototype`, available to all functions via the prototype chain.
 
 ## Important Runtime Note
 
