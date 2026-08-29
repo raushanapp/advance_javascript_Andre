@@ -972,8 +972,6 @@ Function.prototype.bind = function (callmeLater) {
 
 //  OOP Object orirented Programming in javascripts
 
-//  Factory function
-
 const elf = {
   name: "Orwell",
   weapon: "bow",
@@ -994,3 +992,32 @@ const elf2 = {
 
 elf.attack();
 elf2.attack();
+
+//  Factory function and //  to imporve
+const elfFunctionsStore = {
+  attack() {
+    return "Attack with " + this.weapon;
+  },
+};
+
+function createElf(name, weapon) {
+  return {
+    name,
+    weapon,
+  };
+}
+
+function createElf(name, weapon) {
+  let newElf = Object.create(elfFunctionsStore);
+  newElf.name = name;
+  newElf.weapon = weapon;
+  return newElf;
+}
+
+const peter = createElf("Peter", "stones");
+peter.attack = elfFunctionsStore.attack;
+peter.attack();
+
+const sam = createElf("Sam", "stones");
+sam.attack = elfFunctionsStore.attack;
+sam.attack();
