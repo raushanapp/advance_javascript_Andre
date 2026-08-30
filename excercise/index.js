@@ -1084,3 +1084,68 @@ const sarah = new Elf5("Sarah", "fireworks");
 //  funny thing about JS
 
 // OOP Classes
+// ES6 Class
+
+class Elf {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+  attack() {
+    return "Attack with " + this.weapon;
+  }
+}
+
+const peters = new Elf("Peter", "Stones"); // new instanceate
+
+console.log(peters.attack());
+
+console.log(peters instanceof Elf); // true
+
+// Object.create() vs class
+// This Keyword
+
+//  new binding this
+
+function Person(name, age) {
+  this.name = name;
+  this.age = aga;
+}
+
+const person1 = new Person("Xavier", 55);
+
+//  implicit binding
+const person = {
+  name: "karen",
+  age: 40,
+  hi() {
+    console.log("hi" + this.name);
+  },
+};
+
+//  explicit binding
+const person3 = {
+  name: "karen",
+  age: 40,
+  hi: function () {
+    console.log("hi" + this.setTimeout);
+  }.bind(window),
+};
+person3.hi;
+
+//  arrow function
+
+const person4 = {
+  name: "Rohan",
+  age: 25,
+  hi: function () {
+    var inner = () => {
+      console.log("Hi" + this.name);
+    };
+    return inner();
+  },
+};
+
+person4.hi();
+
+//  Inheritance
