@@ -1021,3 +1021,24 @@ peter.attack();
 const sam = createElf("Sam", "stones");
 sam.attack = elfFunctionsStore.attack;
 sam.attack();
+
+//  Constructor function
+
+function Elf4(name, weapon) {
+  this.name = name;
+  this.weapon = weapon;
+}
+
+const pt = new Elf4("Peter", "stones");
+
+const sam = new Elf4("Sam", "stones");
+
+//  this function constructor used here to create object
+
+const Elf5 = new Function(
+  "name",
+  "weapon",
+  `this.name=name; this.weapon=weapon`,
+);
+
+const sarah = new Elf5("Sarah", "fireworks");
