@@ -1025,8 +1025,10 @@ sam.attack();
 //  Constructor function
 
 function Elf4(name, weapon) {
+  console.log("this", this); // {} here empty object because we have't created object
   this.name = name;
   this.weapon = weapon;
+  console.log("this", this); // here we can can see the object
 }
 
 const pt = new Elf4("Peter", "stones");
@@ -1037,11 +1039,33 @@ Elf4.prototype.attack = function () {
   return "attack with " + this.weapon;
 };
 
+//  here is another way to create
+Elf4.prototype.build = function () {
+  function building() {
+    return this.name + " builds a house";
+  }
+
+  return building.bind(this);
+};
+
+Elf4.prototype.build = function () {
+  const self = this;
+  function building() {
+    return this.name + " builds a house";
+  }
+
+  return building();
+};
+
+console.log(pt.build()());
+console.log(pt.attack());
+
 Elf4.prototype.attack = () => {
   let w = "testing ";
   return "attack with " + this.weapon;
 };
-
+//  Only functions have acces to prototype not object like pt or sam
+//  Only constructor function to have ablity to use them
 console.log(pt.attack());
 
 //  this function constructor used here to create object
@@ -1056,3 +1080,7 @@ const sarah = new Elf5("Sarah", "fireworks");
 
 // if we are using this keyword inside arrow function so in this case this keyword lexically bind so we can not access other side property and method
 //  only we can access where is written then can use this
+
+//  funny thing about JS
+
+// OOP Classes
