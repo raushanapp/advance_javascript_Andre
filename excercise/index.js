@@ -1033,6 +1033,17 @@ const pt = new Elf4("Peter", "stones");
 
 const sam = new Elf4("Sam", "stones");
 
+Elf4.prototype.attack = function () {
+  return "attack with " + this.weapon;
+};
+
+Elf4.prototype.attack = () => {
+  let w = "testing ";
+  return "attack with " + this.weapon;
+};
+
+console.log(pt.attack());
+
 //  this function constructor used here to create object
 
 const Elf5 = new Function(
@@ -1042,3 +1053,6 @@ const Elf5 = new Function(
 );
 
 const sarah = new Elf5("Sarah", "fireworks");
+
+// if we are using this keyword inside arrow function so in this case this keyword lexically bind so we can not access other side property and method
+//  only we can access where is written then can use this
