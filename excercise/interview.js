@@ -27,3 +27,22 @@ function improved(a) {
   };
 }
 improved(4)(6)(2)(8)(9)();
+
+//  Amazon  shopping
+
+const user = {
+  name: "Rohan",
+  active: true,
+  cart: [],
+  purchases: [],
+};
+
+//  Implement a cart feature
+// 1 add item to cart
+// 2  add 3% tax to item in cart
+// 3 Buy item: cart ---> purchases
+// 4 Empty cart
+
+//  Bouns
+//  accept refunds.
+//  Track user history.

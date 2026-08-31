@@ -1149,3 +1149,141 @@ const person4 = {
 person4.hi();
 
 //  Inheritance
+
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return "Attact with " + this.weapon;
+  }
+}
+
+class Elf extends Character {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    // console.log(this);
+    this.type = type;
+  }
+}
+
+class Orge extends Character {
+  constructor(name, weapon, color) {
+    super(name, weapon);
+    this.color = color;
+  }
+
+  makeFort() {
+    return "strongest fort in the world mš";
+  }
+}
+
+// Orge.prototype.makeFort under the hood javascripts doing like this
+
+const dolby = new Elf("Bobly", "cloth", "house");
+
+const shrek = new Orge("Shrek", "club", "green");
+console.log(shrek.makeFort());
+
+// console.log(dolby);
+console.log(Orge.isPrototypeOf(shrek)); // false
+console.log(Orge.prototype.isPrototypeOf(shrek)); // true
+console.log(Character.prototype.isPrototypeOf(Orge.prototype)); //true;
+
+//  we check better way
+
+console.log(dolby instanceof Elf); // true
+console.log(dolby instanceof Orge); // false
+console.log(dolby instanceof Character); // true
+
+//  we are using here OOP all pillars to explain things
+
+class Character1 {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return "Attact with " + this.weapon;
+  }
+}
+
+class ElfP extends Character1 {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    // console.log(this);
+    this.type = type;
+  }
+
+  attack(cry) {
+    return "Attack with Cry : " + cry;
+  }
+}
+
+class OrgeP extends Character1 {
+  constructor(name, weapon, color) {
+    super(name, weapon);
+    this.color = color;
+  }
+  attack() {
+    return "ahhhhh";
+  }
+  makeFort() {
+    return "strongest fort in the world mš";
+  }
+}
+
+const dolby1 = new ElfP("Bobly", "cloth", "house");
+
+const shrek1 = new OrgeP("Shrek", "club", "green");
+console.log(dolby.attack("Weee"));
+
+//  Exercise
+//Polymorphism--
+//Extend the Character class to have a Queen class. The output of the below code should be:
+// const victoria = new Queen('Victoria', 'army', 'hearts'); // create a new instace with the queen having (name, weapon, type). Type inlcudes: 'hearts', 'clubs', 'spades', 'diamonds'
+
+// victoria.attack() // will console.log the attack() method in Character class AND will return another string: 'I am the Victoria of hearts, now bow down to me! '
+
+class Queen extends Character1 {
+  constructor(name, weapon, kind) {
+    super(name, weapon);
+    this.kind = kind;
+  }
+  attack() {
+    console.log(super.attack(), "====>>> super class");
+    return `I am the ${this.name} of ${this.kind}, now bow down to me!`;
+  }
+}
+
+const victoria = new Queen("Victoria", "army", "herats");
+console.log(victoria.attack());
+
+//  Functional Programming
+
+// #1 Curry
+// #2 Partial Application
+// #3 Pure Function
+// #4 Referential Transparency
+// #5 Compose
+// #6 Pipe
+
+//  Amazon  shopping
+
+const user = {
+  name: "Rohan",
+  active: true,
+  cart: [],
+  purchases: [],
+};
+
+//  Implement a cart feature
+// 1 add item to cart
+// 2  add 3% tax to item in cart
+// 3 Buy item: cart ---> purchases
+// 4 Empty cart
+
+//  Bouns
