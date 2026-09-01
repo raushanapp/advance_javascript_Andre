@@ -21,6 +21,39 @@ Use this document in three ways:
 | DSA                      | Arrays, strings, hashing, stacks, Big O, space complexity                     | [DSA/Arrays/two-sum.js](DSA/Arrays/two-sum.js), [DSA/Big-O/index.js](DSA/Big-O/index.js)                                                                                   |
 | Broader roadmap          | React, React Native, APIs, auth, micro-frontends, system design               | [inteview_prep.md](inteview_prep.md)                                                                                                                                       |
 
+## Detailed Exercise Notes
+
+This repository contains two layers of study material:
+
+1. A concise interview guide in this file.
+2. A deeper, in-file learning guide in [excercise/README.md](excercise/README.md) created from the examples in [excercise/index.js](excercise/index.js).
+
+The exercise notes cover the runtime internals and conceptual topics in much more detail than the short summary here. They include:
+
+- interpreter/compiler behavior and engine optimization
+- inline caching, hidden classes, memory heap, and call stack
+- execution context, lexical environment, and scope chain
+- hoisting, temporal dead zone, function expressions, and IIFEs
+- `this`, `call`, `apply`, `bind`, and closures
+- currying, first-class functions, default parameters, and nested closures
+- primitive vs object values, pass-by-value, shallow vs deep cloning
+- type coercion, equality, dynamic/static typing, and practical type safety
+- prototypes, constructor functions, and class-based inheritance
+- closure-based encapsulation, timer behavior, and memory-retention warnings
+
+This means the root README should be used as a quick interview checklist, while [excercise/README.md](excercise/README.md) is the more complete reference for understanding the code examples and the reasoning behind them.
+
+Use these files as the main source of truth:
+
+- [excercise/README.md](excercise/README.md)
+- [excercise/index.js](excercise/index.js)
+- [inteview_prep.md](inteview_prep.md)
+- [async_function](async_function)
+- [DSA](DSA)
+- [throttle](throttle)
+
+> Some exercises are intentionally written as learning examples or practice prompts, so verify the actual runtime behavior before presenting them as final interview answers.
+
 ## How To Answer At Mid-Level
 
 For technical questions, use this structure:
