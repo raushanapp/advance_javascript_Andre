@@ -1370,3 +1370,94 @@ const getCounter = makeCount();
 getCounter();
 getCounter();
 getCounter();
+
+// Currying
+
+//  multiply parameters
+
+const multiplys = (a, b) => a * b;
+
+const curriedMultiply = (a) => (b) => a * b;
+
+curriedMultiply(5)(10);
+// for ever remember the first parameter and return new function for second parameter
+const multiplyBy5 = curriedMultiply(5);
+multiplyBy5(10);
+
+//  10 years later we can use multiplyBy5 function to multiply any number by 5
+
+//  Partial Application --> it's means is smaller number of parameters
+//
+
+const multiplyByPartial = (a, b, c) => a * b * c;
+const curredMultiplyByPartial = (a) => (b) => (c) => a * b * c;
+
+curredMultiplyByPartial(5)(10)(2);
+
+//  partial application is a technique in functional programming where a function is transformed into a sequence of functions, each taking a single argument. It allows you to fix a number of arguments to a function, producing another function of smaller arity.
+
+const partialMultiplayBy5 = multiplys.bind(null, 5);
+
+partialMultiplayBy5(4, 10); // 50
+
+//  Dynamic caching  or memoization and caching
+
+function addTo80(n) {
+  return n + 80;
+}
+
+addTo80(5); // 85
+addTo80(5); // 85
+
+let cache = {};
+//  to improve the performance
+function memoizedAddTo80(n) {
+  if (n in cache) {
+    return cache[n];
+  } else {
+    console.log("long time");
+    cache[n] = n + 80;
+    return cache[n];
+  }
+}
+
+memoizedAddTo80(10); // long time 90
+memoizedAddTo80(10); // 90
+
+//  to improve the performance we can use closure to hide the cache variable and make it private
+
+function memoizedAddTo80Closure() {
+  let cache = {};
+  return (n) => {
+    if (n in cache) {
+      return cache[n];
+    } else {
+      console.log("long time");
+      cache[n] = n + 80;
+      return cache[n];
+    }
+  };
+}
+
+const memoized = memoizedAddTo80Closure();
+memoized(10); // long time 90
+memoized(10); // 90
+
+//  Compose and Pipe
+//  data --> fn --> data--> fn--> data
+//  -50 * 3
+// library called ramda.js to use compose and pipe
+//  compose going from right to left
+// Pipe going from left to right
+const pipe = (f, g) => (data) => g(f(data));
+const compose = (f, g) => (data) => f(g(data));
+
+const multiplyBy3 = (num) => num * 3;
+const makePositive = (num) => Math.abs(num);
+
+const multiplyBy3Absolute = compose(multiplyBy3, makePositive);
+const multiplyBy3AbsolutePipe = pipe(makePositive, multiplyBy3);
+console.log(multiplyBy3Absolute(-50)); // 150
+console.log(multiplyBy3AbsolutePipe(-50)); // 150
+
+//  arity --> simply means number of parameters a function takes

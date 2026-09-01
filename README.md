@@ -349,6 +349,58 @@ getCounter(); // 55
 
 This is a strong interview pattern because it shows data encapsulation: the outer variable is not directly exposed, but the returned function can still read it. It is a classic example of how closures help build private state and reusable logic while keeping APIs small and predictable.
 
+### 10e. What are currying, partial application, memoization, and composition?
+
+The latest exercise section adds the following functional-programming patterns that are commonly tested in JavaScript interviews:
+
+- Currying: a function that takes one argument at a time and returns a new function until all arguments are provided.
+- Partial application: fixing some arguments in advance so the remaining function is smaller and more reusable.
+- Memoization: caching computed results so repeated calls with the same input do not recompute work.
+- Composition and pipe: combining functions so data flows through a sequence of transformations.
+
+```js
+const curriedMultiply = (a) => (b) => a * b;
+const multiplyBy5 = curriedMultiply(5);
+
+multiplyBy5(10); // 50
+```
+
+Partial application is similar but often implemented by fixing arguments in advance:
+
+```js
+const multiply = (a, b, c) => a * b * c;
+const partialMultiplyBy5 = multiply.bind(null, 5);
+
+partialMultiplyBy5(4, 10); // 200
+```
+
+Memoization is a cache that stores values for reuse:
+
+```js
+function memoizedAddTo80Closure() {
+  const cache = {};
+
+  return (n) => {
+    if (n in cache) return cache[n];
+    cache[n] = n + 80;
+    return cache[n];
+  };
+}
+```
+
+Composition and pipe are about function flow:
+
+```js
+const pipe = (f, g) => (data) => g(f(data));
+const multiplyBy3 = (num) => num * 3;
+const makePositive = (num) => Math.abs(num);
+
+const multiplyBy3AbsolutePipe = pipe(makePositive, multiplyBy3);
+console.log(multiplyBy3AbsolutePipe(-50)); // 150
+```
+
+These patterns are useful because they make code easier to reason about, easier to test, and easier to reuse in larger systems. The interview answer is usually: use these techniques when you need to reduce repetition, hide internal state, and compose predictable transformations.
+
 ## Runtime, Memory, and Engine
 
 ### 11. What is the call stack?
