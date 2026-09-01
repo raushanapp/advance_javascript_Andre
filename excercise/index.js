@@ -1287,3 +1287,52 @@ const user = {
 // 4 Empty cart
 
 //  Bouns
+// Idempotence : mean's if we run the function multiple time it should not change the output
+
+function notGood(num) {
+  return Math.random(num);
+}
+
+notGood(5); // 0.123
+notGood(5); // 0.456
+
+//  not matter how many time we run the function it should return same output
+//  but still have idempotence because we are not changing the output of the function but still have side effect because we are using random number
+//  when come to parrel and distributed computing we need to have idempotence function because if we run the function multiple time it should not change the output
+function notGood1(num) {
+  console.log(num);
+}
+notGood1(5);
+
+Math.abs(Math.abs(-50)); // 50
+
+// Imperative vs Declarative
+//  first example imperative way
+for (let i = 0; i < 10; i++) {
+  console.log(i);
+}
+
+// declarative way
+[1, 2, 3, 4, 5].forEach((i) => console.log(i));
+
+//  Immutability
+//  Immutability means not changing the data and not changing the state of the data and not changing the object and not changing the array and not changing the string
+//  we can not change the data but we can create new data and return new data
+
+const objR = { name: "Rohan" };
+function clones(obj) {
+  return { ...obj }; // this pure
+}
+
+function updateName(obj) {
+  const obj2 = clones(obj);
+  obj2.name = "Rishu";
+  return obj2;
+}
+
+//  here we are direct change the name called mutation
+
+updateName(objR);
+console.log(objR);
+
+// objR.name = "Rishu"; // this is mutation

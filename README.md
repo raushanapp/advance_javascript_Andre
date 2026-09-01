@@ -263,6 +263,50 @@ The exercise file then models operations like add-to-cart, tax calculation, purc
 
 Functional programming is not an all-or-nothing rule in JavaScript. Most applications mix OOP and FP: classes are useful for domain models, while pure functions and immutability are excellent for predictable logic and easier testing.
 
+### 10c. What functional principles appear in the exercise notes?
+
+The exercise file also highlights several practical FP ideas that appear often in interviews and production code:
+
+- Pure function: deterministic output for the same input and no hidden mutation of external state.
+- Idempotence: running the same operation multiple times should not produce different results when the operation is meant to be repeated safely.
+- Imperative style: step-by-step instructions that describe how to do something.
+- Declarative style: describing the result or transformation rather than the exact control flow.
+- Immutability: creating new data instead of mutating existing objects or arrays.
+
+```js
+function notGood(num) {
+  return Math.random() * num;
+}
+```
+
+This function is not pure because it returns a different value each time, even with the same input. A pure function should not depend on randomness, time, or hidden global state.
+
+```js
+for (let i = 0; i < 10; i += 1) {
+  console.log(i);
+}
+```
+
+This is imperative code: it manually describes the loop and mutation steps.
+
+```js
+[1, 2, 3, 4, 5].forEach((i) => console.log(i));
+```
+
+This is declarative: it describes the action without exposing the lower-level loop mechanics.
+
+Immutability is commonly implemented by cloning before updating:
+
+```js
+const objR = { name: "Rohan" };
+
+function updateName(obj) {
+  return { ...obj, name: "Rishu" };
+}
+```
+
+This keeps the original object unchanged and makes behavior easier to reason about, test, and debug. In a real system, this style is especially useful for state updates, reducers, UI state, and data pipelines.
+
 ## Runtime, Memory, and Engine
 
 ### 11. What is the call stack?
