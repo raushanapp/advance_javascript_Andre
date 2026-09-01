@@ -171,6 +171,98 @@ Every ordinary object has a prototype chain used for property lookup. A class is
 
 Prefer composition when behavior does not represent a true subtype. Prototype and class examples are in [oops/first_class.js](oops/first_class.js) and [DSA/Arrays/classes.js](DSA/Arrays/classes.js).
 
+### 10a. What is object-oriented programming in JavaScript?
+
+Object-oriented programming groups behavior and data into objects and supports reuse through inheritance, encapsulation, and polymorphism. In JavaScript, this is usually implemented with factory functions, constructor functions, or classes.
+
+A factory function creates an object and returns it:
+
+```js
+function createElf(name, weapon) {
+  return {
+    name,
+    weapon,
+    attack() {
+      return `Attack with ${this.weapon}`;
+    },
+  };
+}
+```
+
+A constructor function uses `new` and stores instance state on `this`:
+
+```js
+function Elf(name, weapon) {
+  this.name = name;
+  this.weapon = weapon;
+}
+
+Elf.prototype.attack = function () {
+  return `Attack with ${this.weapon}`;
+};
+```
+
+Class syntax is the modern form of the same idea:
+
+```js
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return `Attack with ${this.weapon}`;
+  }
+}
+
+class Elf extends Character {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+  }
+}
+```
+
+Polymorphism means different classes can implement the same method differently. In the exercise file, the `Queen` example overrides `attack()` and adds a more specific message, while still calling the parent behavior with `super.attack()` when needed. This is a good interview answer for OOP in JavaScript, especially if you can explain the trade-offs between inheritance and composition.
+
+See the pattern examples in [excercise/index.js](excercise/index.js) and [oops/first_class.js](oops/first_class.js).
+
+### 10b. What is functional programming?
+
+Functional programming emphasizes pure functions, immutability, predictable data flow, and composing smaller operations into larger behavior. In JavaScript, this often means using functions as values, avoiding shared mutable state, and keeping side effects at the edges of the system.
+
+Important ideas from the exercise file:
+
+- Pure function: same input, same output; no mutation of outside state.
+- Higher-order function: a function that accepts or returns a function.
+- Currying: breaking a multi-argument function into one-argument steps.
+- Partial application: fixing some arguments in advance.
+- Composition: build bigger logic from smaller functions.
+- Pipe: pass output from one function to the next.
+
+```js
+const multiplyBy = (a) => (b) => a * b;
+const double = multiplyBy(2);
+
+double(5); // 10
+```
+
+A functional cart example often keeps state immutable and models operations as transformations:
+
+```js
+const user = {
+  name: "Rohan",
+  active: true,
+  cart: [],
+  purchases: [],
+};
+```
+
+The exercise file then models operations like add-to-cart, tax calculation, purchase, and empty cart as separate transformations rather than mutating external state without structure. This style is helpful for reasoning, testing, and avoiding hidden side effects.
+
+Functional programming is not an all-or-nothing rule in JavaScript. Most applications mix OOP and FP: classes are useful for domain models, while pure functions and immutability are excellent for predictable logic and easier testing.
+
 ## Runtime, Memory, and Engine
 
 ### 11. What is the call stack?
