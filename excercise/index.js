@@ -1336,3 +1336,37 @@ updateName(objR);
 console.log(objR);
 
 // objR.name = "Rishu"; // this is mutation
+
+// HOF
+const hof = () => () => 5;
+const hof1 = (fn) => fn(6);
+hof1((num) => num * 10);
+
+// Closure
+
+const closures = () => {
+  let count = 0;
+  return () => {
+    count++;
+    return count;
+  };
+};
+
+const increment = closures();
+increment();
+increment();
+increment();
+
+//  here is example closures for data hiding and data encapsulation
+
+function makeCount() {
+  let count = 55;
+  return function getCount() {
+    return count;
+  };
+}
+
+const getCounter = makeCount();
+getCounter();
+getCounter();
+getCounter();

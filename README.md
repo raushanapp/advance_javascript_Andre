@@ -52,6 +52,20 @@ Use these files as the main source of truth:
 - [DSA](DSA)
 - [throttle](throttle)
 
+### Latest updates reflected from the exercise file
+
+The newest examples in [excercise/index.js](excercise/index.js) reinforce these core ideas:
+
+- Interpreter vs compiler behavior and how the engine optimizes hot paths.
+- Inline caching and hidden classes as optimization strategies for repeated property access.
+- Memory heap, call stack, and the difference between synchronous execution and async callbacks.
+- Memory leak patterns from global variables, event listeners, and intervals.
+- Preventing stack overflow by removing work iteratively instead of recursing endlessly.
+- Execution context, lexical environment, static scope, and hoisting behavior for `var`, function declarations, and `let`/`const`.
+- Function expressions, IIFEs, `this`, `call`, `apply`, `bind`, and prototype-based inheritance.
+- OOP patterns using factory functions, constructor functions, `Object.create()`, and classes.
+- Functional programming patterns such as currying, pure functions, idempotence, immutability, and declarative style.
+
 > Some exercises are intentionally written as learning examples or practice prompts, so verify the actual runtime behavior before presenting them as final interview answers.
 
 ## How To Answer At Mid-Level
@@ -306,6 +320,34 @@ function updateName(obj) {
 ```
 
 This keeps the original object unchanged and makes behavior easier to reason about, test, and debug. In a real system, this style is especially useful for state updates, reducers, UI state, and data pipelines.
+
+### 10d. What do the latest closure and higher-order function examples show?
+
+The most recent examples in [excercise/index.js](excercise/index.js) reinforce two common interview ideas:
+
+- Higher-order functions: a function that either takes another function as an argument or returns a function.
+- Closure for private state: an inner function keeps access to outer variables even after the outer function has returned.
+
+```js
+const hof = () => () => 5;
+const hof1 = (fn) => fn(6);
+
+hof1((num) => num * 10); // 60
+```
+
+```js
+function makeCount() {
+  let count = 55;
+  return function getCount() {
+    return count;
+  };
+}
+
+const getCounter = makeCount();
+getCounter(); // 55
+```
+
+This is a strong interview pattern because it shows data encapsulation: the outer variable is not directly exposed, but the returned function can still read it. It is a classic example of how closures help build private state and reusable logic while keeping APIs small and predictable.
 
 ## Runtime, Memory, and Engine
 
