@@ -2270,6 +2270,162 @@ Classes are syntactic sugar over constructor functions and the prototype chain. 
 - Constructor functions establish the prototype chain when a new instance is created.
 - Classes provide cleaner syntax but work the same way as constructor functions under the hood.
 
+## 18. Promises and Async Patterns
+
+Promises are a way to handle asynchronous operations in JavaScript. A Promise represents a value that may not be available immediately but will eventually become available (resolved) or fail (rejected).
+
+### The Callback Problem: Pyramid of Doom
+
+Before Promises, asynchronous code used nested callbacks, which became difficult to read and manage:
+
+```js
+grabTweets("twitter/rausha", (error, raushanTweets) => {
+  if (error) {
+    throw Error;
+  }
+  displayTweets(raushanTweets);
+  grabTweets("twitter/elmusk", (error, elonTweets) => {
+    if (error) {
+      throw Error;
+    }
+    displayTweets(elonTweets);
+    grabTweets("twitter/rohan", (error, rohanTweets) => {
+      if (error) {
+        throw Error;
+      }
+      displayTweets(rohanTweets);
+    });
+  });
+});
+```
+
+This pattern is called "Pyramid of Doom" or "Callback Hell" because each nested callback creates another level of indentation, making the code hard to follow.
+
+### Promise Basics
+
+A Promise wraps an asynchronous operation and has three states:
+
+- **Pending:** The operation has not completed yet.
+- **Resolved (Fulfilled):** The operation succeeded and `resolve()` was called.
+- **Rejected:** The operation failed and `reject()` was called.
+
+```js
+const promise = new Promise((resolve, reject) => {
+  if (true) {
+    resolve("Stuff worked");
+  } else {
+    reject("Error, it broke");
+  }
+});
+```
+
+The executor function receives two parameters: `resolve` and `reject`. Call `resolve()` to fulfill the promise with a value, or call `reject()` to reject it with an error.
+
+### Promise Chaining with .then() and .catch()
+
+Once a Promise settles (resolves or rejects), you can attach handlers with `.then()` for success and `.catch()` for errors:
+
+```js
+promise
+  .then((res) => {
+    throw Error;
+    return res + "!";
+  })
+  .then((an) => console.log("===>> ", an))
+  .catch((e) => console.log("error", e));
+```
+
+Key behaviors:
+
+- `.then()` receives the resolved value.
+- `.catch()` handles errors from the promise or any `.then()` in the chain.
+- Each `.then()` returns a new Promise, allowing chaining.
+- If a `.then()` throws, the next `.catch()` will handle it.
+
+```mermaid
+flowchart TD
+    A["New Promise"] --> B["Pending"]
+    B --> C{Settled?}
+    C -- resolve --> D["Fulfilled"]
+    C -- reject --> E["Rejected"]
+    D --> F[".then() handler runs"]
+    E --> G[".catch() handler runs"]
+    F --> H["Return new Promise"]
+    G --> H
+```
+
+### Promise.all() for Multiple Promises
+
+When you need to wait for multiple asynchronous operations to complete before proceeding, use `Promise.all()`. It takes an array of promises and returns a single promise that resolves with an array of all the results:
+
+```js
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 100, "Hi");
+});
+
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 1000, "POOKIE");
+});
+
+const promise4 = new Promise((resolve, reject) => {
+  setTimeout(resolve, 3000, "Is it me you are looking for ?");
+});
+
+Promise.all([promise2, promise3, promise4]).then((v) => {
+  console.log(v);
+  // Output: ["Hi", "POOKIE", "Is it me you are looking for ?"]
+});
+```
+
+`Promise.all()` waits for all promises to resolve. If any promise rejects, `Promise.all()` rejects immediately.
+
+### Real-World Example: Fetching Multiple API Endpoints
+
+A practical use of `Promise.all()` is fetching data from multiple API endpoints and processing all results together:
+
+```js
+const urls = [
+  "https://jsonplaceholder.typicode.com/users",
+  "https://jsonplaceholder.typicode.com/posts",
+  "https://jsonplaceholder.typicode.com/albums",
+];
+
+Promise.all(
+  urls.map((url) => {
+    return fetch(url).then((resp) => resp.json());
+  }),
+)
+  .then((results) => {
+    console.log(results[0]); // Array of users
+    console.log(results[1]); // Array of posts
+    console.log(results[2]); // Array of albums
+  })
+  .catch(() => {
+    console.log("Error fetching data");
+  });
+```
+
+This pattern:
+
+1. Map each URL to a fetch request.
+2. Convert each response to JSON with `.then()`.
+3. Wait for all requests to complete with `Promise.all()`.
+4. Process all results in a single `.then()`.
+5. Handle any errors in `.catch()`.
+
+```mermaid
+flowchart TD
+    A["URLs array"] --> B["Map to fetch requests"]
+    B --> C["Promise.all waits"]
+    C --> D["All resolve?"]
+    D -- Yes --> E["results array"]
+    D -- No --> F["Error caught"]
+    E --> G[".then() processes all"]
+    F --> H[".catch() handles error"]
+```
+
+**Key Concept:** Promises solve callback hell by allowing sequential chaining with `.then()` instead of nested callbacks. `Promise.all()` makes it easy to combine multiple async operations.
+
 ## Important Runtime Note
 
 `document`, `setInterval`, and event listeners require a browser environment. Running `index.js` directly with Node.js will not provide `document` unless it is mocked or otherwise supplied.
