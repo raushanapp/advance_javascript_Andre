@@ -290,10 +290,10 @@ console.log(victoria.attack());
 
 ```mermaid
 flowchart TD
-    A[Character] --> B[Elf]
-    A --> C[Queen]
-    B --> D[attack() override]
-    C --> E[attack() override]
+    A["Character"] --> B["Elf"]
+    A --> C["Queen"]
+    B --> D["attack() override"]
+    C --> E["attack() override"]
 ```
 
 This shows the real OOP understanding: child classes inherit shared structure, but they can specialize behavior without changing the base class for every use case. Use inheritance when the relationship is genuinely hierarchical; use composition when behavior should be assembled instead of inherited.
@@ -332,13 +332,13 @@ function createOgre(name, weapon, color) {
 
 ```mermaid
 flowchart TD
-    A[User] --> B[Character]
-    B --> C[Elf]
-    B --> D[Ogre]
-    B --> E[Queen]
-    F[shared attack behavior] --> B
-    G[custom features like makeFort] --> D
-    H[custom features like royal speech] --> E
+    A["User"] --> B["Character"]
+    B --> C["Elf"]
+    B --> D["Ogre"]
+    B --> E["Queen"]
+    F["shared attack behavior"] --> B
+    G["custom features like makeFort"] --> D
+    H["custom features like royal speech"] --> E
 ```
 
 This is the practical rule:

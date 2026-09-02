@@ -307,12 +307,12 @@ This is the typical inheritance chain:
 
 ```mermaid
 flowchart TD
-    A[Character] --> B[Elf]
-    A --> C[Ogre]
-    A --> D[Queen]
-    B --> E[attack() override]
-    C --> F[makeFort()]
-    D --> G[attack() override]
+    A["Character"] --> B["Elf"]
+    A --> C["Ogre"]
+    A --> D["Queen"]
+    B --> E["attack() override"]
+    C --> F["makeFort()"]
+    D --> G["attack() override"]
 ```
 
 The important rule is that a child class can reuse the parent logic and then specialize it. In JavaScript, `extends` creates that relationship. The `super()` call initializes the parent constructor, and override methods let the child change behavior without changing the parent definition.
@@ -358,11 +358,11 @@ function Ogre(name, weapon, color) {
 
 ```mermaid
 flowchart TD
-    A[Character-like data] --> B[Composition]
-    B --> C[attack behavior]
-    B --> D[extra behavior]
-    C --> E[Elf]
-    D --> F[Ogre]
+    A["Character-like data"] --> B["Composition"]
+    B --> C["attack behavior"]
+    B --> D["extra behavior"]
+    C --> E["Elf"]
+    D --> F["Ogre"]
 ```
 
 This is the key idea behind the note in the source file:
