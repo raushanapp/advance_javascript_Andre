@@ -1517,3 +1517,81 @@ function Elf(name, weapon, type) {
 // --> imperative
 //  --> few operations and method then this better
 //  data + behaviour to single location
+
+// How does the javascripts work
+
+// --> What is a Program
+//  ---> allocate memory
+//  ---> parase and execute  ==> it's means read and run command
+
+//  A Web Page contains V8 javascripts engine
+//  And javascripts engine consist two part
+// 1. --> Memory Heap ==> where the memroy allocation happened
+// 2. Call stack ==>  here code run or read and execute and also call stack tell you where you are in the code
+
+//  allocation memory
+
+const a = 1; // we just allocate the memory
+const b = 2;
+const c = 3; // if we are increasing number of variable in global state it may leak you memory
+
+// call stack
+
+console.log("1");
+console.log("2");
+console.log("3");
+
+const one = () => {
+  const two = () => {
+    console.log(4);
+  };
+  two();
+};
+
+one();
+
+//  in call stack what happen
+// two()
+// one()
+
+//  stack over flow
+
+// Recursion
+function fooooo() {
+  fooooo();
+}
+
+fooooo();
+
+console.log("1");
+setTimeout(() => {
+  console.log("2");
+}, 1000);
+console.log("3");
+
+//  second question
+console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+Promise.resolve().then(() => {
+  console.log("5");
+  setTimeout(() => console.log("6"), 0);
+});
+console.log("7");
+
+// call Stack
+// --> first console.log("1"); and out of stack
+//  -- second aaya setTimeout  then see the call stack this not a javascipt and he know this web api send to web api and out of the stack
+//  --> this push into call stack this console.log("3") and run the code pop out of the stack;
+
+//  Web API
+//  setTimeout 1 second after one second and call  stack empty then there is call back queue put into callback once stack epmty then put into the stack
+
+// Callback queue
+//  callback()
+
+// Event Loop
+// Event loop continues checking call stack if it empty then first event loop check the callback quque
+
+//  javascripts single thread

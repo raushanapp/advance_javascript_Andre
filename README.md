@@ -298,11 +298,66 @@ flowchart TD
 
 This shows the real OOP understanding: child classes inherit shared structure, but they can specialize behavior without changing the base class for every use case. Use inheritance when the relationship is genuinely hierarchical; use composition when behavior should be assembled instead of inherited.
 
-### 10a.1. Composition vs inheritance
+### 10a.1. OOP vs functional programming
+
+Question: What is the difference between object-oriented programming and functional programming?
+
+Object-oriented programming focuses on objects that contain both data and behavior. Functional programming focuses on functions that transform data without mutating shared state. In JavaScript, most real code mixes both styles, but the interview answer is usually about the trade-off in design and mental model.
+
+```js
+// OOP style
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return `${this.name} attacks with ${this.weapon}`;
+  }
+}
+
+const elf = new Character("Bob", "sword");
+console.log(elf.attack());
+```
+
+```js
+// FP style
+const createCharacter = (name, weapon) => ({
+  name,
+  weapon,
+  attack: () => `${name} attacks with ${weapon}`,
+});
+
+const hero = createCharacter("Bob", "sword");
+console.log(hero.attack());
+```
+
+```mermaid
+flowchart LR
+    A[OOP] --> B[Stateful objects]
+    A --> C[Data + behavior together]
+    D[FP] --> E[Pure functions]
+    D --> F[Immutable data flow]
+    B --> G[Class / instance model]
+    E --> H[Composition / piping]
+```
+
+A strong interview answer:
+
+- OOP is useful when the domain has real identity and shared behavior, such as users, characters, transactions, and orders.
+- FP is useful when you want predictability, easier testing, and safer state updates with less shared mutation.
+- In production code, choose the approach that makes the logic easier to reason about, not just the one you prefer personally.
+
+### 10a.2. Composition vs inheritance
 
 Inheritance creates a tight coupling between the parent and child. It is useful when there is a true `is-a` relationship, but it can become rigid and fragile when the hierarchy grows. This is the classic "fragile base class" problem.
 
 Composition creates behavior by combining smaller objects or functions. It is usually more flexible for evolving systems because the feature set is built from smaller parts instead of a large inheritance tree.
+
+Question: When should I use inheritance and when should I use composition?
+
+Use inheritance when there is a true `is-a` relationship and shared behavior is stable. Use composition when different objects need different behaviors that can be mixed and matched without a rigid hierarchy.
 
 ```js
 function getAttack(character) {
