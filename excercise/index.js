@@ -1500,3 +1500,20 @@ function Elf(name, weapon, type) {
 
 // Elf= attack()+ sleep()
 //  orge= attack + makeFort() + sleep()
+
+//  functional programming
+//  --> many operations on fixed data
+//  --> stateless
+// --> Pure
+//  -- > no have side effect
+//  --> declerative
+//  --> when we havey data processing runing high processing data
+//  ==> data --> data and behaviour both are different things keep it different
+
+//  Object Orirented Programming
+//  --> few operations on common data
+//  --> stateful
+//  --> side effect
+// --> imperative
+//  --> few operations and method then this better
+//  data + behaviour to single location

@@ -240,6 +240,113 @@ class Elf extends Character {
 }
 ```
 
+The core OOP rules are:
+
+1. Encapsulation: keep data and behavior together.
+2. Abstraction: expose only what matters and hide internal details.
+3. Inheritance: reuse parent behavior through a shared class hierarchy.
+4. Polymorphism: same method name, different behavior in different classes.
+
+```js
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return `Attack with ${this.weapon}`;
+  }
+}
+
+class Elf extends Character {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+  }
+
+  attack() {
+    return `Elf ${this.name} attacks with ${this.weapon}`;
+  }
+}
+
+class Queen extends Character {
+  constructor(name, weapon, kind) {
+    super(name, weapon);
+    this.kind = kind;
+  }
+
+  attack() {
+    return `I am the ${this.name} of ${this.kind}, now bow down to me!`;
+  }
+}
+
+const bob = new Elf("Bob", "sword", "forest");
+const victoria = new Queen("Victoria", "army", "hearts");
+
+console.log(bob.attack());
+console.log(victoria.attack());
+```
+
+```mermaid
+flowchart TD
+    A[Character] --> B[Elf]
+    A --> C[Queen]
+    B --> D[attack() override]
+    C --> E[attack() override]
+```
+
+This shows the real OOP understanding: child classes inherit shared structure, but they can specialize behavior without changing the base class for every use case. Use inheritance when the relationship is genuinely hierarchical; use composition when behavior should be assembled instead of inherited.
+
+### 10a.1. Composition vs inheritance
+
+Inheritance creates a tight coupling between the parent and child. It is useful when there is a true `is-a` relationship, but it can become rigid and fragile when the hierarchy grows. This is the classic "fragile base class" problem.
+
+Composition creates behavior by combining smaller objects or functions. It is usually more flexible for evolving systems because the feature set is built from smaller parts instead of a large inheritance tree.
+
+```js
+function getAttack(character) {
+  return {
+    ...character,
+    attack() {
+      return `${this.name} attacks with ${this.weapon}`;
+    },
+  };
+}
+
+function createElf(name, weapon, type) {
+  const elf = { name, weapon, type };
+  return getAttack(elf);
+}
+
+function createOgre(name, weapon, color) {
+  const ogre = { name, weapon, color };
+  return {
+    ...getAttack(ogre),
+    makeFort() {
+      return `${this.name} builds a strong fort`;
+    },
+  };
+}
+```
+
+```mermaid
+flowchart TD
+    A[User] --> B[Character]
+    B --> C[Elf]
+    B --> D[Ogre]
+    B --> E[Queen]
+    F[shared attack behavior] --> B
+    G[custom features like makeFort] --> D
+    H[custom features like royal speech] --> E
+```
+
+This is the practical rule:
+
+- Inheritance is good for shared identity and a clear hierarchy.
+- Composition is better when behavior must be mixed and matched flexibly.
+- In large applications, composition often gives easier extension and fewer hidden side effects.
+
 Polymorphism means different classes can implement the same method differently. In the exercise file, the `Queen` example overrides `attack()` and adds a more specific message, while still calling the parent behavior with `super.attack()` when needed. This is a good interview answer for OOP in JavaScript, especially if you can explain the trade-offs between inheritance and composition.
 
 See the pattern examples in [excercise/index.js](excercise/index.js) and [oops/first_class.js](oops/first_class.js).

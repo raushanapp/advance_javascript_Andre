@@ -322,6 +322,55 @@ When to use inheritance vs. composition:
 - Use inheritance when there is a true parent-child relationship and shared behavior.
 - Use composition when the object should contain reusable behavior instead of being a strict subclass.
 
+### OOP vs FP and composition vs inheritance
+
+The exercise file also describes the trade-off in a very practical way:
+
+- OOP: few operations on common data, stateful behavior, side effects, imperative style, and data + behavior kept together.
+- FP: many operations on fixed data, stateless behavior, pure functions, declarative style, and data kept separate from behavior.
+
+```js
+// Composition example: build behavior from reusable pieces
+function getAttack(character) {
+  return {
+    ...character,
+    attack() {
+      return `${this.name} attacks with ${this.weapon}`;
+    },
+  };
+}
+
+function Elf(name, weapon, type) {
+  const elf = { name, weapon, type };
+  return getAttack(elf);
+}
+
+function Ogre(name, weapon, color) {
+  const ogre = { name, weapon, color };
+  return {
+    ...getAttack(ogre),
+    makeFort() {
+      return `${this.name} builds a strong fort`;
+    },
+  };
+}
+```
+
+```mermaid
+flowchart TD
+    A[Character-like data] --> B[Composition]
+    B --> C[attack behavior]
+    B --> D[extra behavior]
+    C --> E[Elf]
+    D --> F[Ogre]
+```
+
+This is the key idea behind the note in the source file:
+
+- Inheritance is useful for a strict hierarchy such as `Character -> Elf -> Queen`.
+- Composition is better when you want to mix and match behavior like attack, sleep, shield, or fort-building without creating a rigid class chain.
+- In practice, modern JavaScript systems often blend both: classes for domain models, functions for reusable logic and pure transformations.
+
 ## 10. Currying and Closures
 
 Currying transforms a function that takes multiple arguments into a sequence of functions, each taking one argument. This works because of JavaScript's closure mechanism.
