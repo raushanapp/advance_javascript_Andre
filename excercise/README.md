@@ -132,110 +132,7 @@ function calculate() {
 console.log(calculate()); // 7
 ```
 
-## 6. Currying and Closures
-
-Currying transforms a function that takes multiple arguments into a sequence of functions, each taking one argument. This works because of JavaScript's closure mechanism.
-
-```js
-// Without closure optimization
-function addTwo(a) {
-  return (b) => {
-    return (c) => {
-      return (d) => {
-        return (e) => {
-          return () => {
-            return a + b + c + d + e;
-          };
-        };
-      };
-    };
-  };
-}
-
-// With recursion and early return
-function improved(a) {
-  return function (b) {
-    if (b === undefined) {
-      return a;
-    }
-    return improved(a + b);
-  };
-}
-```
-
-The `improved` version allows flexible arity—you can call it with as many or as few arguments as needed before calling with no arguments to finalize.
-
-## 7. Function Composition and Pipe
-
-Composition chains multiple functions together. The `pipe` pattern applies functions left-to-right, transforming the output of one function into the input of the next.
-
-```js
-const pipe =
-  (f, g) =>
-  (...args) =>
-    g(f(...args));
-
-purchaseItems(
-  addItemToCart,
-  applyTaxToItems,
-  buyItems,
-  emptyCart,
-)(user, { name: "laptop", price: 2000 });
-```
-
-This creates a data transformation pipeline where state flows through each function immutably.
-
-## 8. Pure Functions and Side Effects
-
-A pure function has no side effects and always returns the same output for the same input:
-
-```js
-// Pure: Creates new array, doesn't modify original
-function removeLastItem(arr) {
-  const newArray = [].concat(arr);
-  newArray.pop();
-  return newArray;
-}
-
-// Impure: Modifies the original array
-function mutateArray(arr) {
-  arr.pop();
-}
-```
-
-Impure functions modify external state or depend on it, making code harder to test and reason about. Pure functions are predictable and composable.
-
-## 9. Referential Transparency
-
-Code exhibits referential transparency when you can replace a function call with its return value without changing the program's behavior. This only works for pure functions:
-
-```js
-function j(num1, num2) {
-  return num1 * num2;
-}
-
-j(3, 4); // Always returns 12
-f(j(3, 4)); // Same as f(12)
-```
-
-## 10. Immutable State Management
-
-The Amazon cart example demonstrates immutability using `Object.assign` to create new state objects rather than mutating existing ones:
-
-```js
-return Object.assign({}, user, { cart: updatedCart });
-```
-
-This pattern:
-
-- Maintains a history of all state transitions
-- Prevents accidental mutations
-- Makes debugging easier by keeping transaction records
-- Enables undo/redo and audit trails
-
-See [excercise/interview.js](interview.js) for the full shopping cart implementation with history tracking.
-
-## 11. Memory Leaks
+## 6. Memory Leaks
 
 A memory leak happens when memory is still reachable even though the application no longer needs it. Common examples in the file are:
 
@@ -338,13 +235,203 @@ setTimeout(() => {
 }, 1000);
 
 console.log("3");
+```
+
+## 9. OOP Fundamentals
+
+Object-oriented programming is a way of organizing code around objects. Each object can hold data and behavior together. The main idea is to model real-world entities such as a `Character`, `Elf`, or `Queen` with a shared blueprint and specialized behavior.
+
+The four core OOP rules are:
+
+1. **Encapsulation:** keep data and behavior together.
+2. **Abstraction:** expose only what matters and hide implementation details.
+3. **Inheritance:** reuse behavior from a parent class.
+4. **Polymorphism:** override or reuse the same method name in different child classes.
+
+```js
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return `Attack with ${this.weapon}`;
+  }
+}
+
+class Elf extends Character {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+  }
+
+  attack() {
+    return `Elf ${this.name} attacks with ${this.weapon}`;
+  }
+}
+
+class Ogre extends Character {
+  constructor(name, weapon, color) {
+    super(name, weapon);
+    this.color = color;
+  }
+
+  makeFort() {
+    return `${this.name} builds a strong fort`;
+  }
+}
+
+class Queen extends Character {
+  constructor(name, weapon, kind) {
+    super(name, weapon);
+    this.kind = kind;
+  }
+
+  attack() {
+    console.log(super.attack());
+    return `I am the ${this.name} of ${this.kind}, now bow down to me!`;
+  }
+}
+
+const bob = new Elf("Bob", "sword", "forest");
+const shrek = new Ogre("Shrek", "club", "green");
+const victoria = new Queen("Victoria", "army", "hearts");
+
+console.log(bob.attack());
+console.log(shrek.makeFort());
+console.log(victoria.attack());
+```
+
+This is the typical inheritance chain:
+
+```mermaid
+flowchart TD
+    A[Character] --> B[Elf]
+    A --> C[Ogre]
+    A --> D[Queen]
+    B --> E[attack() override]
+    C --> F[makeFort()]
+    D --> G[attack() override]
+```
+
+The important rule is that a child class can reuse the parent logic and then specialize it. In JavaScript, `extends` creates that relationship. The `super()` call initializes the parent constructor, and override methods let the child change behavior without changing the parent definition.
+
+When to use inheritance vs. composition:
+
+- Use inheritance when there is a true parent-child relationship and shared behavior.
+- Use composition when the object should contain reusable behavior instead of being a strict subclass.
+
+## 10. Currying and Closures
+
+Currying transforms a function that takes multiple arguments into a sequence of functions, each taking one argument. This works because of JavaScript's closure mechanism.
+
+```js
+// Without closure optimization
+function addTwo(a) {
+  return (b) => {
+    return (c) => {
+      return (d) => {
+        return (e) => {
+          return () => {
+            return a + b + c + d + e;
+          };
+        };
+      };
+    };
+  };
+}
+
+// With recursion and early return
+function improved(a) {
+  return function (b) {
+    if (b === undefined) {
+      return a;
+    }
+    return improved(a + b);
+  };
+}
+```
+
+The `improved` version allows flexible arity—you can call it with as many or as few arguments as needed before calling with no arguments to finalize.
+
+## 11. Function Composition and Pipe
+
+Composition chains multiple functions together. The `pipe` pattern applies functions left-to-right, transforming the output of one function into the input of the next.
+
+```js
+const pipe =
+  (f, g) =>
+  (...args) =>
+    g(f(...args));
+
+purchaseItems(
+  addItemToCart,
+  applyTaxToItems,
+  buyItems,
+  emptyCart,
+)(user, { name: "laptop", price: 2000 });
+```
+
+This creates a data transformation pipeline where state flows through each function immutably.
+
+## 12. Pure Functions and Side Effects
+
+A pure function has no side effects and always returns the same output for the same input:
+
+```js
+// Pure: Creates new array, doesn't modify original
+function removeLastItem(arr) {
+  const newArray = [].concat(arr);
+  newArray.pop();
+  return newArray;
+}
+
+// Impure: Modifies the original array
+function mutateArray(arr) {
+  arr.pop();
+}
+```
+
+Impure functions modify external state or depend on it, making code harder to test and reason about. Pure functions are predictable and composable.
+
+## 13. Referential Transparency
+
+Code exhibits referential transparency when you can replace a function call with its return value without changing the program's behavior. This only works for pure functions:
+
+```js
+function j(num1, num2) {
+  return num1 * num2;
+}
+
+j(3, 4); // Always returns 12
+f(j(3, 4)); // Same as f(12)
+```
+
+## 14. Immutable State Management
+
+The Amazon cart example demonstrates immutability using `Object.assign` to create new state objects rather than mutating existing ones:
+
+```js
+return Object.assign({}, user, { cart: updatedCart });
+```
+
+This pattern:
+
+- Maintains a history of all state transitions
+- Prevents accidental mutations
+- Makes debugging easier by keeping transaction records
+- Enables undo/redo and audit trails
+
+See [excercise/interview.js](interview.js) for the full shopping cart implementation with history tracking.
 
 // Output immediately:
 // 1
 // 3
 // After about one second:
 // 2
-```
+
+````
 
 ## 9. Preventing Stack Overflow
 
@@ -364,7 +451,7 @@ function removeItemsFromList() {
 }
 
 removeItemsFromList();
-```
+````
 
 `setTimeout` lets the current function return before the next call starts, so the calls do not build up in one large stack:
 

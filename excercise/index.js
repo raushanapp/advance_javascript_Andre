@@ -1466,3 +1466,37 @@ console.log(multiplyBy3AbsolutePipe(-50)); // 150
 // we can run the function in serverless architecture and we can run the function in cloud architecture and we can run the function in distributed system architecture and we can run the function in parallel computing architecture and we can run the function in functional programming architecture
 
 //  Compositon and inheritance
+// Inheritance
+// what it is
+
+// this is all situation where led this types of inheritance
+//  tight coupled Inheritance is a mechanism where one class acquires the properties and behaviors of another class. It allows for code reuse and establishes a parent-child relationship between classes. Inheritance can lead to a rigid structure, making it difficult to modify or extend functionality without affecting the entire hierarchy.
+// fragile base class problem
+//  Hierarchy
+
+//  User
+//  Watcher
+//  Character
+//  ELF
+//   --> Junior Elf
+// ogre
+
+//  how to solve this problem
+//  Composition
+//  What it has
+
+function getAttack(character) {
+  return Object.assign({}, character, { attackFn: () => {} });
+}
+
+function Elf(name, weapon, type) {
+  let elf = {
+    name,
+    weapon,
+    type,
+  };
+  return getAttack(elf);
+}
+
+// Elf= attack()+ sleep()
+//  orge= attack + makeFort() + sleep()
