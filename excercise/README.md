@@ -474,15 +474,128 @@ This pattern:
 
 See [excercise/interview.js](interview.js) for the full shopping cart implementation with history tracking.
 
-// Output immediately:
+## 9. How JavaScript Works Under the Hood
+
+A JavaScript program is not magic; it is a combination of memory allocation, parsing, and execution.
+
+- **Memory heap:** stores allocated values such as objects, arrays, strings, and numbers.
+- **Call stack:** tracks the active function calls in the order they are running.
+- **Parser/executor:** reads the source and runs the operations in the current execution context.
+
+```js
+const a = 1;
+const b = 2;
+const c = 3;
+
+const one = () => {
+  const two = () => {
+    console.log(4);
+  };
+  two();
+};
+
+one();
+```
+
+The order in the call stack is:
+
+1. `one()` enters the stack.
+2. `two()` enters while `one()` is still running.
+3. `two()` finishes and is removed.
+4. `one()` finishes and is removed.
+5. The global execution context resumes.
+
+```mermaid
+flowchart TD
+    A[Global context] --> B[one()]
+    B --> C[two()]
+    C --> D[console.log(4)]
+    D --> E[Pop two()]
+    E --> F[Pop one()]
+```
+
+### Stack overflow and recursion
+
+A recursion bug keeps adding frames on the stack until the memory limit is reached.
+
+```js
+function fooooo() {
+  fooooo();
+}
+
+fooooo();
+```
+
+This is a classic stack overflow because each call waits for the next call to finish before it can return. The engine keeps allocating more stack frames until it crashes or throws a maximum call stack error.
+
+### Timer order and the event loop
+
+JavaScript is single-threaded, but it can schedule work with browser APIs such as `setTimeout` and `Promise` callbacks.
+
+```js
+console.log("1");
+setTimeout(() => console.log("2"), 0);
+Promise.resolve().then(() => console.log("3"));
+console.log("4");
+Promise.resolve().then(() => {
+  console.log("5");
+  setTimeout(() => console.log("6"), 0);
+});
+console.log("7");
+```
+
+Output order:
+
+```js
 // 1
+// 4
+// 7
 // 3
-// After about one second:
+// 5
 // 2
+// 6
+```
 
-````
+Why this happens:
 
-## 9. Preventing Stack Overflow
+1. `console.log("1")` and `console.log("4")` and `console.log("7")` run synchronously on the call stack.
+2. Promise callbacks are placed in the microtask queue.
+3. The microtask queue is drained before the timer task queue is processed.
+4. `setTimeout` callbacks wait in the task queue until the stack is empty.
+
+```mermaid
+flowchart LR
+    A[Call stack] --> B[Microtask queue]
+    A --> C[Task queue]
+    B --> D[Event loop]
+    C --> D
+    D --> A
+```
+
+This explains the single-thread model:
+
+- JavaScript runs one piece of code at a time on the main thread.
+- Browser APIs do not block the JavaScript thread.
+- The event loop decides when queued callbacks are allowed to run.
+
+```mermaid
+flowchart TD
+    A[JavaScript source code] --> B[Memory heap]
+    A --> C[Call stack]
+    C --> D[Execute synchronous code]
+    D --> E{Need async work?}
+    E -- No --> D
+    E -- Yes --> F[Web API / timer / Promise]
+    F --> G[Callback queue]
+    G --> H[Event loop]
+    H --> I{Is stack empty?}
+    I -- Yes --> C
+    I -- No --> H
+```
+
+The key interview answer is: JavaScript is single-threaded, but it is not blocking because asynchronous work is delegated to the environment and then resumed when the call stack is available.
+
+## 10. Preventing Stack Overflow
 
 Calling a recursive function too many times can overflow the call stack because every call must remain on the stack until the next call finishes. The file avoids this by removing one item at a time and scheduling the next removal with `setTimeout`:
 
@@ -500,7 +613,7 @@ function removeItemsFromList() {
 }
 
 removeItemsFromList();
-````
+```
 
 `setTimeout` lets the current function return before the next call starts, so the calls do not build up in one large stack:
 
