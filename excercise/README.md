@@ -507,11 +507,11 @@ The order in the call stack is:
 
 ```mermaid
 flowchart TD
-    A[Global context] --> B[one()]
-    B --> C[two()]
-    C --> D[console.log(4)]
-    D --> E[Pop two()]
-    E --> F[Pop one()]
+    A["Global context"] --> B["one()"]
+    B --> C["two()"]
+    C --> D["console.log(4)"]
+    D --> E["Pop two()"]
+    E --> F["Pop one()"]
 ```
 
 ### Stack overflow and recursion
@@ -580,15 +580,15 @@ This explains the single-thread model:
 
 ```mermaid
 flowchart TD
-    A[JavaScript source code] --> B[Memory heap]
-    A --> C[Call stack]
-    C --> D[Execute synchronous code]
-    D --> E{Need async work?}
+    A["JavaScript source code"] --> B["Memory heap"]
+    A --> C["Call stack"]
+    C --> D["Execute synchronous code"]
+    D --> E{"Need async work?"}
     E -- No --> D
-    E -- Yes --> F[Web API / timer / Promise]
-    F --> G[Callback queue]
-    G --> H[Event loop]
-    H --> I{Is stack empty?}
+    E -- Yes --> F["Web API / timer / Promise"]
+    F --> G["Callback queue"]
+    G --> H["Event loop"]
+    H --> I{"Is stack empty?"}
     I -- Yes --> C
     I -- No --> H
 ```
