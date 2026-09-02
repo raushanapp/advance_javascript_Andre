@@ -43,9 +43,65 @@ const user = {
 // 3 Buy item: cart ---> purchases
 // 4 Empty cart
 
+const amazonHistory = [];
+// const compose =
+//   (f, g) =>
+//   (...args) =>
+//     f(g(...args));
+// purchaseItems(
+//   emptyCart,
+//   buyItems,
+//   applyTaxToItems,
+//   addItemToCart,
+// )(user, { name: "laptop", price: 2000 });
+const pipe =
+  (f, g) =>
+  (...args) =>
+    g(f(...args));
+purchaseItems(
+  addItemToCart,
+  applyTaxToItems,
+  buyItems,
+  emptyCart,
+)(user, { name: "laptop", price: 2000 });
+
+function purchaseItems(...fns) {
+  return fns.reduce(pipe);
+}
+function addItemToCart(user, item) {
+  amazonHistory.push(user);
+  const updatedCart = user.cart.concat(item);
+  return Object.assign({}, user, { cart: updatedCart });
+}
+
+function applyTaxToItems(user) {
+  amazonHistory.push(user);
+  const { cart } = user;
+  const taxRate = 1.3;
+  const updatedCart = cart.map((item) => {
+    return {
+      name: item.name,
+      price: item.price * taxRate,
+    };
+  });
+  return Object.assign({}, user, { cart: updatedCart });
+}
+
+function buyItems(user) {
+  amazonHistory.push(user);
+  return Object.assign({}, user, { purchases: user.cart });
+}
+
+function emptyCart(user) {
+  amazonHistory.push(user);
+  return Object.assign({}, user, { cart: [] });
+}
+
 //  Bouns
 //  accept refunds.
 //  Track user history.
+console.log(amazonHistory);
+function refundItem() {}
 
 // Pure Functions
 //  No side effect

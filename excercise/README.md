@@ -132,7 +132,110 @@ function calculate() {
 console.log(calculate()); // 7
 ```
 
-## 6. Memory Leaks
+## 6. Currying and Closures
+
+Currying transforms a function that takes multiple arguments into a sequence of functions, each taking one argument. This works because of JavaScript's closure mechanism.
+
+```js
+// Without closure optimization
+function addTwo(a) {
+  return (b) => {
+    return (c) => {
+      return (d) => {
+        return (e) => {
+          return () => {
+            return a + b + c + d + e;
+          };
+        };
+      };
+    };
+  };
+}
+
+// With recursion and early return
+function improved(a) {
+  return function (b) {
+    if (b === undefined) {
+      return a;
+    }
+    return improved(a + b);
+  };
+}
+```
+
+The `improved` version allows flexible arity—you can call it with as many or as few arguments as needed before calling with no arguments to finalize.
+
+## 7. Function Composition and Pipe
+
+Composition chains multiple functions together. The `pipe` pattern applies functions left-to-right, transforming the output of one function into the input of the next.
+
+```js
+const pipe =
+  (f, g) =>
+  (...args) =>
+    g(f(...args));
+
+purchaseItems(
+  addItemToCart,
+  applyTaxToItems,
+  buyItems,
+  emptyCart,
+)(user, { name: "laptop", price: 2000 });
+```
+
+This creates a data transformation pipeline where state flows through each function immutably.
+
+## 8. Pure Functions and Side Effects
+
+A pure function has no side effects and always returns the same output for the same input:
+
+```js
+// Pure: Creates new array, doesn't modify original
+function removeLastItem(arr) {
+  const newArray = [].concat(arr);
+  newArray.pop();
+  return newArray;
+}
+
+// Impure: Modifies the original array
+function mutateArray(arr) {
+  arr.pop();
+}
+```
+
+Impure functions modify external state or depend on it, making code harder to test and reason about. Pure functions are predictable and composable.
+
+## 9. Referential Transparency
+
+Code exhibits referential transparency when you can replace a function call with its return value without changing the program's behavior. This only works for pure functions:
+
+```js
+function j(num1, num2) {
+  return num1 * num2;
+}
+
+j(3, 4); // Always returns 12
+f(j(3, 4)); // Same as f(12)
+```
+
+## 10. Immutable State Management
+
+The Amazon cart example demonstrates immutability using `Object.assign` to create new state objects rather than mutating existing ones:
+
+```js
+return Object.assign({}, user, { cart: updatedCart });
+```
+
+This pattern:
+
+- Maintains a history of all state transitions
+- Prevents accidental mutations
+- Makes debugging easier by keeping transaction records
+- Enables undo/redo and audit trails
+
+See [excercise/interview.js](interview.js) for the full shopping cart implementation with history tracking.
+
+## 11. Memory Leaks
 
 A memory leak happens when memory is still reachable even though the application no longer needs it. Common examples in the file are:
 

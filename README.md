@@ -10,16 +10,16 @@ Use this document in three ways:
 
 ## Repository Map
 
-| Area                     | Topics                                                                        | Useful examples                                                                                                                                                            |
-| ------------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Language fundamentals    | Types, coercion, scope, hoisting, functions, closures, copying                | [basic_javascript.js](basic_javascript.js), [types_in_javascript/types.js](types_in_javascript/types.js), [advance/fundamental/hosting.js](advance/fundamental/hosting.js) |
-| Runtime                  | Engine, call stack, heap, garbage collection, memory leaks, execution context | [new_way_to_learn/javascript_engine.js](new_way_to_learn/javascript_engine.js), [fundamental/call_stack.js](fundamental/call_stack.js)                                     |
-| Async JavaScript         | Promises, async/await, event loop, queues, concurrency                        | [async_function/async.js](async_function/async.js), [async_function/sequence.js](async_function/sequence.js)                                                               |
-| Functions and objects    | `this`, call/apply/bind, currying, memoization, prototypes, classes           | [async_function/keyword_this.js](async_function/keyword_this.js), [advance/fundamental/function-invocation.js](advance/fundamental/function-invocation.js)                 |
-| Events and reactive code | Event emitters, subscriptions, mapping, teardown                              | [event_emitter_advance.js](event_emitter_advance.js), [rxjs.js](rxjs.js), [mapped_source.js](mapped_source.js)                                                             |
-| Browser performance      | Debounce, throttle, DOM events, scroll handling                               | [throttle/throttle.js](throttle/throttle.js), [debounce/index.html](debounce/index.html)                                                                                   |
-| DSA                      | Arrays, strings, hashing, stacks, Big O, space complexity                     | [DSA/Arrays/two-sum.js](DSA/Arrays/two-sum.js), [DSA/Big-O/index.js](DSA/Big-O/index.js)                                                                                   |
-| Broader roadmap          | React, React Native, APIs, auth, micro-frontends, system design               | [inteview_prep.md](inteview_prep.md)                                                                                                                                       |
+| Area                     | Topics                                                                        | Useful examples                                                                                                                                                                                              |
+| ------------------------ | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Language fundamentals    | Types, coercion, scope, hoisting, functions, closures, copying                | [basic_javascript.js](basic_javascript.js), [types_in_javascript/types.js](types_in_javascript/types.js), [advance/fundamental/hosting.js](advance/fundamental/hosting.js)                                   |
+| Runtime                  | Engine, call stack, heap, garbage collection, memory leaks, execution context | [new_way_to_learn/javascript_engine.js](new_way_to_learn/javascript_engine.js), [fundamental/call_stack.js](fundamental/call_stack.js)                                                                       |
+| Async JavaScript         | Promises, async/await, event loop, queues, concurrency                        | [async_function/async.js](async_function/async.js), [async_function/sequence.js](async_function/sequence.js)                                                                                                 |
+| Functions and objects    | `this`, call/apply/bind, currying, memoization, prototypes, classes           | [async_function/keyword_this.js](async_function/keyword_this.js), [advance/fundamental/function-invocation.js](advance/fundamental/function-invocation.js), [excercise/interview.js](excercise/interview.js) |
+| Events and reactive code | Event emitters, subscriptions, mapping, teardown                              | [event_emitter_advance.js](event_emitter_advance.js), [rxjs.js](rxjs.js), [mapped_source.js](mapped_source.js)                                                                                               |
+| Browser performance      | Debounce, throttle, DOM events, scroll handling                               | [throttle/throttle.js](throttle/throttle.js), [debounce/index.html](debounce/index.html)                                                                                                                     |
+| DSA                      | Arrays, strings, hashing, stacks, Big O, space complexity                     | [DSA/Arrays/two-sum.js](DSA/Arrays/two-sum.js), [DSA/Big-O/index.js](DSA/Big-O/index.js)                                                                                                                     |
+| Broader roadmap          | React, React Native, APIs, auth, micro-frontends, system design               | [inteview_prep.md](inteview_prep.md)                                                                                                                                                                         |
 
 ## Detailed Exercise Notes
 
@@ -54,7 +54,7 @@ Use these files as the main source of truth:
 
 ### Latest updates reflected from the exercise file
 
-The newest examples in [excercise/index.js](excercise/index.js) reinforce these core ideas:
+The newest examples in [excercise/index.js](excercise/index.js) and [excercise/interview.js](excercise/interview.js) reinforce these core ideas:
 
 - Interpreter vs compiler behavior and how the engine optimizes hot paths.
 - Inline caching and hidden classes as optimization strategies for repeated property access.
@@ -65,6 +65,8 @@ The newest examples in [excercise/index.js](excercise/index.js) reinforce these 
 - Function expressions, IIFEs, `this`, `call`, `apply`, `bind`, and prototype-based inheritance.
 - OOP patterns using factory functions, constructor functions, `Object.create()`, and classes.
 - Functional programming patterns such as currying, pure functions, idempotence, immutability, and declarative style.
+- Function composition using `pipe` and `compose` to chain transformations.
+- Practical applications like Amazon shopping cart with immutable state management and transaction history.
 
 > Some exercises are intentionally written as learning examples or practice prompts, so verify the actual runtime behavior before presenting them as final interview answers.
 

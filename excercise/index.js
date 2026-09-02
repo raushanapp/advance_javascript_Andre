@@ -1461,3 +1461,8 @@ console.log(multiplyBy3Absolute(-50)); // 150
 console.log(multiplyBy3AbsolutePipe(-50)); // 150
 
 //  arity --> simply means number of parameters a function takes
+//  functional programming work very for the distributed system and parallel computing because we can run the function in parallel and we can run the function in distributed system and we can run the function in
+// cloud and we can run the function in serverless architecture and we can run the function in microservices architecture and we can run the function in containerized architecture and we can run the function in kubernetes architecture and we can run the function in docker architecture and
+// we can run the function in serverless architecture and we can run the function in cloud architecture and we can run the function in distributed system architecture and we can run the function in parallel computing architecture and we can run the function in functional programming architecture
+
+//  Compositon and inheritance
