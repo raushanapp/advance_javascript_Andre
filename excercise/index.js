@@ -1673,3 +1673,20 @@ Promise.all(
   });
 
 //  async await
+
+//
+//  call back queue  also called task queue
+setTimeout(() => {
+  console.log("1 is the loneliest");
+}, 0);
+
+setTimeout(() => {
+  console.log("2  can be as bad as one");
+}, 10);
+
+// 2 JOB QUEUE or some other people called  Microtask Queue higher priotory of over the call back queue
+
+Promise.resolve("hi").then((d) => console.log("3 ===>>", d));
+
+// 3
+console.log("3 is a crowd");

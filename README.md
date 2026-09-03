@@ -593,6 +593,12 @@ An execution context contains the state needed to run code, including bindings, 
 
 JavaScript runs synchronous code on a call stack. Host APIs such as timers and network operations complete outside that stack. When the stack is empty, queued callbacks are scheduled for execution. Promise reactions and `queueMicrotask` use the microtask queue, which is drained before the next task such as a timer callback.
 
+#### Why do we use the event loop?
+
+The event loop allows a single JavaScript thread to start slow operations without waiting for them to finish. While the browser or Node.js runtime handles a timer, file operation, network request, or user event, JavaScript can continue handling other work. When the operation is ready, its callback is queued and runs only after the current synchronous work finishes.
+
+This keeps applications responsive and lets Node.js handle many I/O requests without creating one JavaScript thread per request. The event loop does **not** make JavaScript execute two callbacks at the same time, and it does not make CPU-heavy JavaScript asynchronous. A long loop still blocks the call stack and delays timers, rendering, and user interactions.
+
 ```js
 console.log("A");
 setTimeout(() => console.log("B"), 0);
@@ -601,6 +607,33 @@ console.log("D");
 // A, D, C, B
 ```
 
+#### Practical use case: loading a dashboard
+
+An application can request data without freezing the interface. The `fetch` request is handled by the runtime, while the user can continue interacting with the page. Once the response is available, the continuation after `await` is scheduled as a microtask.
+
+```js
+async function loadDashboard() {
+  showLoadingState();
+
+  try {
+    const response = await fetch("/api/dashboard");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const dashboard = await response.json();
+    renderDashboard(dashboard);
+  } catch (error) {
+    showErrorState(error.message);
+  } finally {
+    hideLoadingState();
+  }
+}
+
+loadDashboard();
+handleUserInput(); // The event loop can process this while fetch is pending.
+```
+
+The same pattern is useful for search suggestions, submitting forms, reading files in Node.js, handling WebSocket messages, and responding to timers. Use asynchronous APIs for waiting on external work; move CPU-heavy calculations to a Web Worker or Node.js worker thread when they would block the main call stack.
+
 Microtasks can starve timers if code continually schedules more microtasks. See [interview_question.js](interview_question.js).
 
 #### Promise callbacks versus `setTimeout`
@@ -608,14 +641,24 @@ Microtasks can starve timers if code continually schedules more microtasks. See 
 Promise handlers registered with `.then()` and callbacks registered with `queueMicrotask()` go into the **microtask queue**. A `setTimeout` callback goes into the **task queue** (also called the macrotask or callback queue). After the current synchronous code finishes, the event loop drains all available microtasks before it starts the next timer task.
 
 ```mermaid
-flowchart TD
-    A[Run synchronous code] --> B[Current call stack is empty]
-    B --> C[Drain microtask queue]
-    C --> D{More microtasks?}
-    D -- Yes --> C
-    D -- No --> E[Run one setTimeout task]
-    E --> C
+flowchart LR
+  Source[JavaScript source] --> Stack[Call stack]
+  Stack --> Sync[Run synchronous code]
+  Sync --> Runtime{Needs external work?}
+  Runtime -- No --> Stack
+  Runtime -- Yes --> APIs[Browser or Node.js APIs]
+  APIs --> Microtasks[Microtask queue: Promise / queueMicrotask]
+  APIs --> Tasks[Task queue: timer / I/O / user event]
+  Microtasks --> Loop[Event loop]
+  Tasks --> Loop
+  Loop --> Empty{Is call stack empty?}
+  Empty -- No --> Loop
+  Empty -- Yes --> Drain[Drain microtasks]
+  Drain --> Next[Run one task]
+  Next --> Stack
 ```
+
+The scheduling rule is: finish the current stack, drain microtasks, then run the next task. After each task, microtasks are drained again before another task begins.
 
 Example from [challenge.js](challenge.js):
 
