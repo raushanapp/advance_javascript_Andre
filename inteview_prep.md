@@ -5,6 +5,13 @@
     - Q: What is a closure? Give a real-world example.
     - Q: How does 'this' behave in arrow vs normal functions?
     - Q: Explain hoisting in JavaScript with example.
+  - DOM & Carousel Interview Question
+    - Q: How would you build a simple image carousel using vanilla JavaScript?
+    - Answer: I would keep an array of image URLs and a currentIndex variable to track the active slide. The renderSlide() function clears the container, creates an image element, sets its src and alt, and appends it to the DOM. The next() and previous() functions update the index and call renderSlide() again. I also add boundary checks so the index never goes below 0 or above the last image.
+    - Q: Why is state important in a carousel?
+    - Answer: State tells us which slide is currently visible. Without a currentIndex, the app would not know which image to show or how to move between slides.
+    - Q: What are common improvements for a carousel?
+    - Answer: Auto-play, navigation dots, keyboard support, touch/swipe events, lazy loading for images, and accessibility features like ARIA labels.
   - Async & Event Loop
     - Q: Explain microtask vs macrotask queue.
     - Q: Difference between setTimeout and Promise.resolve().

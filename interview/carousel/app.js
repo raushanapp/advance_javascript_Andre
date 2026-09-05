@@ -1,31 +1,41 @@
-const getImageSection = document.getElementById("carousel_section");
-let counter = 0;
-let images = [
-  "https://fastly.picsum.photos/id/273/200/300.jpg?hmac=C0IK2DPqr03oiShSklDGIHBzHorcmVrky7A_uvBEzIM",
-  "https://www.google.com/imgres?q=image&imgurl=https%3A%2F%2Fi0.wp.com%2Fpicjumbo.com%2Fwp-content%2Fuploads%2Fsilhouettes-of-hawaiian-palms-at-a-gorgeous-sunset-free-image.jpeg%3Fh%3D800%26quality%3D80&imgrefurl=https%3A%2F%2Fpicjumbo.com%2F&docid=Kzg7bmtb2MSiyM&tbnid=yjbyIahNbtz_hM&vet=12ahUKEwiBya65ndeWAxVoSWwGHbQKOCsQnPAOegUIsAIQAA..i&w=533&h=800&hcb=2&ved=2ahUKEwiBya65ndeWAxVoSWwGHbQKOCsQnPAOegUIsAIQAA",
-  "https://fastly.picsum.photos/id/273/200/300.jpg?hmac=C0IK2DPqr03oiShSklDGIHBzHorcmVrky7A_uvBEzIM",
+const carouselSection = document.getElementById("carousel_section");
+const images = [
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=800&q=80",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
 ];
-function appendItems() {
-  let image = document.createElement("img");
-  let p = document.createElement("p");
-  image.src = images[counter];
-  p.innerText = counter;
-  getImageSection.append(image);
-  getImageSection.append(p);
+
+let currentIndex = 0;
+
+function renderSlide() {
+  carouselSection.innerHTML = "";
+
+  const image = document.createElement("img");
+  const caption = document.createElement("p");
+
+  image.src = images[currentIndex];
+  image.alt = `Slide ${currentIndex + 1}`;
+  image.className = "carousel_image";
+
+  caption.textContent = `${currentIndex + 1} / ${images.length}`;
+  caption.className = "carousel_caption";
+
+  carouselSection.appendChild(image);
+  carouselSection.appendChild(caption);
 }
 
 function previous() {
-  console.log(counter);
-  if (counter <= 0) return;
-  getImageSection.innerHTML = "";
-  counter--;
-  appendItems();
-}
-function next() {
-  if (images.length - 1 === counter) return;
-  getImageSection.innerHTML = "";
-  counter++;
-  appendItems();
+  if (currentIndex > 0) {
+    currentIndex--;
+    renderSlide();
+  }
 }
 
-appendItems();
+function next() {
+  if (currentIndex < images.length - 1) {
+    currentIndex++;
+    renderSlide();
+  }
+}
+
+renderSlide();
