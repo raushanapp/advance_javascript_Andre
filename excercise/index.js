@@ -1690,3 +1690,100 @@ Promise.resolve("hi").then((d) => console.log("3 ===>>", d));
 
 // 3
 console.log("3 is a crowd");
+
+//  3  parallel Sequence ,Race
+
+const promisify = (item, delay) =>
+  new Promise((resolve) => setTimeout(() => resolve(item), delay));
+
+const i = () => promisify("I", 100);
+const j = () => promisify("I", 5000);
+const k = () => promisify("I", 3000);
+
+async function parallel() {
+  const promises = [i(), j(), k()];
+  const [output1, output2, output3] = await Promise.all(promises);
+
+  return `Parallel is done : ${output1} ${output2} ${output3}`;
+}
+
+parallel().then(console.log);
+
+async function race() {
+  const promises = [i(), j(), k()];
+  const output1 = await Promise.race(promises);
+  return ` Race is Done : ${output1}`;
+}
+
+race().then(console.log);
+
+async function sequence() {
+  const output1 = await i();
+  const output2 = await j();
+  const output3 = await k();
+
+  return ` Sequnce is done : ${output1} ${output2} ${output3} `;
+}
+sequence().then(console.log);
+
+//  Threads Concurrency and paralleism
+
+if (5 > 4) {
+  let a = "test scret";
+}
+
+console.log(a);
+
+function loopTest() {
+  for (var i = 0; i < 5; i++) {
+    setTimeout(() => console.log("Time --> ", i));
+  }
+}
+
+loopTest();
+
+var glb = "testing";
+
+function t() {
+  glb = "sdfkjsfdk";
+}
+
+console.log(glb);
+
+t();
+
+var m = {
+  name: "Rohan",
+  say() {
+    console.log(this);
+  },
+};
+
+m.s();
+
+var n = {
+  name: "Rohan",
+  say() {
+    return function () {
+      console.log(this);
+    };
+  },
+};
+n.say();
+
+var p = {
+  name: "Rohan",
+  say() {
+    return () => console.log(this);
+  },
+};
+p.say();
+
+const p = {
+  name: "Rohan",
+  say() {
+    console.log("hi" + this.name);
+  },
+};
+
+p.say();

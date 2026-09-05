@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: 0;
+}
+
+.app {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid red;
+  height: 500px;
+  /* padding: 12px; */
+}
+.prev_button,
+.next_button {
+  width: 100px;
+  height: 45px;
+  padding: 10px;
+}

@@ -591,13 +591,34 @@ An execution context contains the state needed to run code, including bindings, 
 
 ### 15. Explain the event loop
 
-JavaScript runs synchronous code on a call stack. Host APIs such as timers and network operations complete outside that stack. When the stack is empty, queued callbacks are scheduled for execution. Promise reactions and `queueMicrotask` use the microtask queue, which is drained before the next task such as a timer callback.
+JavaScript runs synchronous code on one call stack. The event loop is the coordination mechanism that lets JavaScript start slow or external work, continue running other code, and execute the result later when the call stack is available. Host APIs such as timers, network requests, DOM events, and file I/O perform the waiting outside the call stack. They do not make JavaScript multi-threaded; they prevent the stack from being blocked while it waits.
 
-#### Why do we use the event loop?
+The event loop is useful because an application often needs to wait for work that has an unpredictable duration. Without it, a browser would freeze while waiting for a network response, and a Node.js server could not handle other requests while one operation was pending.
 
-The event loop allows a single JavaScript thread to start slow operations without waiting for them to finish. While the browser or Node.js runtime handles a timer, file operation, network request, or user event, JavaScript can continue handling other work. When the operation is ready, its callback is queued and runs only after the current synchronous work finishes.
+```mermaid
+flowchart LR
+  Source[JavaScript source] --> Stack[Call stack]
+  Stack --> Sync[Run synchronous code]
+  Sync --> Runtime{Needs external work?}
+  Runtime -- No --> Stack
+  Runtime -- Yes --> APIs[Browser or Node.js APIs]
+  APIs --> Microtasks[Microtask queue: Promise / queueMicrotask]
+  APIs --> Tasks[Task queue: timer / I/O / user event]
+  Microtasks --> Loop[Event loop]
+  Tasks --> Loop
+  Loop --> Empty{Is call stack empty?}
+  Empty -- No --> Loop
+  Empty -- Yes --> Drain[Drain microtasks]
+  Drain --> Next[Run one task]
+  Next --> Stack
+```
 
-This keeps applications responsive and lets Node.js handle many I/O requests without creating one JavaScript thread per request. The event loop does **not** make JavaScript execute two callbacks at the same time, and it does not make CPU-heavy JavaScript asynchronous. A long loop still blocks the call stack and delays timers, rendering, and user interactions.
+The event loop follows this simplified order:
+
+1. Run the current synchronous code until the call stack is empty.
+2. Drain the microtask queue, including Promise handlers and `queueMicrotask` callbacks.
+3. Run a task such as a timer or DOM event callback.
+4. Repeat the process.
 
 ```js
 console.log("A");
@@ -606,6 +627,15 @@ Promise.resolve().then(() => console.log("C"));
 console.log("D");
 // A, D, C, B
 ```
+
+In this example, `A` and `D` run immediately on the call stack. The resolved Promise queues `C` as a microtask, while `setTimeout` queues `B` as a task. After the stack is empty, the event loop runs `C` before `B`.
+
+### Event loop use cases
+
+- **Fetching data:** start `fetch()` and render or process the response when the network operation completes, while the UI remains responsive.
+- **User interaction:** place a click or keyboard handler in a queue so the browser can finish the current work before handling the event.
+- **Timers and scheduling:** defer non-urgent work with `setTimeout`, or schedule a repeating task with `setInterval` and clean it up when it is no longer needed.
+- **Node.js servers:** allow other requests to be handled while the application waits for a database, file, or network operation.
 
 #### Practical use case: loading a dashboard
 
