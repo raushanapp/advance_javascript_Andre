@@ -135,20 +135,20 @@ In short: object-oriented programming is about modeling real-world entities as o
 
 ```mermaid
 flowchart TD
-    A[Object / Entity] --> B[State]
-    A --> C[Behavior]
+    A["Object / Entity"] --> B["State"]
+    A --> C["Behavior"]
 
-    B --> D[name]
-    B --> E[weapon]
-    C --> F[attack()]
+    B --> D["name"]
+    B --> E["weapon"]
+    C --> F["attack()"]
 
-    G[Factory Function createElf()] --> H[Returns new elf object]
-    H --> I[peter]
-    H --> J[sam]
+    G["Factory Function"] --> H["Returns new elf object"]
+    H --> I["peter"]
+    H --> J["sam"]
 
-    K[elfFn.attack method] --> L[Assigned to a.attack]
-    L --> M[When called, this = a]
-    M --> N[a.weapon]
+    K["elfFn.attack method"] --> L["Assigned to a.attack"]
+    L --> M["this = a"]
+    M --> N["a.weapon"]
 ```
 
 ---
