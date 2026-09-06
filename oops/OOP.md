@@ -309,3 +309,33 @@ flowchart TD
 ## 14) Final interview-ready answer
 
 JavaScript OOP is based on objects, functions, and prototypes. We create objects with properties and methods, reuse behavior through factory functions and constructor functions, and inherit shared methods through the prototype chain. The tricky part is `this`, because its value changes based on how a function is called. That is why understanding `this`, prototype, and constructor functions is important in JavaScript interviews.
+
+---
+
+## 15) 5 Common JavaScript OOP Interview Questions
+
+### Q1. What is OOP in JavaScript?
+
+Answer: OOP is a programming style where we model real-world entities as objects. In JavaScript, objects contain properties and methods, and we can create many similar objects using factory functions or constructor functions.
+
+### Q2. What is encapsulation?
+
+Answer: Encapsulation means keeping related data and behavior together in one object. For example, an `elf` object has `name` and `weapon` and a method like `attack()`, so the object manages its own state and behavior.
+
+### Q3. What is the difference between a factory function and a constructor function?
+
+Answer: A factory function returns a new object directly, while a constructor function is used with the `new` keyword. Constructor functions are usually used with prototypes to share methods across instances.
+
+### Q4. What is prototype inheritance in JavaScript?
+
+Answer: Every object has a prototype. If a property or method is not found on the object itself, JavaScript looks up the prototype chain. This allows child objects to inherit methods from parent objects.
+
+### Q5. Why is `this` confusing in JavaScript?
+
+Answer: `this` depends on how a function is called. If a method is called as `obj.method()`, then `this` is `obj`. In nested functions, `this` may change, so developers often save the outer value in a variable like `self` or use arrow functions carefully.
+
+---
+
+### Quick revision line
+
+JavaScript OOP is about objects, properties, methods, prototypes, inheritance, and understanding how `this` works.
