@@ -91,10 +91,13 @@ let newCreateObject = createNewElf("Rohit", "Wood");
 //  new Keyword here automatic return the objects and it's  ElfConstructor construct the objects for  us
 //  any function invoked with new keyword called the constructor functions
 function ElfConstructor(name, weapon) {
+  console.log("This ===>>", this);
   this.name = name;
   this.weapon = weapon;
+  console.log("This --->>", this);
 }
 
+//  with constructor function only way to create the property using this keyword
 //  in the Javascript function is a specails types of callable functions and at end it is called  object can we can attached the
 //  methods using prototype and if see the method in __proto__.__prototypes__ --> attack method
 
@@ -113,8 +116,25 @@ ElfConstructor.prototype.buildOwnHouse = function () {
   return "Build Own house " + this.name;
 };
 
+ElfConstructor.prototype.build = function () {
+  let self = this;
+  // function building() {
+  //   return this.name + " builds a house";
+  // }
+  function building() {
+    return self.name + " builds a house";
+  }
+  // few way to solve this
+  return building();
+  // return building.bind(this);
+};
+
 const peters = new ElfConstructor("Peter", "gun");
+// undefined why do get undefined  and function inside function this keyword not assign to the object itself actually assign to the windows object
+console.log("====>>> " + peters.build()); // undefined and there is few way to solve this
 const peters2 = new ElfConstructor("New build", "gun");
+
+console.log(peters.prototype); // undefined because peter is object and only function have access to prototypes
 
 console.log(peters2.buildOwnHouse());
 
