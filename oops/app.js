@@ -150,3 +150,106 @@ let Andrew = new Function(
 let andrew1 = new Andrew("Andrew", "Stone");
 
 console.log(andrew1);
+
+// Classes in javascripts
+//  ES6 Javascripts
+//  here are modeling real world data and method and property into one place
+// Instance happen when we create object to call the claas Elfg
+class Elfg {
+  // sudo class of prototype of inheritance
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return "Attack with New Es6 " + this.weapon;
+  }
+}
+
+// shally have instance of  Elfg
+// under the hood javascript create using to the  prototype
+
+const shally = new Elfg("Shally", "stones"); // this is also called instanceance
+console.log(shally instanceof Elfg); // true
+shally.attack();
+
+// This Keyword
+
+//  new binding this
+//  new binding allow us to person1 to instanceate  to person1 and person1 is this keyword
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const person1 = new Person("Xavier", 40);
+//  implicit binding
+//  this imply to person or referr to person
+const person = {
+  name: "Karen",
+  age: 40,
+  hi() {
+    console.log("Hi " + this.name);
+  },
+};
+
+//  explicit binding
+// in this case i am tell to bind to the window
+const person2 = {
+  name: "Karen",
+  age: 40,
+  hi: function () {
+    console.log("Hi " + this.setTimeout);
+  }.bind(window),
+};
+
+person2.hi();
+
+//  arrow function case
+// lexical scope where ever write the function that why this bind
+
+const person3 = {
+  name: "Karen",
+  age: 40,
+  hi: function () {
+    var inner = () => {
+      //  this is window object but usally never won't this
+      console.log("Hi " + this.name);
+    };
+
+    return inner();
+  },
+};
+//  second case
+const person4 = {
+  name: "Karen",
+  age: 40,
+  hi: function () {
+    var inner = function () {
+      //  this is window object but usally never won't this
+      console.log("Hi " + this.name);
+    };
+
+    return inner();
+  },
+};
+
+//  here i need to fixed this
+const person5 = {
+  name: "Karen",
+  age: 40,
+  hi: function () {
+    let self = this;
+    var inner = function () {
+      //  this is window object but usally never won't this
+      console.log("Hi  ==>>" + self.name);
+    };
+
+    return inner();
+  },
+};
+
+person3.hi();
+person4.hi();
+person5.hi();
