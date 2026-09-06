@@ -62,4 +62,71 @@ let a = createElf("PS", "Fire");
 a.attack = elfFn.attack;
 
 // a.attack();
-console.log(a.attack());
+// console.log(a.attack());
+
+//  create using OBject.create
+// Inheritance in javascripts
+//  here we are using object .create method to inheritate the propertry to other objects
+
+const elfStore = {
+  changeWeapon() {
+    return "Changed Weapons : --> " + this.weapon;
+  },
+};
+
+function createNewElf(name, weapon) {
+  let newElf = Object.create(elfStore);
+  newElf.name = name;
+  newElf.weapon = weapon;
+  return newElf;
+}
+
+let newCreateObject = createNewElf("Rohit", "Wood");
+
+// console.log(newCreateObject.changeWeapon());
+
+//  this even close the OOP
+// Constructor Function
+
+//  new Keyword here automatic return the objects and it's  ElfConstructor construct the objects for  us
+//  any function invoked with new keyword called the constructor functions
+function ElfConstructor(name, weapon) {
+  this.name = name;
+  this.weapon = weapon;
+}
+
+//  in the Javascript function is a specails types of callable functions and at end it is called  object can we can attached the
+//  methods using prototype and if see the method in __proto__.__prototypes__ --> attack method
+
+ElfConstructor.prototype.attackWithWeapon = function () {
+  return "Attack With : " + this.weapon;
+};
+
+//  if here i used arrow function get undefined because the arrow is lexically scope base on where ran
+//   arrow function is matter where it's ran so that why the buildOwnHouse method is returning undefined and switch to arrow function to normal function is dynamically scope
+
+ElfConstructor.prototype.buildOwnHouse = () => {
+  return "Build Own house " + this.name;
+};
+
+ElfConstructor.prototype.buildOwnHouse = function () {
+  return "Build Own house " + this.name;
+};
+
+const peters = new ElfConstructor("Peter", "gun");
+const peters2 = new ElfConstructor("New build", "gun");
+
+console.log(peters2.buildOwnHouse());
+
+//  A functions constructor they allow us to create object with new Keywords
+
+let Andrew = new Function(
+  "name",
+  "weapon",
+  ` this.name = name;
+  this.weapon = weapon;`,
+);
+
+let andrew1 = new Andrew("Andrew", "Stone");
+
+console.log(andrew1);
