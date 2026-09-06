@@ -433,7 +433,112 @@ This is a common workaround when `this` is lost inside a nested function.
 
 ---
 
-## 14) Big idea from this file
+## 14) Class Inheritance with `extends`
+
+The latest part of `app.js` shows how one class can inherit from another class.
+
+```js
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return "Attack with " + this.weapon;
+  }
+}
+
+class Elf extends Character {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+  }
+}
+
+class Ogre extends Character {
+  constructor(name, weapon, color) {
+    super(name, weapon);
+    this.color = color;
+  }
+
+  makeFort() {
+    return "strongest fort in the world made";
+  }
+}
+```
+
+### What is happening?
+
+- `Character` is the parent class.
+- `Elf` and `Ogre` are child classes.
+- `extends` creates the inheritance relationship.
+- `super(name, weapon)` calls the parent constructor.
+- `Elf` gets the inherited `attack()` method.
+- `Ogre` gets `attack()` and also defines its own `makeFort()` method.
+
+```js
+const dolby = new Elf("Dolby", "cloth", "house");
+const shrek = new Ogre("Shrek", "club", "green");
+
+shrek.attack();
+shrek.makeFort();
+```
+
+`shrek` can call both methods because `attack()` comes from `Character` and `makeFort()` comes from `Ogre`.
+
+### Important interview point
+
+JavaScript does not copy all parent methods into the child object. The child is connected to the parent through the prototype chain. This saves memory because shared methods are looked up through that chain.
+
+---
+
+## 15) Checking the Prototype Chain
+
+The code uses `isPrototypeOf()` and `instanceof` to check inheritance relationships.
+
+```js
+console.log(Ogre.prototype.isPrototypeOf(shrek));
+console.log(Character.prototype.isPrototypeOf(Ogre));
+
+console.log(dolby instanceof Elf);
+console.log(dolby instanceof Character);
+```
+
+### `instanceof`
+
+`instanceof` checks whether an object was created from a class or from one of its parent classes.
+
+```js
+dolby instanceof Elf; // true
+dolby instanceof Character; // true
+```
+
+`dolby` is an `Elf`, and because `Elf` extends `Character`, it is also considered a `Character`.
+
+### `isPrototypeOf()`
+
+`isPrototypeOf()` checks whether one prototype exists in another object's prototype chain.
+
+```js
+Ogre.prototype.isPrototypeOf(shrek); // true
+```
+
+The `Character` check in the file is different:
+
+```js
+Character.prototype.isPrototypeOf(Ogre); // false
+```
+
+Here `Ogre` is the class function itself, not an instance created with `new`. To check the instance relationship, use `Character.prototype.isPrototypeOf(shrek)` or `shrek instanceof Character`.
+
+### Interview answer
+
+An instance is an object created with `new`. Inheritance does not copy the parent class; JavaScript links objects and prototypes together through the prototype chain.
+
+---
+
+## 16) Big idea from this file
 
 This file teaches the real foundation of JavaScript OOP:
 
@@ -447,7 +552,7 @@ This file teaches the real foundation of JavaScript OOP:
 
 ---
 
-## 15) Simple diagram
+## 17) Simple diagram
 
 ```mermaid
 flowchart TD
@@ -468,6 +573,12 @@ flowchart TD
     N["Constructor Function"] --> O["Prototype methods"]
     O --> P["attackWithWeapon()"]
 
+    U["Character parent class"] --> V["Elf extends Character"]
+    U --> W["Ogre extends Character"]
+    V --> X["Inherited attack()"]
+    W --> Y["Inherited attack()"]
+    W --> Z["Own makeFort()"]
+
     Q["this"] --> R["Depends on call site"]
     R --> S["Normal function"]
     R --> T["Arrow function"]
@@ -475,7 +586,7 @@ flowchart TD
 
 ---
 
-## 16) Final understanding
+## 18) Final understanding
 
 The main thing to remember is this:
 

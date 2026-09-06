@@ -253,3 +253,56 @@ const person5 = {
 person3.hi();
 person4.hi();
 person5.hi();
+
+// Inheritance
+class Character {
+  constructor(name, weapon) {
+    this.name = name;
+    this.weapon = weapon;
+  }
+
+  attack() {
+    return "Attack with " + this.weapon;
+  }
+}
+// this called subclass
+class Elf extends Character {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+    console.log(this); // here how this behave, this telling who am i and who calling me so in this Elf class calling this keyword
+  }
+}
+class Ogre extends Character {
+  constructor(name, weapon, color) {
+    super(name, weapon);
+    this.color = color;
+  }
+
+  makeFort() {
+    return "strongest fort in the world made";
+  }
+}
+
+// Ogre.prototype.makeFort
+
+const dolby = new Elf("Dolby", "cloth", "house");
+console.log(dolby);
+
+const shrek = new Ogre("Shrek", "club", "green");
+shrek.makeFort();
+shrek.attack();
+
+console.log(Ogre.prototype.isPrototypeOf(shrek));
+console.log(Character.prototype.isPrototypeOf(Ogre));
+
+//  other way to chek the cahin
+
+console.log(dolby instanceof Elf);
+console.log(dolby instanceof Character);
+
+//  Instance means when we use new keyword with class we create instance
+//  instance creating a version of class
+// inheritance means in javascript does not copy the class,it's simply link through the chain
+//  so here we are not creating copy of class, we justing linking make effecient
+// in javascript we are linking to the objects and classes not making copy of object and class and terms of memory effecient
