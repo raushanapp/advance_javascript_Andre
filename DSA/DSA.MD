@@ -358,3 +358,200 @@ The computer fundamentals are connected:
 - Big O describes how time and memory usage grow as input size increases
 
 Understanding this connection makes DSA solutions easier to explain in interviews.
+
+---
+
+## 12. CPU Cache and Bits
+
+The latest notes in `app.js` mention CPU cache and how many values can be represented with different numbers of bits.
+
+### CPU cache
+
+CPU cache is very fast memory located close to the CPU. It stores frequently used instructions and data so the CPU does not always need to wait for RAM.
+
+```mermaid
+flowchart LR
+		A["CPU registers"] --> B["CPU cache"]
+		B --> C["RAM"]
+		C --> D["Persistent storage"]
+		A1["Fastest and smallest"] -.-> A
+		A1 -.-> B
+		A1 -.-> C
+		A1 -.-> D
+```
+
+In general, moving from storage toward CPU registers gives faster access but less capacity and higher cost.
+
+### What does a bit represent?
+
+A bit can hold either `0` or `1`. With `n` bits, there are $2^n$ possible bit patterns.
+
+For an unsigned value, the range is:
+
+$$0 \text{ through } 2^n - 1$$
+
+| Bits |          Possible values |             Unsigned maximum |
+| ---: | -----------------------: | ---------------------------: |
+|    8 |              $2^8 = 256$ |                        $255$ |
+|   16 |        $2^{16} = 65,536$ |                     $65,535$ |
+|   32 | $2^{32} = 4,294,967,296$ |              $4,294,967,295$ |
+|   64 |                 $2^{64}$ | $18,446,744,073,709,551,615$ |
+
+This table describes unsigned integer storage. It should not be interpreted as the exact internal representation of every JavaScript number.
+
+---
+
+## 13. JavaScript Number Limits
+
+JavaScript uses the `Number` type for ordinary numeric values. It is based on the IEEE 754 double-precision floating-point format, not a simple unsigned 64-bit integer.
+
+```js
+console.log(Number.MAX_SAFE_INTEGER); // 9007199254740991
+console.log(Math.pow(6, 1000)); // Infinity
+```
+
+### Important points
+
+- `Number.MAX_SAFE_INTEGER` is $2^{53} - 1$.
+- Integers larger than the safe range may lose precision.
+- Very large floating-point results can become `Infinity`.
+- `BigInt` can represent arbitrarily large integers, but it cannot be mixed directly with `Number` in arithmetic.
+
+```js
+const safeNumber = Number.MAX_SAFE_INTEGER;
+const largeInteger = 123456789012345678901234567890n;
+
+console.log(safeNumber);
+console.log(largeInteger);
+```
+
+### Interview answer
+
+JavaScript numbers are usually 64-bit floating-point values, but that does not mean every integer up to $2^{64} - 1$ is represented exactly. Safe integer precision ends at $2^{53} - 1$ for the `Number` type.
+
+---
+
+## 14. JavaScript Data Types
+
+The `app.js` notes divide values into primitive and non-primitive types.
+
+### Primitive values
+
+Primitive values are individual, immutable values:
+
+```js
+const count = 10; // number
+const message = "hello"; // string
+const isReady = true; // boolean
+let result; // undefined
+const emptyValue = null;
+```
+
+Common primitive types include:
+
+- `number`
+- `string`
+- `boolean`
+- `undefined`
+- `null`
+- `bigint`
+- `symbol`
+
+### Non-primitive values
+
+Objects, arrays, and functions are reference values.
+
+```js
+const numbers = [1, 2, 3];
+const user = { name: "Maya" };
+const sayHello = function () {
+  return "Hello";
+};
+```
+
+The variable stores a reference to the object in memory. Two variables can refer to the same object:
+
+```js
+const firstUser = { name: "Maya" };
+const secondUser = firstUser;
+
+secondUser.name = "Ravi";
+console.log(firstUser.name); // Ravi
+```
+
+### Interview answer
+
+Primitive values are copied by value. Objects and arrays are reference values, so assigning them to another variable copies the reference to the same object.
+
+---
+
+## 15. Common Data Structure Operations
+
+The notes in `app.js` list the main operations we perform on data structures.
+
+### 1. Insertion
+
+Adding a new value.
+
+```js
+const values = [10, 20];
+values.push(30);
+```
+
+### 2. Deletion
+
+Removing a value.
+
+```js
+values.pop();
+```
+
+### 3. Traversal
+
+Visiting each value.
+
+```js
+for (const value of values) {
+  console.log(value);
+}
+```
+
+### 4. Searching
+
+Checking whether a value exists.
+
+```js
+values.includes(20); // true
+```
+
+### 5. Sorting
+
+Reordering values according to a rule.
+
+```js
+const scores = [30, 10, 20];
+scores.sort((left, right) => left - right);
+```
+
+### 6. Access
+
+Reading a value at a known location.
+
+```js
+console.log(values[0]);
+```
+
+The cost of each operation depends on the data structure. For example, array access by index is usually $O(1)$, while searching an unsorted array is usually $O(n)$.
+
+---
+
+## 16. Final Interview Summary
+
+When explaining these fundamentals in an interview, connect the layers:
+
+1. Bits represent low-level binary information.
+2. CPU cache, RAM, and storage hold data at different speeds and capacities.
+3. JavaScript values are represented in memory as primitives or objects.
+4. Data structures organize those values.
+5. Algorithms perform operations such as insertion, search, traversal, and sorting.
+6. Big O explains how the time and memory cost changes as the input grows.
