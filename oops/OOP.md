@@ -538,7 +538,116 @@ An instance is an object created with `new`. Inheritance does not copy the paren
 
 ---
 
-## 16) Big idea from this file
+## 16) OOP Pillars and Polymorphism
+
+The next section of `app.js` introduces four important OOP ideas:
+
+- **Encapsulation:** keep related data and methods together in a class or object.
+- **Abstraction:** expose the useful behavior and hide unnecessary implementation details.
+- **Inheritance:** allow a child class to reuse properties and methods from a parent class.
+- **Polymorphism:** allow different classes to use the same method name with different behavior.
+
+### The parent class
+
+`Character1` defines shared properties and a default `attack1()` method.
+
+```js
+class Character1 {
+  constructor(name, weapon, age) {
+    this.name = name;
+    this.age = age;
+    this.weapon = weapon;
+  }
+
+  attack1() {
+    return `Attack with --> ${this.weapon} and the age of person have ${this.age}`;
+  }
+}
+```
+
+The `name`, `age`, and `weapon` fields are public because they are accessed through `this.name`, `this.age`, and `this.weapon`.
+
+### Child classes override the same method
+
+`Elf2` and `Orge1` both extend `Character1`, but each class provides its own version of `attack1()`.
+
+```js
+class Elf2 extends Character1 {
+  constructor(name, weapon, age, color) {
+    super(name, weapon, age);
+    this.color = color;
+  }
+
+  attack1(withParameter) {
+    return `Attack with different ${this.weapon} and ${this.color}, ${withParameter}`;
+  }
+}
+
+class Orge1 extends Character1 {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+  }
+
+  attack1() {
+    return "HAHAHAHAH with different this but same function";
+  }
+}
+```
+
+This is polymorphism: the method name is the same, but the result depends on the object type.
+
+```js
+const elf = new Elf2("Dolby", "cloth", 100, "house");
+const ogre = new Orge1("Shrek", "club", "green");
+
+console.log(elf.attack1("with speed"));
+console.log(ogre.attack1());
+```
+
+Both objects respond to `attack1()`, but they produce different output.
+
+### What does `super()` do?
+
+`super(name, weapon, age)` calls the parent constructor so the child can initialize the properties defined by `Character1`.
+
+The child can then add its own property, such as `color` or `type`.
+
+### Private and public fields
+
+The comment in `app.js` mentions private and public fields, but the current code only uses public fields. A public field can be accessed from outside the object:
+
+```js
+console.log(elf.weapon); // cloth
+```
+
+A truly private field uses the `#` syntax and cannot be accessed directly outside the class:
+
+```js
+class SecureCharacter {
+  #weapon;
+
+  constructor(weapon) {
+    this.#weapon = weapon;
+  }
+
+  attack() {
+    return "Attack with " + this.#weapon;
+  }
+}
+
+const secureCharacter = new SecureCharacter("sword");
+console.log(secureCharacter.attack());
+// secureCharacter.#weapon; // SyntaxError: private field
+```
+
+### Interview answer
+
+Polymorphism means different objects can respond to the same method call in different ways. In this example, `Character1` defines `attack1()`, while `Elf2` and `Orge1` override it with their own implementations. Inheritance provides the shared structure, and polymorphism provides the different behavior.
+
+---
+
+## 17) Big idea from this file
 
 This file teaches the real foundation of JavaScript OOP:
 
@@ -552,7 +661,7 @@ This file teaches the real foundation of JavaScript OOP:
 
 ---
 
-## 17) Simple diagram
+## 18) Simple diagram
 
 ```mermaid
 flowchart TD
@@ -586,7 +695,7 @@ flowchart TD
 
 ---
 
-## 18) Final understanding
+## 19) Final understanding
 
 The main thing to remember is this:
 

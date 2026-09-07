@@ -306,3 +306,49 @@ console.log(dolby instanceof Character);
 // inheritance means in javascript does not copy the class,it's simply link through the chain
 //  so here we are not creating copy of class, we justing linking make effecient
 // in javascript we are linking to the objects and classes not making copy of object and class and terms of memory effecient
+
+// Private and public fields
+
+//  Encapsulation -->
+//  Abstraction --> hide the method and properties  to the out side our code give to what need according to this just we are providing the method properties
+// Inheritance --> brrowing the method and property to other classes and by having shared method and properties and also memory effecient
+// Polymorphism --> calling same method with different objects with give us different result
+
+//  ==> polymorphism example code
+//  ability to apper many form
+// ability to processing differently according to data types in class
+// ability to restrict to method
+
+class Character1 {
+  constructor(name, weapon, age) {
+    this.name = name;
+    this.age = age;
+    this.weapon = weapon;
+  }
+
+  attack1() {
+    return `Attack with --> ${this.weapon} and the age of person have ${this.age} `;
+  }
+}
+
+class Elf2 extends Character1 {
+  constructor(name, weapon, age, color) {
+    super(name, weapon, age);
+    this.color = color;
+  }
+
+  attack1(withParameter) {
+    return `Attack with different ${this.weapon} and ${this.color}, ${withParameter}`;
+  }
+}
+
+class Orge1 extends Character1 {
+  constructor(name, weapon, type) {
+    super(name, weapon);
+    this.type = type;
+  }
+
+  attack1() {
+    return "HAHAHAHAH with different this but same function";
+  }
+}
