@@ -61,3 +61,15 @@ define(["module1", "module2"], function (module1Import, module2Import) {
 });
 
 //  UMD at end the day doing if else statement to verify to do things
+
+// Es6 modules
+const harry = "potter";
+const voldemort = "He who must not be named";
+
+export function jump() {}
+
+export function fight(char1, char2) {
+  const attack1 = Math.floor(Math.random() * char1.length);
+  const attack2 = Math.floor(Math.random() * char2.length);
+  return attack1 > attack2 ? `${char1} Wins ` : `${char2} wins`;
+}

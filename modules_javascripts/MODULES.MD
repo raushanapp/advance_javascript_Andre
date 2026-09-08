@@ -417,3 +417,60 @@ flowchart LR
 ```
 
 The most important rule is: keep implementation details private and export only what other parts of the application need.
+
+---
+
+## 13. Native ES Module Example from `app.js`
+
+The code at lines 65–75 uses the modern ES module system.
+
+```js
+const harry = "potter";
+const voldemort = "He who must not be named";
+
+export function jump() {}
+
+export function fight(char1, char2) {
+  const attack1 = Math.floor(Math.random() * char1.length);
+  const attack2 = Math.floor(Math.random() * char2.length);
+  return attack1 > attack2 ? `${char1} Wins ` : `${char2} wins`;
+}
+```
+
+### What is private?
+
+`harry` and `voldemort` are not exported, so another module cannot import them directly. They are private to this file.
+
+### What is public?
+
+`jump()` and `fight()` are exported named functions. Another module can import them by name:
+
+```js
+import { jump, fight } from "./app.js";
+
+console.log(fight("Harry", "Voldemort"));
+jump();
+```
+
+### How does `fight()` work?
+
+1. It receives two character names.
+2. It creates a random attack value for each character.
+3. It compares the two values.
+4. It returns the winner's name.
+
+The result is not guaranteed to be the same every time because `Math.random()` is used.
+
+### Browser requirement
+
+Because `app.js` contains `export`, the browser must load it as a module:
+
+```html
+<script type="module" src="app.js"></script>
+```
+
+A normal script tag such as `<script src="app.js"></script>` cannot directly execute `export` syntax.
+
+### Interview answer
+
+ES modules use `export` to expose selected values and `import` to consume them. Values that are not exported remain private to the module file. This gives JavaScript file-level scope and prevents unnecessary global variables.

@@ -13,7 +13,7 @@
       </ul>
     </main>
     <!--  keep it mind have scripts tag have write order -->
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
     <script>
       //  is  called
       var globalSecret = "123";
@@ -25,6 +25,10 @@
         console.log(globalSecret);
       })(globalSecret);
       console.log("===>>", globalSecret);
+    </script>
+    <script type="module">
+      import { fight } from "./app.js";
+      console.log(fight("ron", "hedwing"));
     </script>
   </body>
 </html>
