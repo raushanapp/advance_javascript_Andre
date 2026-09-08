@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modules in Js</title>
+  </head>
+  <body>
+    <main>
+      <h1>Modules In Javascripts</h1>
+      <ul>
+        <li>What are modules in javascript</li>
+      </ul>
+    </main>
+    <!--  keep it mind have scripts tag have write order -->
+    <script src="app.js"></script>
+    <script>
+      //  is  called
+      var globalSecret = "123";
+      // var fight = "hahaha";
+    </script>
+    <script>
+      var script2 = (function (globalSecret) {
+        globalSecret = "o";
+        console.log(globalSecret);
+      })(globalSecret);
+      console.log("===>>", globalSecret);
+    </script>
+  </body>
+</html>
