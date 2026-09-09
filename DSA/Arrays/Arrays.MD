@@ -277,12 +277,12 @@ Storing `n` elements requires `O(n)` space. An operation such as middle deletion
 
 ```mermaid
 flowchart LR
-		A[Array: a b c d] --> B{Operation}
-		B -->|index lookup| C[Read one position: O(1)]
-		B -->|push| D[Append at end: amortized O(1)]
-		B -->|pop| E[Remove end: O(1)]
-		B -->|unshift| F[Move all items right: O(n)]
-		B -->|middle delete| G[Move later items left: O(n)]
+  A["Array: a b c d"] --> B{"Operation"}
+  B -->|index lookup| C["Read one position: O(1)"]
+  B -->|push| D["Append at end: amortized O(1)"]
+  B -->|pop| E["Remove end: O(1)"]
+  B -->|unshift| F["Move all items right: O(n)"]
+  B -->|middle delete| G["Move later items left: O(n)"]
 ```
 
 ## Source-file corrections to remember
