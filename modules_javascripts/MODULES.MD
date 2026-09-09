@@ -474,3 +474,63 @@ A normal script tag such as `<script src="app.js"></script>` cannot directly exe
 ### Interview answer
 
 ES modules use `export` to expose selected values and `import` to consume them. Values that are not exported remain private to the module file. This gives JavaScript file-level scope and prevents unnecessary global variables.
+
+---
+
+## 14. Top-Level `await` and Dynamic Import
+
+The code at lines 77–83 uses `await` directly at the top level of an ES module:
+
+```js
+let a;
+
+if (1 === 1) {
+  const { testAwait } = await import("./test");
+  a = testAwait;
+}
+
+console.log(a);
+```
+
+### What is happening?
+
+1. `a` is declared outside the block so it can be used after the `if` block.
+2. The condition is true, so the block runs.
+3. `import("./test")` dynamically loads another module.
+4. `await` pauses this module until the import is complete.
+5. Destructuring extracts the exported `testAwait` value.
+6. That value is assigned to `a` and then logged.
+
+### Why does top-level `await` work here?
+
+Top-level `await` is available in ES modules. The file must be loaded with:
+
+```html
+<script type="module" src="app.js"></script>
+```
+
+It cannot be used directly in a classic script.
+
+### Dynamic import versus static import
+
+```js
+// Static import: loaded as part of module initialization.
+import { testAwait } from "./test.js";
+
+// Dynamic import: returns a Promise and can be loaded conditionally.
+const moduleData = await import("./test.js");
+```
+
+Dynamic import is useful when a feature is needed only after a condition, user action, or route change.
+
+### Important browser detail
+
+The imported file must exist and export `testAwait`. In browsers, the path normally needs the file extension:
+
+```js
+const { testAwait } = await import("./test.js");
+```
+
+### Interview answer
+
+Top-level `await` lets an ES module wait for asynchronous work during module initialization. Here, dynamic `import()` returns a promise for another module, `await` waits for it, and destructuring reads its named export.

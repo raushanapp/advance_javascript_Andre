@@ -73,3 +73,11 @@ export function fight(char1, char2) {
   const attack2 = Math.floor(Math.random() * char2.length);
   return attack1 > attack2 ? `${char1} Wins ` : `${char2} wins`;
 }
+
+//  Top level await
+let a;
+if (1 === 1) {
+  const { testAwait } = await import("./test");
+  a = testAwait;
+}
+console.log(a);
