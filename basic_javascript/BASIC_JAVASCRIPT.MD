@@ -159,3 +159,84 @@ without coercion, so it is generally the safer default.
 `typeof null` returns `"object"` because of a historical language bug. Conceptually,
 `null` represents an intentional absence of a value and is treated as a
 primitive value.
+
+## 5. Undefined
+
+When a variable is declared but no value is assigned, its value is
+`undefined`.
+
+```js
+var password;
+console.log(password); // undefined
+```
+
+`undefined` means that a value has not been assigned. This is different from
+`null`, which is an intentional empty value.
+
+## 6. Control Flow and Conditional Statements
+
+Control flow determines which code runs. JavaScript conditional statements
+include:
+
+- `if` - runs code when a condition is true.
+- `else if` - checks another condition when the previous condition is false.
+- `else` - runs when none of the previous conditions are true.
+- Ternary operator - a short form of `if...else` for simple conditions.
+- `switch` - compares one value with several `case` values.
+
+```js
+const name = "Billay";
+
+if (name === "Billay") {
+  console.log("Hi Billay");
+} else if (name === "Susy") {
+  console.log("Hi Susy");
+} else {
+  console.log("I do not know you");
+}
+```
+
+JavaScript checks the conditions from top to bottom. Once it finds a true
+condition, it runs that block and skips the remaining blocks.
+
+## 7. Logical Operators
+
+Logical operators combine or reverse conditions.
+
+| Operator | Name        | Meaning                                 |
+| -------- | ----------- | --------------------------------------- | ---------- | ---------------------------------------- |
+| `&&`     | Logical AND | True only when both conditions are true |
+| `        |             | `                                       | Logical OR | True when at least one condition is true |
+| `!`      | Logical NOT | Reverses a Boolean value                |
+
+```js
+const name = "Ann";
+
+if (name === "Billay" || name === "Ann") {
+  console.log("The name is Billay or Ann");
+}
+
+if (name === "Billay" && name === "Ann") {
+  console.log("This will not run because both cannot be true");
+}
+
+if (!(name === "Bob")) {
+  console.log("The name is not Bob");
+}
+```
+
+Boolean examples:
+
+```js
+!true; // false
+!false; // true
+```
+
+### Interview points
+
+- `if...else` is useful when conditions need to be evaluated in order.
+- `&&` requires every condition to be true.
+- `||` requires at least one condition to be true.
+- `!` changes `true` to `false` and `false` to `true`.
+- Prefer `const` for values that are not reassigned. The example source uses
+  `var` because it is demonstrating variable declarations.
