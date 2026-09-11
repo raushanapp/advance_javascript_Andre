@@ -336,3 +336,105 @@ const double = (number) => number * 2;
 - Calling a function without a returned value produces `undefined`.
 - Functions are first-class values in JavaScript, so they can be stored in
   variables, passed as arguments, and returned from other functions.
+
+## 9. Arrays and Objects
+
+### Arrays (source lines 118-131)
+
+An array is an ordered collection of values. JavaScript arrays can contain
+different data types, including strings, numbers, booleans, objects, and
+functions.
+
+```js
+const list = ["tiger", "cat", "bear", "bird"];
+const mixedValues = ["text", 10, true, function () {}];
+
+console.log(list[0]); // "tiger"
+console.log(list.length); // 4
+```
+
+Arrays use zero-based indexes, so the first item is at index `0`.
+
+Functions can also be stored in an array and called using their index:
+
+```js
+const functionList = [
+  function apple() {
+    console.log("Apple function called");
+  },
+  function banana() {
+    console.log("Banana function called");
+  },
+];
+
+functionList[0](); // Apple function called
+functionList[1](); // Banana function called
+```
+
+### Objects (source lines 133-152)
+
+An object stores related data as **key-value pairs**. The keys are called
+properties. A function stored inside an object is called a **method**.
+
+```js
+const user = {
+  name: "John",
+  age: 34,
+  isMarried: false,
+  spells: ["abrakadra", "shuzan", "boo"],
+  shout: function () {
+    console.log("AHHHHHH!");
+  },
+};
+```
+
+Read object properties with dot notation or bracket notation:
+
+```js
+console.log(user.name); // "John"
+console.log(user["name"]); // "John"
+```
+
+Dot notation is concise. Bracket notation is useful when the property name is
+stored in a variable or contains characters that are not valid in dot notation.
+
+```js
+const propertyName = "name";
+console.log(user[propertyName]); // "John"
+```
+
+Objects can be changed after creation. You can add a property or update an
+existing property, then call a method on the object:
+
+```js
+user.favouriteFood = "spinach"; // add a property
+user.isMarried = true; // update a property
+user.shout(); // call the method
+```
+
+### Arrays of objects (source lines 154-165)
+
+An array of objects is useful for representing a collection of records, such
+as users, products, or orders.
+
+```js
+const users = [
+  { username: "andy", password: "secret", id: 1 },
+  { username: "jess", password: "secret", id: 2 },
+];
+
+console.log(users[0].username); // "andy"
+console.log(users[1]["id"]); // 2
+```
+
+### Interview points
+
+- Arrays are ordered collections and use zero-based indexes.
+- Arrays can contain mixed value types, including functions and objects.
+- Objects store data as key-value pairs.
+- A function inside an object is called a method.
+- Dot notation and bracket notation both access object properties.
+- `var list` is declared earlier in the source and declared again later. This
+  is allowed because `var` can be redeclared, but `let` and `const` cannot be
+  redeclared in the same scope. Prefer `const` when the variable is not
+  reassigned.

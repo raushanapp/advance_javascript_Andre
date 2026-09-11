@@ -114,3 +114,52 @@ function multiply(a, b) {
 }
 
 multiply(5, 20); // we are using arugment to pass the function
+
+// Array  Data structure
+
+var list = ["tiger", "cat", "bear", "bird"];
+//  we can hold multiple type of data
+//  we can hold string number boolean function
+
+var functionList = [
+  function apple() {
+    console.log("Apple function called");
+  },
+  function banana() {
+    console.log("Banana function called");
+  },
+];
+
+//  Object --> object is  collection of property
+
+var user = {
+  name: "John",
+  age: 34,
+  hobby: "Socer",
+  isMarried: false,
+  spells: ["abrakadra", "shuzan", "boo"],
+  //  function inside object called methods
+  shout: function () {
+    console.log("AHHHHHH!");
+  },
+};
+
+user.name;
+user["name"];
+
+user.favouriteFood = "spinch";
+user.isMarried = true;
+user.shout();
+
+var list = [
+  {
+    username: "andy",
+    password: "secret",
+    id: 1,
+  },
+  {
+    username: "jess",
+    password: "secret",
+    id: 2,
+  },
+];
