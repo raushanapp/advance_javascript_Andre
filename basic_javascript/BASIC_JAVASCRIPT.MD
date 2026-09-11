@@ -240,3 +240,99 @@ Boolean examples:
 - `!` changes `true` to `false` and `false` to `true`.
 - Prefer `const` for values that are not reassigned. The example source uses
   `var` because it is demonstrating variable declarations.
+
+## 8. JavaScript Functions
+
+A function is a reusable block of code that performs an action. A function can
+perform one action or several actions.
+
+### Function declaration
+
+A function declaration uses the `function` keyword and a function name. It can
+be called after it is declared, and function declarations are hoisted.
+
+```js
+function sayHello() {
+  console.log("Hello");
+}
+
+sayHello(); // Hello
+```
+
+### Function expression
+
+A function expression stores a function in a variable. When the function has
+no name, it is called an **anonymous function**.
+
+```js
+const sayBye = function () {
+  console.log("Bye");
+};
+
+sayBye(); // Bye
+```
+
+The variable `sayBye` references the function, so adding `()` calls the
+function.
+
+### Parameters and arguments
+
+- **Parameters** are the named variables in a function definition.
+- **Arguments** are the actual values passed when the function is called.
+
+```js
+function multiply(a, b) {
+  // a and b are parameters
+  return a * b;
+}
+
+const result = multiply(5, 20); // 5 and 20 are arguments
+console.log(result); // 100
+```
+
+Using parameters makes a function reusable and helps avoid repeating the same
+code, which follows the DRY principle: **Don't Repeat Yourself**.
+
+### The `return` statement
+
+`return` sends a value back to the code that called the function. It also ends
+the function immediately. A function without a `return` statement returns
+`undefined`.
+
+```js
+function add(firstNumber, secondNumber) {
+  return firstNumber + secondNumber;
+  // Code here would not run.
+}
+
+function showMessage() {
+  console.log("Hello");
+}
+
+console.log(add(2, 3)); // 5
+console.log(showMessage()); // Hello, then undefined
+```
+
+### Arrow function
+
+Arrow functions were introduced in ES6. They provide a shorter syntax for
+function expressions.
+
+```js
+const multiplyNumbers = (firstNumber, secondNumber) => {
+  return firstNumber * secondNumber;
+};
+
+const double = (number) => number * 2;
+```
+
+### Interview points
+
+- A function declaration has a name and is hoisted.
+- A function expression is assigned to a variable and is not usable before
+  that assignment runs.
+- Parameters are placeholders; arguments are the values passed to them.
+- `return` provides a result and stops the function.
+- Calling a function without a returned value produces `undefined`.
+- Functions are first-class values in JavaScript, so they can be stored in
+  variables, passed as arguments, and returned from other functions.

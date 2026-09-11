@@ -7,6 +7,8 @@
 // 6. Symbol (new in ECMAScript 6)
 // 7. Object
 
+//
+//  this primitve data in javascript
 // Javascript Comparisons
 //  !==
 //  ===
@@ -68,3 +70,47 @@ if (name === "Billay" && name === "Ann") {
 if (!(name === "Bob")) {
   console.log("Hi Bob");
 }
+
+//  Javascripts Function
+//  var a = function name() {} -->
+//  function name (){}
+//  return
+//  () => {new in ECMASscript Es6}
+// what is function in javascipt --> function in javascrips perform actions and could be one action and multiple actions
+// alert("Hello") ==> hello is arguments
+//   Arguments are what given to the functions
+
+//  Function declaration
+function sayHello() {
+  console.log("Hello");
+}
+
+sayHello();
+
+//  function expression
+//  technically does not have the function name here
+//  this is called anonymous function
+// but here in function expression what we are doing we just asign to the var name to the function
+// here we referencing to function into the sayBye variable
+
+//  whenever use function if we are not  mean's your are not give back to result to function because we are not returning the value
+//  if we are using return key either is you get value or undefined
+//  if as soon as return keyword than programm exist into the function
+//
+var sayBye = function () {
+  console.log("Bye");
+};
+
+var sayByes = function () {
+  console.log("God Bye");
+};
+
+sayBye();
+sayByes();
+// here we use arugment to reuse the function and DRY method do not repeat same things again and again
+
+function multiply(a, b) {
+  return a * b;
+}
+
+multiply(5, 20); // we are using arugment to pass the function
