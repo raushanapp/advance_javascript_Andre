@@ -438,3 +438,129 @@ console.log(users[1]["id"]); // 2
   is allowed because `var` can be redeclared, but `let` and `const` cannot be
   redeclared in the same scope. Prefer `const` when the variable is not
   reassigned.
+
+## 10. JavaScript Loops
+
+Loops repeat code while a condition is true or while iterating over a
+collection. The source code from lines 166-224 demonstrates `for`, `while`,
+`do...while`, and `forEach` loops.
+
+### Example data (source lines 173-179)
+
+```js
+const todos = [
+  "clean room",
+  "brush teeth",
+  "exercise",
+  "study JavaScript",
+  "eat healthy",
+];
+
+console.log(todos.length); // 5
+```
+
+Use `todos.length`, not `todo.length`, because the array variable is named
+`todos`. The singular `todo` is used later as an individual item.
+
+### `for` loop (source lines 182-194)
+
+A `for` loop is useful when you need an index or want explicit control over
+initialization, the condition, and the update.
+
+```js
+for (let index = 0; index < todos.length; index++) {
+  console.log(todos[index]);
+}
+```
+
+The three parts are:
+
+1. `let index = 0` runs once before the loop.
+2. `index < todos.length` is checked before every iteration.
+3. `index++` runs after each iteration.
+
+The source changes each item and removes the last item during the same loop:
+
+```js
+for (let index = 0; index < todos.length; index++) {
+  todos[index] = todos[index] + "!";
+  todos.pop();
+}
+```
+
+Because `pop()` reduces `todos.length` on every iteration, the loop condition
+changes while the loop is running and some items are skipped. Avoid changing
+the array being traversed unless that behavior is intentional.
+
+To remove every item deliberately, a `while` loop is clearer:
+
+```js
+while (todos.length > 0) {
+  todos.pop();
+}
+```
+
+### `while` loop (source lines 196-206)
+
+A `while` loop checks its condition before each iteration. It may execute zero
+times if the condition is initially false.
+
+```js
+let counter = 0;
+
+while (counter < 10) {
+  console.log(counter);
+  counter++;
+}
+```
+
+The counter must be updated, or the loop can become infinite.
+
+### `do...while` loop (source lines 208-214)
+
+A `do...while` loop runs its body first and checks the condition afterward. It
+always runs at least once.
+
+```js
+let counter = 10;
+
+do {
+  console.log(counter);
+  counter--;
+} while (counter > 0);
+```
+
+### `forEach` (source lines 215-224)
+
+`forEach` calls a function once for every item in an array. Its callback can
+receive the current item and its index.
+
+```js
+todos.forEach((todo, index) => {
+  console.log(todo, index);
+});
+```
+
+The callback can also be declared separately and passed by reference:
+
+```js
+function logTodo(todo, index) {
+  console.log(todo + "!", index);
+}
+
+todos.forEach(logTodo);
+```
+
+Do not write `todos.forEach(logTodo())` here. That calls the function
+immediately instead of passing the function to `forEach`.
+
+### Interview points
+
+- `for` is useful when you need an index or precise loop control.
+- `while` checks the condition before running and may run zero times.
+- `do...while` runs at least once because it checks the condition afterward.
+- `forEach` is designed to visit each array item and does not return a new
+  transformed array. Use `map()` when you need a new array of transformed
+  values.
+- Updating the array length during iteration can skip items or change the
+  number of iterations.

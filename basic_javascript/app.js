@@ -163,3 +163,62 @@ var list = [
     id: 2,
   },
 ];
+
+//  Javascripts Looping
+//  for
+//  while
+//  do
+//  forEach (new in ECMAScript 5)
+
+var todos = [
+  "clean room",
+  "brush teeth",
+  "exercise",
+  "study javascript",
+  "eat healthy",
+];
+
+todo.length; // get 5 items
+//  for loop
+//
+for (var i = 0; i < todos.length; i++) {
+  todos[i] = todos[i] + "!";
+  console.log(todos[i]);
+  //  in this case we do pop
+  todos.pop(); // not clear all todos list because each iteration length is getting change to fixed this issue
+}
+
+var todosLength = todos.length;
+for (var i = 0; i < todosLength; i++) {
+  todos.pop();
+}
+
+//  while loop
+var counterOne = 0;
+while (counterOne < 10) {
+  console.log(counterOne);
+  counterOne++;
+}
+
+while (counterOne > 0) {
+  console.log(counterOne);
+  counterOne--;
+}
+
+//  do while loop
+var counterTwo = 10;
+// here main difference is first run the loop and check the conditions
+do {
+  console.log(counterTwo);
+  counterTwo--;
+} while (counterTwo > 0);
+//  forEach
+todos.forEach((todo, index) => {
+  console.log(todo, index);
+});
+
+function logoTodos(todo, index) {
+  console.log(todo + "!", index);
+}
+
+todos.forEach(logoTodos);
