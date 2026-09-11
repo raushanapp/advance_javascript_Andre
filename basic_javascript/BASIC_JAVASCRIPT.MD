@@ -564,3 +564,120 @@ immediately instead of passing the function to `forEach`.
   values.
 - Updating the array length during iteration can skip items or change the
   number of iterations.
+
+## 11. JavaScript Keywords
+
+The source lines 226-259 list JavaScript keywords. Keywords have a special
+meaning in the language and generally cannot be used as variable or function
+names.
+
+### Variable and function keywords
+
+```js
+const name = "Raushan";
+let score = 10;
+var oldStyleValue = true;
+
+function greet() {
+  return "Hello";
+}
+```
+
+- `const`, `let`, and `var` declare variables.
+- `function` declares a function.
+- `return` sends a value back from a function.
+
+### Conditional and loop keywords
+
+```js
+if (score > 5) {
+  console.log("Passed");
+} else {
+  console.log("Try again");
+}
+
+for (let index = 0; index < 3; index++) {
+  if (index === 1) {
+    continue;
+  }
+  console.log(index);
+}
+```
+
+- `if`, `else`, and `switch` control which code runs.
+- `for`, `while`, and `do` create loops.
+- `break` stops a loop or `switch` statement.
+- `continue` skips the current loop iteration and moves to the next one.
+- `case` and `default` are used inside a `switch` statement.
+
+### Error-handling keywords
+
+```js
+try {
+  throw new Error("Something went wrong");
+} catch (error) {
+  console.log(error.message);
+} finally {
+  console.log("Finished");
+}
+```
+
+- `try` contains code that may throw an error.
+- `throw` creates or raises an error.
+- `catch` handles an error.
+- `finally` runs whether an error occurs or not.
+
+### Object and class-related keywords
+
+```js
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+const person = new Person("Raushan");
+console.log(person.name);
+```
+
+- `class` defines a class.
+- `new` creates an object from a constructor or class.
+- `this` refers to the current object context.
+- `extends` creates inheritance between classes.
+- `super` calls the parent class constructor or method.
+- `delete` removes an object property.
+- `instanceof` checks whether an object comes from a constructor's prototype.
+
+```js
+delete person.name;
+console.log(person instanceof Person); // true
+```
+
+### Modules and other keywords
+
+- `import` brings values from another module into a file.
+- `export` makes values available to other modules.
+- `typeof` returns a value's type as a string.
+- `in` checks whether a property exists in an object.
+- `void` evaluates an expression and returns `undefined`.
+- `yield` pauses a generator function and returns a value temporarily.
+- `with` is deprecated and should not be used in modern JavaScript.
+- `debugger` pauses execution when developer tools are open.
+
+```js
+const user = { name: "Raushan" };
+console.log("name" in user); // true
+console.log(typeof user); // "object"
+```
+
+### Interview points
+
+- Keywords are language-reserved words with special behavior.
+- `break` exits a loop; `continue` skips to the next iteration.
+- `try...catch...finally` is used for handling runtime errors.
+- `throw` raises an error manually.
+- `class`, `extends`, `super`, and `new` support object-oriented patterns.
+- `import` and `export` support JavaScript modules.
+- Not every word in a keyword list is forbidden in every context; some are
+  contextual keywords whose meaning depends on where they appear. Avoid using
+  all listed words as identifiers for clear, portable code.
