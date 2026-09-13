@@ -202,7 +202,89 @@ funestFunction();
 console.log("outside after update", fun); // AHHHHHH
 ```
 
-## 8. `var`, `let`, and `const`
+## 8. Ternary operator and `switch` statement
+
+These are conditional patterns used often in JavaScript interview questions.
+
+### 1) Ternary operator
+
+The ternary operator is a compact form of an `if/else` statement.
+
+```js
+function isUserValid(bool) {
+  return bool;
+}
+
+var answer = isUserValid(true) ? "You may enter" : "Access Denied";
+console.log(answer); // You may enter
+```
+
+Equivalent `if/else` version:
+
+```js
+function condition() {
+  if (isUserValid(true)) {
+    return "You may enter";
+  } else {
+    return "Access Denied";
+  }
+}
+
+console.log(condition()); // You may enter
+```
+
+Use ternary when the logic is simple and short. Use `if/else` when the logic is longer or needs more conditions.
+
+### 2) `switch` statement
+
+A `switch` is useful when you have many fixed values to compare against one variable.
+
+```js
+function moveCommand(direction) {
+  var whatHappen;
+
+  switch (direction) {
+    case "forward":
+      whatHappen = "you encounter a monster";
+      break;
+
+    case "back":
+      whatHappen = "you arrived home";
+      break;
+
+    case "right":
+      whatHappen = "you found a river";
+      break;
+
+    case "left":
+      whatHappen = "you run into a troll";
+      break;
+
+    default:
+      whatHappen = "please enter a valid direction";
+  }
+
+  return whatHappen;
+}
+
+console.log(moveCommand("left")); // you run into a troll
+```
+
+Important interview note: in the original code, this line was written incorrectly:
+
+```js
+moveCommand(left);
+```
+
+`left` is treated as a variable name, not a string. The correct version is:
+
+```js
+moveCommand("left");
+```
+
+That is the difference between a string literal and an identifier.
+
+## 9. `var`, `let`, and `const`
 
 `var` is function-scoped. `let` and `const` are block-scoped, so they are limited to the nearest pair of braces.
 

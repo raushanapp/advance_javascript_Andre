@@ -45,3 +45,50 @@ funFunction();
 funerFunction();
 funestFunction();
 console.log("BEFORE Out side function window", fun);
+
+//  ternary operator
+//  condition ? expr1 : expr2
+
+function isUserValid(bool) {
+  return bool;
+}
+
+var answer = isUserValid(true) ? "You may enter" : "Access Denied";
+//  answer --> you may enter
+//  isUserValid(false) --> Access Denied
+
+//  same thing doing here
+function condition() {
+  if (isUserValid(true)) {
+    return "You may enter";
+  } else {
+    return "Access Denied";
+  }
+}
+// switch
+
+function moveCommand(direction) {
+  var wahtHappen;
+  switch (direction) {
+    case "forward": {
+      wahtHappen = "you encounter a monster";
+      break; // stop here go strignt of the switch to return the value what happen
+    }
+    case "back": {
+      wahtHappen = "you arrived home";
+      break;
+    }
+    case "right": {
+      wahtHappen = "you found a river";
+      break;
+    }
+    case "left": {
+      wahtHappen = "you run into a troll";
+      break;
+    }
+    default:
+      wahtHappen = "please eneter a valid direction";
+  }
+  return wahtHappen;
+}
+moveCommand(left);
