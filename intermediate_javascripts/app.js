@@ -116,3 +116,67 @@ if (experience > 90) {
   //  also create a new scope when we use let keyword
   let wizardlevel = true;
 }
+//  Destructuring
+const userDetails = {
+  name: "Sally",
+  age: 30,
+  isMarried: false,
+};
+
+const { name, age, isMarried } = userDetails;
+
+//  Object Property
+//  old way
+//  daynamic property value
+const name1 = "John show";
+const obj1 = {
+  [name1]: "hello",
+  ["ray" + "smith"]: "hihi",
+  [1 + 2]: "tskjs",
+};
+
+const d = "Siomon";
+const e = true;
+const f = {};
+const obj2 = {
+  d: d,
+  e: e,
+  f: f,
+};
+
+// new way of javascript
+
+const obj3 = {
+  d,
+  e,
+  f,
+};
+//  Tempplate string
+const greeting = "Hello " + name + " you seem to be doing";
+const greetingBest = `Hello ${name1} you seem to be doing `;
+
+// default argument
+function greet(name = "", age = 30, pet = "pet") {
+  return `Hello ${name} you seem to be ${age - 10}. what a lovely ${pet} you have`;
+}
+
+greet("john", 40, "dog");
+
+//  type of javascript symbols
+//  sysmbol is specials
+//  Symbol are used because he create a different types and symbol value used as identifier
+let sm1 = Symbol();
+let sm2 = Symbol("foo");
+let sm3 = Symbol("foo");
+// sm2===sm3  fals
+
+// Arrow function
+
+// before be  are doing like this
+
+function add(a, b) {
+  return a + b;
+}
+
+//  in arrow function we have single line code we do not need to use return keyword
+const add1 = (a, b) => a + b;

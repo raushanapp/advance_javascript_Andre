@@ -349,9 +349,176 @@ if (experience > 90) {
 
 This is different from `var`, which is function-scoped. `let` creates a new scope in the block, which helps avoid accidental variable leakage.
 
-## 9. Interview-ready answers
+## 10. Destructuring, object shorthand, template strings, symbols, and arrow functions
+
+These are common JavaScript patterns that appear in modern code and interview questions.
+
+### Destructuring
+
+Destructuring lets you extract values from objects or arrays in a clean, readable way.
+
+```js
+const userDetails = {
+  name: "Sally",
+  age: 30,
+  isMarried: false,
+};
+
+const { name, age, isMarried } = userDetails;
+console.log(name); // Sally
+console.log(age); // 30
+console.log(isMarried); // false
+```
+
+Instead of writing `userDetails.name`, we directly unpack the values we need.
+
+### Computed property names
+
+JavaScript allows object keys to be created dynamically.
+
+```js
+const name1 = "John show";
+
+const obj1 = {
+  [name1]: "hello",
+  ["ray" + "smith"]: "hihi",
+  [1 + 2]: "tskjs",
+};
+
+console.log(obj1["John show"]); // hello
+console.log(obj1["raysmith"]); // hihi
+console.log(obj1["3"]); // tskjs
+```
+
+This is useful when property names are generated at runtime.
+
+### Object shorthand syntax
+
+When the variable name and property name are the same, you can shorten the object literal.
+
+```js
+const d = "Simon";
+const e = true;
+const f = {};
+
+const obj2 = {
+  d: d,
+  e: e,
+  f: f,
+};
+
+const obj3 = {
+  d,
+  e,
+  f,
+};
+
+console.log(obj2.d); // Simon
+console.log(obj3.e); // true
+```
+
+### Template strings
+
+Template strings make string interpolation easy and readable.
+
+```js
+const greeting = "Hello " + name + " you seem to be doing";
+const greetingBest = `Hello ${name1} you seem to be doing`;
+
+console.log(greetingBest);
+```
+
+This is cleaner than concatenation when mixing strings and variables.
+
+### Default parameters
+
+Default parameters let us assign fallback values when arguments are missing.
+
+```js
+function greet(name = "", age = 30, pet = "pet") {
+  return `Hello ${name} you seem to be ${age - 10}. what a lovely ${pet} you have`;
+}
+
+console.log(greet("john", 40, "dog"));
+console.log(greet());
+```
+
+When a user does not pass an argument, the default is used instead.
+
+### Symbols
+
+A symbol is a unique primitive value. It is often used as an identifier that should not collide with other properties.
+
+```js
+let sm1 = Symbol();
+let sm2 = Symbol("foo");
+let sm3 = Symbol("foo");
+
+console.log(sm2 === sm3); // false
+```
+
+Even if the description is the same, each `Symbol()` call creates a new unique value.
+
+### Arrow functions
+
+Arrow functions are a shorter syntax for writing functions.
+
+```js
+function add(a, b) {
+  return a + b;
+}
+
+const add1 = (a, b) => a + b;
+console.log(add(2, 3)); // 5
+console.log(add1(2, 3)); // 5
+```
+
+When the function body is a single expression, the `return` keyword is implicit. This makes the syntax shorter and cleaner.
+
+## 11. Interview-ready answers
 
 **What is the scope chain?**
+
+It is the ordered chain of lexical environments JavaScript searches when resolving a variable name. Lookup begins in the current scope and continues outward until the name is found or the global scope is reached.
+
+**Can a parent function access a child function's variable?**
+
+No. Scope lookup goes inward to outward, not outward to inward. The parent can provide variables to the child, but cannot directly read the child's local variables.
+
+**What is shadowing?**
+
+Shadowing is declaring a same-named variable in an inner scope. References in that inner scope use the inner binding, while the outer binding remains unchanged.
+
+**Why did `console.log(c)` fail in `app.js`?**
+
+`c` was declared with `var` inside `bb`, so it is function-scoped. It does not exist in the surrounding scope, and the uncaught `ReferenceError` stops the script.
+
+**How can a function change an outer variable?**
+
+If no local binding with that name exists, assignment resolves the nearest outer binding and updates it. A clearer design is usually to return a new value or pass the value as an argument.
+
+**What is the difference between `const` and `let`?**
+
+`const` prevents reassignment of the variable binding, while `let` allows reassignment. However, `const` does not freeze an object, so object properties can still be mutated.
+
+**What is destructuring used for?**
+
+It is used to unpack values from arrays and objects into variables, which makes code cleaner and easier to read.
+
+## Quick summary
+
+```text
+Scope       = where a variable is accessible
+Scope chain = where JavaScript searches for a name
+Shadowing   = inner same-name binding hides an outer binding
+var         = function-scoped
+let         = block-scoped and reassignable
+const       = block-scoped and non-reassignable
+Destructuring = extract object/array values into variables
+Template strings = cleaner string interpolation
+Arrow functions = shorthand for simple functions
+Symbols = unique, non-colliding identifiers
+```
 
 It is the ordered chain of lexical environments JavaScript searches when resolving a variable name. Lookup begins in the current scope and continues outward until the name is found or the global scope is reached.
 
