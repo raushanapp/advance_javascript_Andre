@@ -304,6 +304,51 @@ function example() {
 
 Prefer `const` by default, use `let` when reassignment is required, and avoid `var` in new code unless demonstrating legacy behavior.
 
+### `const` and object mutation
+
+JavaScript `const` means the variable binding cannot be reassigned. It does not mean the value itself is deeply immutable.
+
+```js
+const player = "bobby";
+// player = "Sally"; // TypeError: Assignment to constant variable.
+
+const obj = {
+  player: "Rohan",
+  experience: 120,
+  wizardLevel: false,
+};
+
+// obj = 10; // TypeError: Assignment to constant variable.
+obj.wizardLevel = true; // valid: we are mutating the object property
+console.log(obj.wizardLevel); // true
+```
+
+Interview answer:
+
+- `const player = "bobby"` prevents reassigning `player`
+- `const obj = {...}` prevents reassigning the `obj` variable itself
+- but the object properties can still change if they are not frozen
+
+This is a common interview question: `const` protects the binding, not the object contents.
+
+### `let` and block scope
+
+`let` is also block-scoped, which means variables declared inside `{}` are not accessible outside that block.
+
+```js
+let experience = 100;
+let wizardLevel = false;
+
+if (experience > 90) {
+  let wizardlevel = true;
+  console.log(wizardlevel); // true
+}
+
+// console.log(wizardlevel); // ReferenceError
+```
+
+This is different from `var`, which is function-scoped. `let` creates a new scope in the block, which helps avoid accidental variable leakage.
+
 ## 9. Interview-ready answers
 
 **What is the scope chain?**

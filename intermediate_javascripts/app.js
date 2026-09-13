@@ -92,3 +92,27 @@ function moveCommand(direction) {
   return wahtHappen;
 }
 moveCommand(left);
+
+// ECMA internation
+// ECMAScript===javascript
+//  let  --> ECMAScript Es6
+//  const --> ECMAScript Es6
+const player = "bobby"; // this player variable always should be bobby and does not change
+player = "Sally"; // you get error Assignment to constant variable  because if we are using const keyword we can not re-assign the value again and can be update the variable value
+
+const obj = {
+  player: "Rohan",
+  experience: 120,
+  wizardLevel: false,
+};
+obj = 10; // you can re-assign to variable value but in the case of object you can re-assign the object property value
+obj.wizardLevel = true;
+
+// let
+let experience = 100;
+let wizardLevel = false;
+if (experience > 90) {
+  //  only way to access this below varibale created only inside the curly braceses
+  //  also create a new scope when we use let keyword
+  let wizardlevel = true;
+}
