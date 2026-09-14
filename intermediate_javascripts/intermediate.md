@@ -594,7 +594,144 @@ It checks whether an array contains a specific value.
 
 It is a shorter and cleaner way to write powers, for example `2 ** 4` instead of `Math.pow(2, 4)`.
 
-## 12. ES10 features
+## 12. Advanced loops: `for`, `forEach`, `for...of`, and `for...in`
+
+The file `advance_loop.js` shows the key difference between loop types in JavaScript.
+
+### 1) `for` loop
+
+A classic `for` loop gives you full control over the starting point, condition, and increment.
+
+```js
+const basket = ["apples", "oranges", "grapes"];
+
+for (let i = 0; i < basket.length; i++) {
+  console.log(basket[i]);
+}
+```
+
+This works well when you need the index value or want to manually control the iteration.
+
+### 2) `forEach()`
+
+`forEach()` is simpler and is commonly used with arrays.
+
+```js
+basket.forEach((item) => {
+  console.log("Items -->>", item);
+});
+```
+
+It loops over each array element and runs a callback, but it does not give you the index by default unless you add it as a second parameter.
+
+```js
+basket.forEach((item, index) => {
+  console.log(index, item);
+});
+```
+
+### 3) `for...of`
+
+`for...of` is best for iterating over values in iterable collections like arrays and strings.
+
+```js
+for (item of basket) {
+  console.log(item);
+}
+
+for (item of "basket") {
+  console.log(item);
+}
+```
+
+This prints each value directly, not the index. It is cleaner than a `for` loop when you only need the item itself.
+
+```mermaid
+flowchart LR
+    A[Array or String] --> B[for...of]
+    B --> C[Each value one by one]
+```
+
+### 4) `for...in`
+
+`for...in` is used to loop over object keys or property names.
+
+```js
+const detailedBasket = {
+  apple: 5,
+  oranges: 10,
+  grapes: 1000,
+};
+
+for (item in detailedBasket) {
+  console.log("Object", item);
+}
+```
+
+This prints the property names:
+
+```text
+Object apple
+Object oranges
+Object grapes
+```
+
+It also works on arrays, but in arrays it gives the indexes, not the values.
+
+```js
+for (item in basket) {
+  console.log("Object", item);
+}
+```
+
+This gives:
+
+```text
+Object 0
+Object 1
+Object 2
+```
+
+Because arrays are objects under the hood, `for...in` enumerates indices.
+
+### 5) Why `for...of` fails on objects
+
+Objects are not iterable by default, so this will throw an error:
+
+```js
+for (item of detailedBasket) {
+  console.log("Object", item);
+}
+```
+
+This gives a `TypeError` because `detailedBasket` is not iterable.
+
+### 6) Quick comparison
+
+- `for` loop = full control, uses index and condition
+- `forEach()` = array-only, simple callback style
+- `for...of` = works with arrays and strings, gives values
+- `for...in` = works with objects, gives property names/keys
+
+### Interview-style explanation
+
+**When should you use `for...of`?**
+
+Use it when you want values from iterable data such as arrays or strings.
+
+**When should you use `for...in`?**
+
+Use it when you want object keys or property names.
+
+**Why does `for...of` not work on an object?**
+
+Because plain objects are not iterable in JavaScript unless you convert them or use `Object.entries()`.
+
+**Why does `for...in` on an array show indexes?**
+
+Because arrays are basically objects with numeric property names, and `for...in` loops over enumerable keys.
+
+## 13. ES10 features
 
 ES10, also called ECMAScript 2019, introduced a few useful features for working with arrays, strings, objects, and error handling.
 
@@ -713,7 +850,7 @@ It converts an array of key-value entries into an object.
 
 It lets you catch errors without declaring an error variable.
 
-## 14. Objects, references, `this`, and inheritance
+## 15. Objects, references, `this`, and inheritance
 
 Objects are one of the most important topics in JavaScript. The file `advance_object.js` focuses on a few core ideas: object references, scope vs. context, `this`, and how objects are created and extended.
 
@@ -904,7 +1041,7 @@ Because objects are stored in memory, and variables hold references to that memo
 
 It means methods can be shared across many objects through a prototype chain instead of copying the same function into every object.
 
-## 15. Destructuring, object shorthand, template strings, symbols, and arrow functions
+## 16. Destructuring, object shorthand, template strings, symbols, and arrow functions
 
 These are common JavaScript patterns that appear in modern code and interview questions.
 
@@ -1030,7 +1167,7 @@ console.log(add1(2, 3)); // 5
 
 When the function body is a single expression, the `return` keyword is implicit. This makes the syntax shorter and cleaner.
 
-## 16. Interview-ready answers
+## 17. Interview-ready answers
 
 **What is the scope chain?**
 
