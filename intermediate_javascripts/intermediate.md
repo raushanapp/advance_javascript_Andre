@@ -349,7 +349,115 @@ if (experience > 90) {
 
 This is different from `var`, which is function-scoped. `let` creates a new scope in the block, which helps avoid accidental variable leakage.
 
-## 10. Destructuring, object shorthand, template strings, symbols, and arrow functions
+## 10. Advanced arrays and functions
+
+The files in the advanced examples highlight a few important patterns that are used often in real JavaScript code.
+
+### 1) `forEach`, `map`, `filter`, and `reduce`
+
+These array methods all help us work with collections, but they are not the same.
+
+```js
+const array = [1, 2, 10, 16];
+
+const doubled = [];
+array.forEach((num) => {
+  doubled.push(num * 2);
+});
+
+console.log(doubled); // [2, 4, 20, 32]
+```
+
+`forEach()` loops through elements and runs a callback for each one. It does not return a new array. It is useful when we want to perform an action, but not when we want a transformed result.
+
+```js
+const myArray = array.map((num) => num * 2);
+console.log(myArray); // [2, 4, 20, 32]
+```
+
+`map()` creates a new array from an existing array. The output length is the same as the input length unless filtering is also used.
+
+```js
+const filterArray = array.filter((num) => num > 5);
+console.log(filterArray); // [10, 16]
+```
+
+`filter()` creates a new array containing only the values that satisfy a condition.
+
+```js
+const reduceArray = array.reduce((accumulator, num) => {
+  return accumulator + num;
+}, 10);
+
+console.log(reduceArray); // 39
+```
+
+`reduce()` combines all values into one result. The accumulator holds the running total. The second argument to `reduce()` is the initial value for the accumulator. Here it starts at `10`, so the total becomes:
+
+```text
+10 + 1 + 2 + 10 + 16 = 39
+```
+
+### 2) Closures
+
+A closure is created when an inner function keeps access to variables from its outer function even after the outer function has finished execution.
+
+```js
+const first = () => {
+  const greet = "Hi";
+
+  const second = () => {
+    alert(greet);
+  };
+
+  return second;
+};
+
+const newFunc = first();
+newFunc();
+```
+
+The `second` function still remembers the `greet` variable even though `first()` has already returned. This is the core idea behind closures in JavaScript.
+
+### 3) Currying
+
+Currying means converting a function that takes multiple arguments into a chain of functions, each taking one argument at a time.
+
+```js
+const multiply = (a, b) => a * b;
+const curriedMultiply = (a) => (b) => a * b;
+
+const multiplyBy5 = curriedMultiply(5);
+console.log(multiplyBy5(11)); // 55
+```
+
+This makes some logic easier to reuse and compose. A curried function can be partially applied and reused later.
+
+### 4) Side effects and functional purity
+
+A side effect happens when a function changes something outside its own local scope.
+
+```js
+var a = 1;
+
+function b() {
+  a = 2; // side effect: modifies outer state
+}
+```
+
+This changes the value of `a` outside the function. That can make code harder to debug because the function depends on and changes external state.
+
+A pure function avoids side effects and always returns the same output for the same inputs.
+
+```js
+const add = (x, y) => x + y;
+console.log(add(2, 3)); // 5
+console.log(add(2, 3)); // 5
+```
+
+Pure functions are easier to test because they are deterministic and do not mutate shared state.
+
+## 11. Destructuring, object shorthand, template strings, symbols, and arrow functions
 
 These are common JavaScript patterns that appear in modern code and interview questions.
 
@@ -475,7 +583,7 @@ console.log(add1(2, 3)); // 5
 
 When the function body is a single expression, the `return` keyword is implicit. This makes the syntax shorter and cleaner.
 
-## 11. Interview-ready answers
+## 12. Interview-ready answers
 
 **What is the scope chain?**
 
@@ -504,6 +612,26 @@ If no local binding with that name exists, assignment resolves the nearest outer
 **What is destructuring used for?**
 
 It is used to unpack values from arrays and objects into variables, which makes code cleaner and easier to read.
+
+**What is the difference between `forEach` and `map`?**
+
+`forEach` runs a callback for each item but returns `undefined`. `map` returns a new array of transformed values.
+
+**What does `reduce` do?**
+
+`reduce` folds an array into one value by repeatedly combining the accumulator with each element.
+
+**What is a closure?**
+
+A closure allows an inner function to keep access to variables from an outer function even after the outer function has finished executing.
+
+**What is currying?**
+
+Currying transforms a function that accepts multiple arguments into a chain of functions that each take one argument at a time.
+
+**What is functional purity?**
+
+A pure function does not mutate external state and returns the same output for the same inputs.
 
 ## Quick summary
 
