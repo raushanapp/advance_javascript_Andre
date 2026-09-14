@@ -457,7 +457,198 @@ console.log(add(2, 3)); // 5
 
 Pure functions are easier to test because they are deterministic and do not mutate shared state.
 
-## 11. Destructuring, object shorthand, template strings, symbols, and arrow functions
+## 11. Objects, references, `this`, and inheritance
+
+Objects are one of the most important topics in JavaScript. The file `advance_object.js` focuses on a few core ideas: object references, scope vs. context, `this`, and how objects are created and extended.
+
+### 1) Reference type and object equality
+
+Objects are reference types. That means JavaScript compares objects by reference, not by their content.
+
+```js
+var object1 = { value: 10 };
+var object2 = object1;
+var object3 = { value: 10 };
+
+console.log(object1 === object2); // true
+console.log(object1 === object3); // false
+```
+
+Here is the key idea:
+
+- `object1` and `object2` point to the same memory location
+- `object3` is a different object, even though it has the same property values
+
+```mermaid
+flowchart LR
+    A[object1] -->|same reference| B[shared memory]
+    C[object2] -->|same reference| B
+    D[object3] -->|different reference| E[different memory]
+```
+
+Because `object2` points to the same object as `object1`, when we update one, the other sees the change:
+
+```js
+object1.value = 15;
+console.log(object2.value); // 15
+console.log(object3.value); // 10
+```
+
+This is why object comparisons can feel surprising in interviews:
+
+```js
+[] === []; // false
+{} === {}; // false
+```
+
+Two new arrays or objects are never equal by value unless they are exactly the same reference.
+
+### 2) Scope vs context
+
+These two ideas are easy to mix up.
+
+- Scope = where a variable is available
+- Context = what `this` refers to in a function call
+
+```js
+function a() {
+  let b = 5;
+}
+
+console.log(b); // ReferenceError
+```
+
+`b` is inside the function `a()`, so it is not available outside that function. That is scope.
+
+Now look at `this`:
+
+```js
+function d() {
+  console.log(this);
+}
+
+d();
+```
+
+The value of `this` depends on how the function is called. In a regular function call, it points to the global object (or `undefined` in strict mode). In a method call, it points to the object that owns the method.
+
+```js
+const object4 = {
+  a: function () {
+    console.log(this);
+  },
+};
+
+object4.a();
+```
+
+When we call `object4.a()`, `this` refers to `object4` because the function is being called as a method of that object.
+
+```mermaid
+flowchart TD
+    A[Regular function call: d()] --> B[this = global object / undefined]
+    C[Method call: object4.a()] --> D[this = object4]
+    E[Constructor call: new Wizard()] --> F[this = new instance]
+```
+
+### 3) `this` in constructors and classes
+
+The `new` keyword creates a new object and binds `this` to that object.
+
+```js
+class Player {
+  constructor(name, type) {
+    this.name = name;
+    this.type = type;
+  }
+
+  introduce() {
+    console.log(`Hi I am ${this.name}, I'm a ${this.type}`);
+  }
+}
+
+class Wizard extends Player {
+  constructor(name, type) {
+    super(name, type);
+  }
+
+  play() {
+    console.log(`WEEEE I'm a ${this.type}`);
+  }
+}
+
+const wizard1 = new Wizard("Shally", "Healer");
+const wizard2 = new Wizard("Shawn", "Drak Magic");
+
+wizard1.introduce();
+wizard2.play();
+```
+
+The constructor creates a fresh object for each instance. `this` is the current instance, and the methods are available through the object instance.
+
+### 4) Classical inheritance and prototype
+
+Before classes became common, JavaScript used constructor functions and prototypes.
+
+```js
+var Player1 = function (name, type) {
+  this.name = name;
+  this.type = type;
+};
+
+Player1.prototype.introduce1 = function () {
+  console.log(`Hi I am ${this.name}, I'm a ${this.type}`);
+};
+
+var wizard3 = new Player1("Shally", "Healer");
+var wizard4 = new Player1("Bobby", "Dark magic");
+
+wizard3.play = function () {
+  console.log(`WEEEE I'm a ${this.type}`);
+};
+
+wizard4.play = function () {
+  console.log(`WEEEE I'm a ${this.type}`);
+};
+```
+
+In this pattern:
+
+- `Player1` is a constructor function
+- `new Player1(...)` creates a new object
+- the object gets properties from the constructor
+- methods on `Player1.prototype` are shared by all instances
+
+This is the original way JavaScript handled inheritance before `class` syntax.
+
+```mermaid
+flowchart TD
+    A[Player1 constructor] --> B[shared prototype methods]
+    C[wizard3 instance] --> A
+    D[wizard4 instance] --> A
+    E[wizard3 custom play method] --> C
+    F[wizard4 custom play method] --> D
+```
+
+### 5) Interview-style explanation
+
+**What is the difference between scope and context?**
+
+Scope is about where variables are accessible. Context is about what `this` points to during a function execution.
+
+**Why are objects compared by reference?**
+
+Because objects are stored in memory, and variables hold references to that memory. Two different object literals are not the same object even if they look identical.
+
+**What does `new` do?**
+
+`new` creates a new object, sets its prototype, and binds `this` to the new instance.
+
+**What is prototype-based inheritance?**
+
+It means methods can be shared across many objects through a prototype chain instead of copying the same function into every object.
+
+## 12. Destructuring, object shorthand, template strings, symbols, and arrow functions
 
 These are common JavaScript patterns that appear in modern code and interview questions.
 
@@ -583,7 +774,7 @@ console.log(add1(2, 3)); // 5
 
 When the function body is a single expression, the `return` keyword is implicit. This makes the syntax shorter and cleaner.
 
-## 12. Interview-ready answers
+## 13. Interview-ready answers
 
 **What is the scope chain?**
 
@@ -608,6 +799,14 @@ If no local binding with that name exists, assignment resolves the nearest outer
 **What is the difference between `const` and `let`?**
 
 `const` prevents reassignment of the variable binding, while `let` allows reassignment. However, `const` does not freeze an object, so object properties can still be mutated.
+
+**What is the difference between scope and context?**
+
+Scope tells you where a variable is accessible. Context tells you what `this` refers to when a function runs.
+
+**Why do two objects with the same properties not compare equal?**
+
+Because JavaScript compares object references, not their contents. Two objects are only equal when they are the same object instance.
 
 **What is destructuring used for?**
 
