@@ -457,7 +457,144 @@ console.log(add(2, 3)); // 5
 
 Pure functions are easier to test because they are deterministic and do not mutate shared state.
 
-## 11. Objects, references, `this`, and inheritance
+## 11. ES7 and ES8 features
+
+ES7 and ES8 added smaller but useful JavaScript improvements that make code cleaner and easier to read.
+
+### 1) `includes()` in ES7
+
+`includes()` checks whether an array contains a value.
+
+```js
+const pet = ["cat", "dog", "bat", "parrot"];
+
+console.log(pet.includes("dog")); // true
+console.log(pet.includes("bird")); // false
+```
+
+It is simpler than checking an index manually, and it is very common in real-world code.
+
+### 2) Exponentiation operator in ES7
+
+The `**` operator is used for powers.
+
+```js
+const square = (x) => x ** 2;
+const cube = (y) => y ** 3;
+
+console.log(square(5)); // 25
+console.log(cube(3)); // 27
+console.log(2 ** 4); // 16
+```
+
+This is a cleaner way to write repeated multiplication.
+
+### 3) `padStart()` and `padEnd()` in ES8
+
+These methods add extra characters to the start or end of a string.
+
+```js
+let s = "Turtle";
+console.log(s.padStart(10, "*")); // ******Turtle
+console.log(s.padEnd(10, "-")); // Turtle----
+```
+
+They are useful when formatting strings such as IDs, dates, or labels.
+
+### 4) Trailing commas in function parameters
+
+Trailing commas allow a comma after the last parameter.
+
+```js
+const fun = (a, b, c, d) => {
+  console.log(a + b + c + d);
+};
+
+fun(1, 2, 3, 4); // 10
+```
+
+This is mainly about cleaner formatting, but it is a valid ES8 feature.
+
+### 5) `Object.keys()`, `Object.values()`, and `Object.entries()`
+
+These three methods help us inspect object data more easily.
+
+```js
+const obj = {
+  username0: "Santa",
+  username1: "Rudolf",
+  username2: "Mr Grinch",
+};
+
+console.log(Object.keys(obj));
+console.log(Object.values(obj));
+console.log(Object.entries(obj));
+```
+
+Output idea:
+
+```text
+Object.keys(obj) => ["username0", "username1", "username2"]
+Object.values(obj) => ["Santa", "Rudolf", "Mr Grinch"]
+Object.entries(obj) => [
+  ["username0", "Santa"],
+  ["username1", "Rudolf"],
+  ["username2", "Mr Grinch"]
+]
+```
+
+```mermaid
+flowchart LR
+    A[obj] --> B[Object.keys -> [keys]]
+    A --> C[Object.values -> [values]]
+    A --> D[Object.entries -> [[key, value], ...]]
+```
+
+### 6) Mapping entries
+
+`Object.entries()` gives us key-value pairs, which are easy to transform.
+
+```js
+const formattedNames = Object.entries(obj).map(([key, value]) => {
+  return value + key.replace("username", "");
+});
+
+console.log(formattedNames);
+```
+
+This is the same idea as the code in `es8.js`:
+
+```js
+const olderWay = Object.entries(obj).map((v) => {
+  return v[1] + v[0].replace("username", "");
+});
+```
+
+Here:
+
+- `v[0]` is the object key
+- `v[1]` is the value
+- `.replace("username", "")` removes the word `username` from the key
+
+### Interview-style explanation
+
+**What is `Object.entries()` used for?**
+
+It helps you loop through an object as key-value pairs, which is useful for mapping, filtering, and transforming object data.
+
+**What is `padStart()`?**
+
+It adds characters to the beginning of a string until it reaches the target length.
+
+**What is `includes()`?**
+
+It checks whether an array contains a specific value.
+
+**What is the exponentiation operator?**
+
+It is a shorter and cleaner way to write powers, for example `2 ** 4` instead of `Math.pow(2, 4)`.
+
+## 12. Objects, references, `this`, and inheritance
 
 Objects are one of the most important topics in JavaScript. The file `advance_object.js` focuses on a few core ideas: object references, scope vs. context, `this`, and how objects are created and extended.
 
@@ -648,7 +785,7 @@ Because objects are stored in memory, and variables hold references to that memo
 
 It means methods can be shared across many objects through a prototype chain instead of copying the same function into every object.
 
-## 12. Destructuring, object shorthand, template strings, symbols, and arrow functions
+## 13. Destructuring, object shorthand, template strings, symbols, and arrow functions
 
 These are common JavaScript patterns that appear in modern code and interview questions.
 
@@ -774,7 +911,7 @@ console.log(add1(2, 3)); // 5
 
 When the function body is a single expression, the `return` keyword is implicit. This makes the syntax shorter and cleaner.
 
-## 13. Interview-ready answers
+## 14. Interview-ready answers
 
 **What is the scope chain?**
 
