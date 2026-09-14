@@ -683,9 +683,9 @@ When we call `object4.a()`, `this` refers to `object4` because the function is b
 
 ```mermaid
 flowchart TD
-    A[Regular function call: d()] --> B[this = global object / undefined]
-    C[Method call: object4.a()] --> D[this = object4]
-    E[Constructor call: new Wizard()] --> F[this = new instance]
+    A[Regular call] --> B[global object or undefined]
+    C[Method call] --> D[object4]
+    E[Constructor call] --> F[new instance]
 ```
 
 ### 3) `this` in constructors and classes
