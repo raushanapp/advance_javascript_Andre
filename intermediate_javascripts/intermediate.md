@@ -545,9 +545,9 @@ Object.entries(obj) => [
 
 ```mermaid
 flowchart LR
-    A[obj] --> B[Object.keys -> [keys]]
-    A --> C[Object.values -> [values]]
-    A --> D[Object.entries -> [[key, value], ...]]
+    A[obj] --> B[Object.keys result]
+    A --> C[Object.values result]
+    A --> D[Object.entries result]
 ```
 
 ### 6) Mapping entries
