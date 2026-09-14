@@ -594,7 +594,126 @@ It checks whether an array contains a specific value.
 
 It is a shorter and cleaner way to write powers, for example `2 ** 4` instead of `Math.pow(2, 4)`.
 
-## 12. Objects, references, `this`, and inheritance
+## 12. ES10 features
+
+ES10, also called ECMAScript 2019, introduced a few useful features for working with arrays, strings, objects, and error handling.
+
+### 1) `flat()` and `flatMap()`
+
+`flat()` removes extra nesting from arrays.
+
+```js
+const arr = [1, [2, 3], [4, 5]];
+const nested = [1, 2, [3, 4, [5]]];
+
+console.log(arr.flat()); // [1, 2, 3, 4, 5]
+console.log(nested.flat()); // [1, 2, 3, 4, [5]]
+```
+
+The depth is optional. If we want to flatten deeper arrays, we can pass a number.
+
+```js
+const deep = [1, [2, [3, [4]]]];
+console.log(deep.flat(2)); // [1, 2, 3, [4]]
+```
+
+`flatMap()` combines `map()` and `flat()` in one step.
+
+```js
+const jurassicPark = [["🦖", "🦎"], "🦕", ["🦖", "🦖"]];
+
+const chaos = jurassicPark.flatMap((creature) => creature + "🦖");
+console.log(chaos);
+```
+
+This is useful when you want to transform elements and flatten the result in a single step.
+
+```mermaid
+flowchart LR
+    A[original array] --> B[map or transform]
+    B --> C[flat result]
+```
+
+### 2) `trimStart()` and `trimEnd()`
+
+These remove whitespace from the beginning or end of a string.
+
+```js
+const userEmail = "     eddytheeagle@gmail.com";
+const userEmail2 = "eddytheeagle@gmail.com    ";
+
+console.log(userEmail.trimStart());
+console.log(userEmail2.trimEnd());
+```
+
+This is useful when handling form input or cleaning user-provided data.
+
+### 3) `Object.fromEntries()`
+
+`Object.fromEntries()` turns an array of key-value pairs into an object.
+
+```js
+const userProfiles = [
+  ["commanderTom", 23],
+  ["derekZlander", 40],
+  ["hansel", 10],
+];
+
+const obj = Object.fromEntries(userProfiles);
+console.log(obj);
+```
+
+This is the reverse of `Object.entries()`.
+
+```js
+console.log(Object.entries(obj));
+```
+
+### 4) Optional catch binding
+
+Before ES10, you had to write `catch (error) { ... }`. ES10 allows a simpler version:
+
+```js
+try {
+  true + hi;
+} catch {
+  console.log("you messed up");
+}
+```
+
+This is useful when you do not need the error object itself.
+
+```js
+try {
+  true + hi;
+} catch (error) {
+  console.log("you messed up: " + error);
+}
+```
+
+### Interview-style explanation
+
+**What is `flat()` used for?**
+
+It is used to flatten nested arrays into a simpler one-dimensional array.
+
+**What does `flatMap()` do?**
+
+It maps each item and then flattens the result one level.
+
+**What is `trimStart()`?**
+
+It removes spaces from the beginning of a string.
+
+**What is `Object.fromEntries()`?**
+
+It converts an array of key-value entries into an object.
+
+**What is optional catch binding?**
+
+It lets you catch errors without declaring an error variable.
+
+## 14. Objects, references, `this`, and inheritance
 
 Objects are one of the most important topics in JavaScript. The file `advance_object.js` focuses on a few core ideas: object references, scope vs. context, `this`, and how objects are created and extended.
 
@@ -785,7 +904,7 @@ Because objects are stored in memory, and variables hold references to that memo
 
 It means methods can be shared across many objects through a prototype chain instead of copying the same function into every object.
 
-## 13. Destructuring, object shorthand, template strings, symbols, and arrow functions
+## 15. Destructuring, object shorthand, template strings, symbols, and arrow functions
 
 These are common JavaScript patterns that appear in modern code and interview questions.
 
@@ -911,7 +1030,7 @@ console.log(add1(2, 3)); // 5
 
 When the function body is a single expression, the `return` keyword is implicit. This makes the syntax shorter and cleaner.
 
-## 14. Interview-ready answers
+## 16. Interview-ready answers
 
 **What is the scope chain?**
 
