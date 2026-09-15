@@ -953,33 +953,68 @@ try {
 }
 ```
 
-### 4) ES2023: `findLast()`, immutable array methods, and last-index searches
+### 4) ES2023: `findLast()`, `findLastIndex()`, and immutable array methods
 
-`findLast()` searches from the end of the array.
+ES2023 adds several helpful array methods for working from the end of the array and for creating transformed copies without mutating the original array.
+
+#### 1. `findLast()` and `findLastIndex()`
+
+These search from the end of the array instead of from the beginning.
 
 ```js
-const monsters = [
-  { name: "Mouse", level: 1 },
-  { name: "Mac", level: 30 },
-  { name: "Dendude", level: 17 },
+const ztmMonsters = [
+  { id: 1, monster: "Mr. Mouse", level: 1 },
+  { id: 2, monster: "Mac", level: 30 },
+  { id: 3, monster: "Denodude", level: 17 },
+  { id: 4, monster: "Pye", level: 5 },
 ];
 
-console.log(monsters.findLast((item) => item.level > 15));
-// { name: 'Mac', level: 30 }
+const lastStrongMonster = ztmMonsters.findLast((item) => item.level > 15);
+console.log(lastStrongMonster);
+// { id: 3, monster: 'Denodude', level: 17 }
+
+const lastStrongMonsterIndex = ztmMonsters.findLastIndex(
+  (item) => item.level > 15,
+);
+console.log(lastStrongMonsterIndex);
+// 2
 ```
 
-The new immutable array methods keep the original array unchanged.
+This is useful when the last matching item matters more than the first one.
+
+#### 2. Immutable array helpers: `toReversed()`, `toSorted()`, `toSpliced()`, and `with()`
+
+Regular array methods like `reverse()`, `sort()`, and `splice()` mutate the original array. ES2023 adds non-mutating versions that return a new array instead.
 
 ```js
-const names = ["Mr. Mouse", "Mac", "Dendude", "Pye"];
+const ztmMonsterList = ["Mr. Mouse", "Mac", "Dendude", "Pye"];
 
-console.log(names.toReversed());
-console.log(names.toSorted());
-console.log(names.toSpliced(2, 1));
-console.log(names.with(1, "Testing"));
+const mutated = [...ztmMonsterList];
+mutated.reverse();
+console.log(mutated);
+// [ 'Pye', 'Dendude', 'Mac', 'Mr. Mouse' ]
+
+console.log(ztmMonsterList.toReversed());
+// [ 'Pye', 'Dendude', 'Mac', 'Mr. Mouse' ]
+
+console.log(ztmMonsterList.toSorted());
+// alphabetical order
+
+console.log(ztmMonsterList.toSpliced(2, 1));
+// removes one item from index 2
+
+console.log(ztmMonsterList.with(1, "Testing"));
+// replaces the item at index 1
 ```
 
-This is useful when we want a transformed version without mutating the original data.
+Important idea: the original array stays unchanged.
+
+```js
+console.log(ztmMonsterList);
+// [ 'Mr. Mouse', 'Mac', 'Dendude', 'Pye' ]
+```
+
+These array methods are especially useful in functional programming patterns because they avoid side effects and keep data immutable.
 
 ### 5) ES2024: `Object.groupBy()` and `Map.groupBy()`
 
