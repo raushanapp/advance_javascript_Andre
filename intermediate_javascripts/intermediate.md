@@ -850,6 +850,169 @@ It converts an array of key-value entries into an object.
 
 It lets you catch errors without declaring an error variable.
 
+## 14. ES2020 to ES2024 features
+
+These are newer JavaScript features that make code safer, more expressive, and easier to work with when handling data and async values.
+
+### 1) ES2020: BigInt, nullish coalescing, optional chaining, and `Promise.allSettled()`
+
+**BigInt** is used for numbers larger than JavaScript's safe integer limit.
+
+```js
+const hugeNumber = 9007199254740991n + 2n;
+console.log(hugeNumber); // 9007199254740993n
+```
+
+The `??` operator is used for nullish checks. It only falls back when the value is `null` or `undefined`.
+
+```js
+const score = 0;
+const safeScore = score ?? 10;
+console.log(safeScore); // 0
+```
+
+Optional chaining prevents errors when an object property is missing.
+
+```js
+const pokemon = {
+  raichu: {
+    power: "lightning",
+  },
+};
+
+console.log(pokemon?.raichu?.power); // lightning
+console.log(pokemon?.pikachu?.power ?? "no power"); // no power
+```
+
+`Promise.allSettled()` waits for all promises to finish even if some reject.
+
+```js
+const p1 = Promise.resolve("bulbasaur");
+const p2 = Promise.reject("error");
+
+Promise.allSettled([p1, p2]).then(console.log);
+```
+
+### 2) ES2021: `replaceAll()`, logical assignment, and `Promise.any()`
+
+`replaceAll()` replaces every matching substring instead of only the first occurrence.
+
+```js
+const text = "ztm is the best of the best";
+console.log(text.replaceAll("best", "worst"));
+// ztm is the worst of the worst
+```
+
+Logical assignment operators combine assignment with `&&`, `||`, and `??`.
+
+```js
+let score = 10;
+score &&= 20;
+console.log(score); // 20
+
+let count = 0;
+count ||= 5;
+console.log(count); // 5
+```
+
+`Promise.any()` resolves when any promise succeeds, ignoring rejected ones.
+
+```js
+const a = Promise.reject("fail");
+const b = Promise.resolve("success");
+
+Promise.any([a, b]).then(console.log); // success
+```
+
+### 3) ES2022: `Array.prototype.at()`, `Object.hasOwn()`, and error causes
+
+`at()` lets you access elements from the end of the array more clearly.
+
+```js
+const arr = [100, 200, 400, 5000, 50000, 10];
+console.log(arr.at(-2)); // 50000
+console.log(arr.at(-1)); // 10
+```
+
+`Object.hasOwn()` checks whether an object owns a property.
+
+```js
+const player = { name: "Ash" };
+console.log(Object.hasOwn(player, "name")); // true
+```
+
+Error objects can include a `cause` field for debugging.
+
+```js
+try {
+  const foo = undefined;
+  foo.bar();
+} catch (error) {
+  const wrapped = new Error("Something went wrong", { cause: error });
+  console.log(wrapped.cause.message);
+}
+```
+
+### 4) ES2023: `findLast()`, immutable array methods, and last-index searches
+
+`findLast()` searches from the end of the array.
+
+```js
+const monsters = [
+  { name: "Mouse", level: 1 },
+  { name: "Mac", level: 30 },
+  { name: "Dendude", level: 17 },
+];
+
+console.log(monsters.findLast((item) => item.level > 15));
+// { name: 'Mac', level: 30 }
+```
+
+The new immutable array methods keep the original array unchanged.
+
+```js
+const names = ["Mr. Mouse", "Mac", "Dendude", "Pye"];
+
+console.log(names.toReversed());
+console.log(names.toSorted());
+console.log(names.toSpliced(2, 1));
+console.log(names.with(1, "Testing"));
+```
+
+This is useful when we want a transformed version without mutating the original data.
+
+### 5) ES2024: `Object.groupBy()` and `Map.groupBy()`
+
+`Object.groupBy()` groups an array of objects by a chosen key.
+
+```js
+const pokemons = [
+  { name: "bulbasaur", type: "grass" },
+  { name: "pikachu", type: "electric" },
+  { name: "charmander", type: "fire" },
+];
+
+const grouped = Object.groupBy(pokemons, (pokemon) => pokemon.type);
+console.log(grouped);
+```
+
+This is a clean way to organize data without writing custom `reduce()` logic for simple grouping tasks.
+
+```js
+const groupedMap = Map.groupBy(pokemons, (pokemon) => pokemon.type);
+console.log(groupedMap.get("fire"));
+```
+
+### Interview-style summary
+
+- ES2020 made JavaScript safer with `BigInt`, `??`, optional chaining, and settled promise handling.
+- ES2021 improved string and logical operations.
+- ES2022 added easier array access and cleaner object/error handling.
+- ES2023 added safer immutable array methods and last-item searching.
+- ES2024 added grouping APIs for data organization.
+
+These features are especially important in real projects because they reduce bugs and make code easier to read and maintain.
+
 ## 15. Objects, references, `this`, and inheritance
 
 Objects are one of the most important topics in JavaScript. The file `advance_object.js` focuses on a few core ideas: object references, scope vs. context, `this`, and how objects are created and extended.
