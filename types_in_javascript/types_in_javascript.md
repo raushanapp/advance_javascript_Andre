@@ -82,13 +82,12 @@ Arrays are special objects with index-based keys, but they are still treated as 
 
 ## 3) Primitive vs Reference in Memory
 
-```mermaid
-flowchart LR
-    A[Primitive value] --> B[Stored directly in memory]
-    C[Reference value] --> D[Stored as a pointer/reference]
+```text
+Primitive value  ──> Stored directly in memory
+Reference value  ──> Stored as a pointer/reference
 
-    E[let a = 10] --> F[Direct value copy]
-    G[const obj = { name: 'Tom' }] --> H[Object stored somewhere else]
+let a = 10       ──> Direct value copy
+const obj = { name: 'Tom' }  ──> Object stored somewhere else
 ```
 
 ### Example: primitive assignment
