@@ -2,26 +2,29 @@
 //  Root scope (Window)
 //  Scope --> Mean's  what variable do have to  access when javascript code runing
 // By default in javascript we have root scope mean's window object or in node js we called it global scope
-
 //  example
-
 // now a function part of the window scope
+
 function a() {
   console.log("Testing Scope");
 }
 a();
+
 //  both have window object so we can access
 var b = "Can  I access this";
 function bb() {
+  console.log(b);
   b = "Hello Now I can access this";
+  console.log("after");
   var c = "hello";
 }
-
+bb();
 // give me error  Reference error is not definded c because c variable have inside the function scope not a window and global scope
 console.log(c);
 console.log("before function run -->", b);
 bb();
 console.log("after function runs -->", b);
+
 var fun = 5; // this is also called name confilict
 function funFunction() {
   //  as soon as create with carly brance we create child scope or we say own scope with in the function
@@ -45,10 +48,9 @@ funFunction();
 funerFunction();
 funestFunction();
 console.log("BEFORE Out side function window", fun);
-
+//  tommorow goin to disccus about these
 //  ternary operator
 //  condition ? expr1 : expr2
-
 function isUserValid(bool) {
   return bool;
 }
@@ -56,7 +58,6 @@ function isUserValid(bool) {
 var answer = isUserValid(true) ? "You may enter" : "Access Denied";
 //  answer --> you may enter
 //  isUserValid(false) --> Access Denied
-
 //  same thing doing here
 function condition() {
   if (isUserValid(true)) {
@@ -66,7 +67,6 @@ function condition() {
   }
 }
 // switch
-
 function moveCommand(direction) {
   var wahtHappen;
   switch (direction) {
@@ -168,10 +168,9 @@ greet("john", 40, "dog");
 let sm1 = Symbol();
 let sm2 = Symbol("foo");
 let sm3 = Symbol("foo");
-// sm2===sm3  fals
+// sm2===sm3  false
 
 // Arrow function
-
 // before be  are doing like this
 
 function add(a, b) {
