@@ -187,11 +187,11 @@ The returned `increment` function remembers `count` after `createCounter` has fi
 
 ```mermaid
 flowchart LR
-    A[createCounter()] --> B[Creates count = 0]
+  A["createCounter()"] --> B[Creates count = 0]
     B --> C[Returns increment]
-    C --> D[counter()]
+  C --> D["counter()"]
     D --> E[count becomes 1]
-    E --> F[counter()]
+  E --> F["counter()"]
     F --> G[count becomes 2]
     D -. remembers .-> B
     F -. remembers .-> B
