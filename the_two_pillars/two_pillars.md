@@ -37,11 +37,11 @@ The way a function is invoked affects the value of `this`. A normal function als
 
 ```mermaid
 flowchart TD
-    A[Function call] --> B{How is it called?}
-    B -->|plain call| C[showName()\nthis depends on strict mode]
-    B -->|method call| D[user.showName()\nthis is user]
-    B -->|call/apply/bind| E[Explicit this value]
-    B -->|new| F[New object\nprototype linked]
+  A[Function call] --> B{How is it called?}
+  B -->|plain call| C["showName() <br/> this depends on strict mode"]
+  B -->|method call| D["user.showName() <br/> this is user"]
+  B -->|call/apply/bind| E[Explicit this value]
+  B -->|new| F["New object <br/> prototype linked"]
 ```
 
 #### 1. Plain function call
