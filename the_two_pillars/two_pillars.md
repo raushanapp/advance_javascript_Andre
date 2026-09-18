@@ -244,6 +244,145 @@ getValue(0); // 0
 getValue(null); // null
 ```
 
+## 2. Higher-Order Functions
+
+A **Higher-Order Function (HOF)** is a function that does at least one of these things:
+
+1. Accepts another function as an argument.
+2. Returns another function as its result.
+
+This works because JavaScript functions are first-class values.
+
+```mermaid
+flowchart LR
+    A[Data] --> C[Higher-order function]
+    B[Function argument] --> C
+    C --> D[Result]
+    C --> E[Optional returned function]
+```
+
+### Why use a higher-order function?
+
+Repeated functions often differ only in the data they use or the action they perform. Instead of writing one login function for every person, create a generic function and pass the changing values to it.
+
+```js
+// Repeated, specialized functions
+function letAdamLogin() {
+  return "Access Granted to Adam";
+}
+
+function letEvaLogin() {
+  return "Access Granted to Eva";
+}
+
+// Generic behavior
+const giveAccessTo = (name) => `Access Granted to ${name}`;
+
+function letUserLogin(userName) {
+  return giveAccessTo(userName);
+}
+
+letUserLogin("Eva"); // "Access Granted to Eva"
+```
+
+The generic version follows the **DRY** principle: the access message is defined once and reused with different data.
+
+### Passing a function as an argument
+
+In this example, `letPerson` receives both the person data and the function that should handle that person. The function passed as an argument is called a **callback**.
+
+```js
+function authenticate(person) {
+  return `Access Granted to ${person.name}`;
+}
+
+function sing(person) {
+  return `La la la, my name is ${person.name}`;
+}
+
+function letPerson(person, action) {
+  return action(person);
+}
+
+letPerson({ level: "user", name: "Tim" }, authenticate);
+// "Access Granted to Tim"
+
+letPerson({ level: "admin", name: "Sally" }, sing);
+// "La la la, my name is Sally"
+```
+
+`letPerson` controls **when** the callback runs, while the callback controls **what** happens to the person.
+
+```mermaid
+sequenceDiagram
+    participant Caller
+    participant letPerson
+    participant Callback
+    Caller->>letPerson: person, authenticate
+    letPerson->>Callback: authenticate(person)
+    Callback-->>letPerson: access message
+    letPerson-->>Caller: result
+```
+
+The callback can be selected dynamically:
+
+```js
+const person = { level: "admin", name: "Sally" };
+const action = person.level === "admin" ? authenticate : sing;
+
+letPerson(person, action);
+```
+
+### Returning a function
+
+`multiplyBy` is also a higher-order function because it returns a function. The returned function remembers the value of `numberToMultiply`; this is a closure.
+
+```js
+function multiplyBy(numberToMultiply) {
+  return function multiply(number) {
+    return numberToMultiply * number;
+  };
+}
+
+const multiplyByTwo = multiplyBy(2);
+const multiplyByTen = multiplyBy(10);
+
+multiplyByTwo(10); // 20
+multiplyByTen(10); // 100
+```
+
+```mermaid
+flowchart TD
+    A[multiplyBy(2)] --> B[Returns multiply]
+    B --> C[multiplyByTwo(10)]
+    C --> D[2 * 10 = 20]
+    B -. remembers numberToMultiply = 2 .-> A
+```
+
+### A reusable HOF pattern
+
+The same pattern appears throughout JavaScript APIs such as `map`, `filter`, and `reduce`: the method receives a callback and applies it to collection values.
+
+```js
+const numbers = [1, 2, 3, 4];
+
+const doubled = numbers.map((number) => number * 2);
+const evenNumbers = numbers.filter((number) => number % 2 === 0);
+const total = numbers.reduce((sum, number) => sum + number, 0);
+
+doubled; // [2, 4, 6, 8]
+evenNumbers; // [2, 4]
+total; // 10
+```
+
+### HOF checklist
+
+- Does the function receive another function?
+- Does the function return another function?
+- What data is supplied to the callback?
+- When and how many times is the callback called?
+- Does the returned function close over surrounding variables?
+
 ## Quick summary
 
 ```mermaid
@@ -259,6 +398,11 @@ mindmap
       Pass
       Return
       Store
+    Higher-order functions
+      Accept callbacks
+      Return functions
+      Reuse behavior
+      Compose actions
     Scope
       Parameters
       Default values
