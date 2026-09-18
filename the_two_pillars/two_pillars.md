@@ -353,8 +353,8 @@ multiplyByTen(10); // 100
 
 ```mermaid
 flowchart TD
-    A[multiplyBy(2)] --> B[Returns multiply]
-    B --> C[multiplyByTwo(10)]
+  A["multiplyBy(2)"] --> B[Returns multiply]
+  B --> C["multiplyByTwo(10)"]
     C --> D[2 * 10 = 20]
     B -. remembers numberToMultiply = 2 .-> A
 ```
