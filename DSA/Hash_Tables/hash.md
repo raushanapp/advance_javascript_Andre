@@ -328,7 +328,7 @@ flowchart LR
     H[Hash table] --> HK[Key]
     HK --> HF[Hash function]
     HF --> HB[Bucket]
-    H --> HC[Average O(1) lookup]
+    H --> HC["Average O(1) lookup"]
 ```
 
 ### Time complexity comparison
