@@ -312,3 +312,95 @@ The exact complexity depends on the hash function, number of buckets, load facto
 - What happens when a key is missing?
 - Does setting an existing key update or duplicate its value?
 - Should this data use an object, `Map`, or `Set`?
+
+## 8. Hash tables versus arrays
+
+Choose the structure based on how the data will be accessed:
+
+- Use an **array** when items are naturally ordered and you access them by numeric index.
+- Use a **hash table** when you access values by a key such as a name or ID.
+
+```mermaid
+flowchart LR
+    A[Array] --> AI[Numeric index]
+    AI --> AF[Fast direct access]
+    A --> AO[Ordered values]
+    H[Hash table] --> HK[Key]
+    HK --> HF[Hash function]
+    HF --> HB[Bucket]
+    H --> HC[Average O(1) lookup]
+```
+
+### Time complexity comparison
+
+Let `n` be the number of stored items. For a hash table, the average cases assume a good hash function and a reasonable load factor.
+
+| Operation                           | Array          | Hash table average | Hash table worst case |
+| ----------------------------------- | -------------- | ------------------ | --------------------- |
+| Access by index or key              | O(1)           | O(1)               | O(n)                  |
+| Search by value                     | O(n)           | O(n)               | O(n)                  |
+| Insert at the end                   | O(1) amortized | O(1)               | O(n)                  |
+| Insert at the beginning or middle   | O(n)           | O(1) average       | O(n)                  |
+| Update a known item                 | O(1) by index  | O(1) average       | O(n)                  |
+| Delete from the end                 | O(1)           | O(1) average       | O(n)                  |
+| Delete from the beginning or middle | O(n)           | O(1) average       | O(n)                  |
+| Iterate through all items           | O(n)           | O(n)               | O(n)                  |
+
+### Array example
+
+An array gives direct access when the numeric index is known. Inserting or deleting in the middle shifts later items, which makes that operation O(n).
+
+```js
+const users = ["Maya", "Rohan", "Sally"];
+
+users[1]; // "Rohan" - O(1)
+users.push("Tim"); // O(1) amortized
+users.unshift("Ava"); // O(n), shifts existing items
+users.includes("Sally"); // O(n), searches values
+```
+
+### Hash table example
+
+A hash table gives average O(1) access when the key is known. It does not need to shift unrelated entries when a new key is added.
+
+```js
+const userAges = new Map([
+  ["Maya", 29],
+  ["Rohan", 32],
+  ["Sally", 27],
+]);
+
+userAges.get("Rohan"); // 32 - O(1) average
+userAges.set("Tim", 35); // O(1) average
+userAges.has("Sally"); // O(1) average
+userAges.delete("Maya"); // O(1) average
+```
+
+### Space complexity
+
+Both structures use O(n) space for `n` stored items, but their memory layout is different:
+
+| Structure  | Stored data                 | Space complexity | Extra memory                       |
+| ---------- | --------------------------- | ---------------- | ---------------------------------- |
+| Array      | Values in indexed positions | O(n)             | Small; may include unused capacity |
+| Hash table | Key-value entries           | O(n)             | Bucket array and collision chains  |
+
+If a hash table has `m` buckets and `n` entries, its total space can be described as:
+
+$$
+O(m + n)
+$$
+
+The bucket array contributes `O(m)`, and the stored key-value entries contribute `O(n)`. A larger bucket array can reduce collisions but uses more memory.
+
+### Which one should you choose?
+
+| Requirement                           | Better choice                        | Reason                                      |
+| ------------------------------------- | ------------------------------------ | ------------------------------------------- |
+| Preserve order and access by position | Array                                | Numeric indexes are direct and simple       |
+| Find a value by a unique key          | Hash table or `Map`                  | Average O(1) key lookup                     |
+| Search for a value without its key    | Array                                | Both require a scan, but arrays are simpler |
+| Frequent insertions in the middle     | Hash table if key-based access works | Arrays must shift items                     |
+| Store unique values only              | `Set`                                | Uniqueness is built in                      |
+
+The important distinction is **index versus key**: arrays are optimized for positions, while hash tables are optimized for key-based lookup.

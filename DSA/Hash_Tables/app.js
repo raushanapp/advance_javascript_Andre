@@ -104,3 +104,5 @@ myHashTable.get("grapess", 54);
 //  down side of hash table
 myHashTable.keys();
 myHashTable.values();
+
+//  Comparision with hash table and arrays
