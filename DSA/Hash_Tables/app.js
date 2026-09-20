@@ -106,3 +106,16 @@ myHashTable.keys();
 myHashTable.values();
 
 //  Comparision with hash table and arrays
+
+//  pros
+//  Fast key/value access
+//  Efficient memory usage
+//  Can handle large datasets
+//  fast lookups
+//  fast inserts
+//  flexible key
+
+// cons
+//  Good collision resoluation needed
+//  Unorder structure
+//  Slow key iteration
