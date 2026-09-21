@@ -84,7 +84,6 @@ console.log("Result2 ==>>", res2);
 console.log("Result3 ==>>", res3);
 
 //  exercise
-
 function multiplyBy(num1) {
   return function (num2) {
     return num1 * num2;
@@ -93,5 +92,5 @@ function multiplyBy(num1) {
 
 let multiplyByTwo = multiplyBy(2);
 let multiplyByTen = multiplyBy(10);
-console.log(multiplyByTwo(10));
-console.log(multiplyByTen(10));
+console.log(multiplyByTwo(10)); // 20
+console.log(multiplyByTen(10)); // 100
