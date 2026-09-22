@@ -20,13 +20,17 @@ user.scream();
 //  1. linkedlist
 //  2. sperate chaining
 //  in a object only we can save key as string
-//  in object there is no order matining
+// with  in object there is no order maintain
 //  in Javascript
 // Map --> Map allow you to any data type to save as key
 // with allow us to array ,functions save as key
 //  another benifit of Map it's allow us to insertion in order
+//  In Map case when loop through the data, the insertion order is maintained
 const a = new Map();
+
 // Set
+// Set are verify similar to Map
+//  Set only store unique values, no duplicates allowed
 //  Set only store key not a value
 const b = new Set();
 

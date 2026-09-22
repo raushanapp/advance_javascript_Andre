@@ -254,11 +254,11 @@ const scores = {
 scores.Maya; // 95
 ```
 
-Plain objects do not guarantee that arbitrary values such as arrays or functions will work as distinct keys. Object keys are generally strings or symbols.
+Plain objects do not use arbitrary objects, arrays, or functions as distinct keys in the same way as `Map`. Object keys are generally strings or symbols. Objects also should not be chosen when you need a general-purpose insertion-ordered key-value collection.
 
 ### Map
 
-`Map` is designed for key-value storage and allows keys of any data type. It also preserves insertion order when iterated.
+`Map` is designed for key-value storage and allows keys of any data type, including objects, arrays, and functions. When a `Map` is iterated, entries appear in insertion order.
 
 ```js
 const map = new Map();
@@ -272,17 +272,23 @@ map.set(functionKey, "function value");
 map.get(objectKey); // "object value"
 map.has("name"); // true
 map.size; // 3
+
+for (const [key, value] of map) {
+  console.log(key, value); // follows insertion order
+}
 ```
 
 ### Set
 
-`Set` stores unique values rather than key-value pairs. It is useful for membership checks and removing duplicates.
+`Set` stores unique values rather than key-value pairs. Duplicate values are ignored, so it is useful for membership checks and removing duplicates.
 
 ```js
 const uniqueNumbers = new Set([1, 2, 2, 3]);
 
 uniqueNumbers.has(2); // true
 uniqueNumbers.size; // 3
+
+[...uniqueNumbers]; // [1, 2, 3]
 ```
 
 ```mermaid
@@ -414,6 +420,7 @@ The important distinction is **index versus key**: arrays are optimized for posi
 - Works well with large datasets when keys are well distributed.
 - Supports flexible keys, especially through `Map`.
 - Uses direct lookup instead of scanning every stored item.
+- Can handle large datasets when the load factor and collision rate are controlled.
 
 ### Disadvantages
 
@@ -423,7 +430,44 @@ The important distinction is **index versus key**: arrays are optimized for posi
 - Iterating over all keys is O(n), unlike looking up one known key.
 - A hash table uses extra bucket memory in addition to the stored entries.
 
-## 10. Deterministic hash functions
+The main tradeoff is speed versus memory: hash tables use extra space to make average key-based lookup and insertion fast.
+
+## 10. Deterministic versus idempotent functions
+
+The final comment in `app.js` describes a function that gives the same output for the same input. The precise term for that property is **deterministic** or **referentially transparent** when there are no side effects.
+
+```js
+function double(value) {
+  return value * 2;
+}
+
+double(4); // 8
+double(4); // 8 again: same input, same output
+```
+
+An **idempotent** operation gives the same final result when it is applied more than once. In mathematical form:
+
+$$
+f(f(x)) = f(x)
+$$
+
+For example, setting a map key to the same value is idempotent:
+
+```js
+const settings = new Map();
+
+function enableFeature() {
+  settings.set("featureEnabled", true);
+}
+
+enableFeature();
+enableFeature();
+settings.get("featureEnabled"); // true
+```
+
+`double` is deterministic, but it is not idempotent because `double(double(4))` is `16`, not `8`.
+
+## 11. Deterministic hash functions
 
 A hash function should be **deterministic**: the same input must produce the same output under the same conditions.
 
@@ -453,7 +497,7 @@ flowchart LR
     A2 --> B
 ```
 
-## 11. Interview problem: first recurring character
+## 12. Interview problem: first recurring character
 
 Given an array, return the first value that appears again while scanning from left to right. Return `undefined` when every value is unique.
 
@@ -552,3 +596,4 @@ This is a common data-structure decision: use additional space when it removes r
 - Can you compare array indexing with hash-table key lookup?
 - Can you solve first recurring character in O(n) average time with a `Set`?
 - Can you state the time and space trade-off of the brute-force and hash solutions?
+- Can you explain the difference between deterministic and idempotent behavior?
