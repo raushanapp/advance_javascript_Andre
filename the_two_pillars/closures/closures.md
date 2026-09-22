@@ -339,20 +339,19 @@ handleSaveClick(); // "Clicked Save"
 ## Quick summary
 
 ```mermaid
-mindmap
-  root((Closures))
-    Lexical scope
-      Written location matters
-      Scope chain
-    Inner functions
-      Returned functions
-      Callbacks
-      Function factories
-    Preserved state
-      Private variables
-      Counters
-      Async callbacks
-    Tradeoffs
-      Encapsulation
-      Memory lifetime
+flowchart TD
+    A[Closures] --> B[Lexical scope]
+    B --> B1[Written location matters]
+    B --> B2[Scope chain]
+    A --> C[Inner functions]
+    C --> C1[Returned functions]
+    C --> C2[Callbacks]
+    C --> C3[Function factories]
+    A --> D[Preserved state]
+    D --> D1[Private variables]
+    D --> D2[Counters]
+    D --> D3[Async callbacks]
+    A --> E[Tradeoffs]
+    E --> E1[Encapsulation]
+    E --> E2[Memory lifetime]
 ```
