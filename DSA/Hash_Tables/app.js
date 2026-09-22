@@ -118,3 +118,7 @@ myHashTable.values();
 //  Good collision resoluation needed
 //  Unorder structure
 //  Slow key iteration
+
+//  Idempotent -->  a function given input always given same output
+
+//

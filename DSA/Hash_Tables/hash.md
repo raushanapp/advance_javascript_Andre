@@ -404,3 +404,151 @@ The bucket array contributes `O(m)`, and the stored key-value entries contribute
 | Store unique values only              | `Set`                                | Uniqueness is built in                      |
 
 The important distinction is **index versus key**: arrays are optimized for positions, while hash tables are optimized for key-based lookup.
+
+## 9. Hash table advantages and disadvantages
+
+### Advantages
+
+- Fast average key-value access.
+- Fast average insertion and update.
+- Works well with large datasets when keys are well distributed.
+- Supports flexible keys, especially through `Map`.
+- Uses direct lookup instead of scanning every stored item.
+
+### Disadvantages
+
+- Collisions require a resolution strategy such as separate chaining.
+- Poor hashing or too many entries can make operations approach O(n).
+- Plain objects do not preserve data as a general-purpose ordered key-value collection.
+- Iterating over all keys is O(n), unlike looking up one known key.
+- A hash table uses extra bucket memory in addition to the stored entries.
+
+## 10. Deterministic hash functions
+
+A hash function should be **deterministic**: the same input must produce the same output under the same conditions.
+
+```js
+function simpleHash(key, tableSize) {
+  let hashValue = 0;
+
+  for (let index = 0; index < key.length; index += 1) {
+    hashValue = (hashValue + key.charCodeAt(index) * (index + 1)) % tableSize;
+  }
+
+  return hashValue;
+}
+
+simpleHash("grapes", 50) === simpleHash("grapes", 50); // true
+```
+
+For hash table use, this repeatability is more important than returning a different number every time. A random result would make it impossible to find a key later because the lookup could search a different bucket from the one used during insertion.
+
+```mermaid
+flowchart LR
+    K[Same key] --> H1[Hash function]
+    H1 --> A1[Same address]
+    K --> H2[Hash function later]
+    H2 --> A2[Same address]
+    A1 --> B[Find the same bucket]
+    A2 --> B
+```
+
+## 11. Interview problem: first recurring character
+
+Given an array, return the first value that appears again while scanning from left to right. Return `undefined` when every value is unique.
+
+```js
+firstRecurringCharacter([2, 5, 1, 2, 3, 5, 1, 2, 4]);
+// 2
+
+firstRecurringCharacter([2, 1, 1, 2, 3, 5, 1, 2, 4]);
+// 1
+
+firstRecurringCharacter([2, 3, 4, 5]);
+// undefined
+```
+
+### Brute-force solution
+
+Compare every item with every item after it. This is easy to understand, but the nested loops can repeat many comparisons.
+
+```js
+function firstRecurringCharacter(input) {
+  for (let index = 0; index < input.length; index += 1) {
+    for (let nextIndex = index + 1; nextIndex < input.length; nextIndex += 1) {
+      if (input[index] === input[nextIndex]) {
+        return input[index];
+      }
+    }
+  }
+
+  return undefined;
+}
+```
+
+Complexity:
+
+- Time: O(n²) in the worst case.
+- Extra space: O(1), because no structure grows with the input.
+
+### Hash table solution
+
+Store each value as it is visited. Before storing a value, check whether it is already present. The first match is the first recurring character.
+
+```js
+function firstRecurringCharacterWithHash(input) {
+  const seen = new Set();
+
+  for (const value of input) {
+    if (seen.has(value)) {
+      return value;
+    }
+
+    seen.add(value);
+  }
+
+  return undefined;
+}
+
+firstRecurringCharacterWithHash([2, 5, 1, 2, 3, 5, 1, 2, 4]);
+// 2
+
+firstRecurringCharacterWithHash([2, 3, 4, 5]);
+// undefined
+```
+
+Complexity:
+
+- Time: O(n) average, because `Set.has` and `Set.add` are average O(1).
+- Extra space: O(n), because `seen` can store every input value.
+
+```mermaid
+flowchart TD
+    A[Read value] --> B{Already in seen?}
+    B -->|Yes| C[Return value]
+    B -->|No| D[Add value to seen]
+    D --> E{More values?}
+    E -->|Yes| A
+    E -->|No| F[Return undefined]
+```
+
+### Why the hash solution is better here
+
+The hash-based approach trades memory for speed:
+
+| Solution     | Time         | Extra space | Main idea                    |
+| ------------ | ------------ | ----------- | ---------------------------- |
+| Nested loops | O(n²)        | O(1)        | Compare pairs                |
+| `Set` lookup | O(n) average | O(n)        | Remember values already seen |
+
+This is a common data-structure decision: use additional space when it removes repeated work and improves the time complexity.
+
+## Final revision checklist
+
+- Can you explain how a key becomes a bucket index?
+- Can you describe a collision and separate chaining?
+- Can you explain why the same key must hash to the same address?
+- Can you implement `set` and `get` using `[key, value]` bucket entries?
+- Can you compare array indexing with hash-table key lookup?
+- Can you solve first recurring character in O(n) average time with a `Set`?
+- Can you state the time and space trade-off of the brute-force and hash solutions?
