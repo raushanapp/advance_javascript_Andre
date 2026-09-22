@@ -1,5 +1,4 @@
 // In Javascript Hash table called as object
-
 let user = {
   age: 54,
   name: "Kylie",
