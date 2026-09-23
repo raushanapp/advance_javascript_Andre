@@ -116,7 +116,43 @@ flowchart TD
 
 The lookup order is local scope first, then parent scope, then the next outer scope. JavaScript continues outward until it finds the variable or reaches the global scope.
 
-## 4. Higher-order functions and closures
+## 4. Lexical environments and `[[Scope]]`
+
+JavaScript functions keep an internal link to the lexical environment where they were created. This relationship is often described as the function's `[[Scope]]`. It lets the function find variables from outer scopes when it runs later.
+
+The call stack contains active function calls. A closure keeps its needed outer bindings reachable in memory after the outer call has finished, so those bindings are not collected while the closure can still use them.
+
+```js
+function sayMyName() {
+  const a = "a";
+
+  return function findName() {
+    const b = "b";
+
+    return function printName() {
+      const c = "c";
+      return `${a} -> ${b} -> ${c}`;
+    };
+  };
+}
+
+sayMyName()()(); // "a -> b -> c"
+```
+
+`printName` can access `c` locally, `b` from `findName`, and `a` from `sayMyName`.
+
+```mermaid
+flowchart LR
+    A[sayMyName scope] --> AV[a]
+    A --> B[findName scope]
+    B --> BV[b]
+    B --> C[printName scope]
+    C --> CV[c]
+    C -. closes over .-> AV
+    C -. closes over .-> BV
+```
+
+## 5. Higher-order functions and closures
 
 A higher-order function accepts a function, returns a function, or both. In the nested example:
 
@@ -140,7 +176,33 @@ triple(5); // 15
 
 Each returned function has its own closure. `double` remembers `2`, while `triple` remembers `3`.
 
-## 5. Closures preserve state
+## 6. Curried functions use multiple closures
+
+Currying breaks a function that needs several arguments into a chain of functions. Each call creates a closure over the value it received.
+
+```js
+const boo = (first) => (second) => (third) =>
+  `${first} -> ${second} -> ${third}`;
+
+const withGreeting = boo("Hi");
+const withName = withGreeting("Alice");
+
+withName("Bob"); // "Hi -> Alice -> Bob"
+boo("Hi")("Alice")("Bob"); // the same result
+```
+
+`withGreeting` remembers `"Hi"`, and `withName` remembers both `"Hi"` and `"Alice"`. Those values remain available even if the final call happens much later.
+
+```mermaid
+flowchart LR
+    A[boo Hi] --> B[Remembers Hi]
+    B --> C[withGreeting Alice]
+    C --> D[Remembers Hi and Alice]
+    D --> E[withName Bob]
+    E --> F[Returns final string]
+```
+
+## 7. Closures preserve state
 
 Closures can create private state. The `count` variable cannot be changed directly from outside, but the returned functions can read and update it.
 
@@ -178,7 +240,7 @@ flowchart LR
     C --> F[reads current count]
 ```
 
-## 6. Closures with asynchronous callbacks
+## 8. Closures with asynchronous callbacks
 
 The callback passed to `setTimeout` is created inside `callMeMaybe`. It closes over `callMe`, so it can read the variable later when the timer runs.
 
@@ -188,10 +250,10 @@ function callMeMaybe() {
 
   setTimeout(() => {
     console.log(callMe);
-  }, 1000);
+  }, 4000);
 }
 
-callMeMaybe(); // logs the message after about one second
+callMeMaybe(); // logs the message after about four seconds
 ```
 
 The outer function finishes before the timer callback runs, but the callback still has access to `callMe`.
@@ -215,7 +277,7 @@ This version also works:
 function callMeMaybeLater() {
   setTimeout(() => {
     console.log(callMe);
-  }, 1000);
+  }, 4000);
 
   const callMe = "Hi! I am now here!";
 }
@@ -237,7 +299,7 @@ function invalidOrder() {
 
 The difference is the delay between creating the callback and executing it.
 
-## 7. Closures and loops
+## 9. Closures and loops
 
 `let` creates a separate binding for each loop iteration, so each callback remembers the expected value.
 
@@ -265,7 +327,7 @@ callbacksWithVar.map((callback) => callback()); // [3, 3, 3]
 
 Prefer `let` or `const` for block-scoped loop variables.
 
-## 8. Memory and lifetime
+## 10. Memory efficiency and lifetime
 
 A closure does not keep every variable in an entire program alive. It keeps the variables that are still reachable through the function. The environment can be collected when no live reference can access it anymore.
 
@@ -286,7 +348,82 @@ After `readMessage` no longer references the returned function, the closure is n
 
 Closures are useful, but keeping long-lived closures that capture large objects can increase memory usage.
 
-## 9. Common uses
+### Reusing captured data
+
+`heavyDuty` creates a large array every time it is called. `heavyDuty2` creates the array once and returns a closure that reuses it for later lookups.
+
+```js
+function heavyDuty(index) {
+  const bigArray = new Array(1000).fill("simple");
+  return bigArray[index];
+}
+
+function heavyDuty2() {
+  const bigArray = new Array(1000).fill("simple");
+
+  return function readValue(index) {
+    return bigArray[index];
+  };
+}
+
+heavyDuty(5); // creates the array for this call
+heavyDuty(5); // creates it again
+
+const readHeavyValue = heavyDuty2(); // creates it once
+readHeavyValue(6); // reuses the captured array
+readHeavyValue(7); // reuses the same captured array
+```
+
+This can avoid repeated setup work, but the captured array stays alive as long as `readHeavyValue` remains reachable.
+
+## 11. Encapsulation and least privilege
+
+A closure can keep implementation details private and expose only the operations that callers need. This supports the **least privilege principle**: give code the minimum access required to perform its job.
+
+```js
+function makeNuclearButton() {
+  let timeWithoutDestruction = 0;
+
+  const passTime = () => {
+    timeWithoutDestruction += 1;
+  };
+
+  const totalPeaceTime = () => timeWithoutDestruction;
+  const launch = () => {
+    timeWithoutDestruction = -1;
+    return "Boom!";
+  };
+
+  const timerId = setInterval(passTime, 1000);
+
+  return {
+    totalPeaceTime,
+    stop() {
+      clearInterval(timerId);
+    },
+  };
+}
+
+const button = makeNuclearButton();
+button.totalPeaceTime();
+button.stop();
+```
+
+The `launch` function is intentionally not returned, so callers cannot invoke it. The private counter can only be observed through `totalPeaceTime`. The `stop` method is included here so the interval can be cleaned up when the object is no longer needed.
+
+```mermaid
+flowchart TD
+    A[makeNuclearButton] --> B[Private counter]
+    A --> C[Private launch]
+    A --> D[Private timer]
+    A --> E[Public totalPeaceTime]
+    A --> F[Public stop]
+    C -. not exposed .-> G[Caller cannot launch]
+    E --> H[Read controlled result]
+    F --> I[Clear interval]
+```
+
+## 12. Common uses
 
 ### Data privacy
 
@@ -327,7 +464,7 @@ const handleSaveClick = createClickMessage("Save");
 handleSaveClick(); // "Clicked Save"
 ```
 
-## 10. Closure checklist
+## 13. Closure checklist
 
 - Where was the function written?
 - Which outer variables does it use?
