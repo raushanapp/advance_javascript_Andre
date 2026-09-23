@@ -64,13 +64,13 @@ class HashTable {
     }
     return undefined;
     console.log("Current", currentBucket);
-  } // O(1)
+  } // O(1) --> if not collision occur then most of time O(1) otherwise if have collisions it can degrade to O(n)
   set(key, value) {
     let address = this._hash(key);
     if (!this.data[address]) {
       this.data[address] = [];
     }
-    this.data[address].push(key, value);
+    this.data[address].push([key, value]);
     return this.data;
   } // O(1)
   keys() {
@@ -78,7 +78,7 @@ class HashTable {
     for (let i = 0; i < this.data.length; i++) {
       if (this.data[i]) {
         // keysArray.push(this.data[i][0][0]);
-        keysArray.push(this.data[i][0]);
+        keysArray.push(this.data[i][0][0]);
       }
     }
     return keysArray;
@@ -88,21 +88,21 @@ class HashTable {
     const valuesArrays = [];
     for (let i = 0; i < this.data.length; i++) {
       if (this.data[i]) {
-        valuesArrays.push(this.data[i][1]);
+        valuesArrays.push(this.data[i][0][1]);
       }
     }
     return valuesArrays;
   }
 }
 
-const myHashTable = new HashTable(50);
+const myHashTable = new HashTable(20);
 //  exam _hash working
 // let has = myHashTable._hash("grapes");
 // console.log(has);
 myHashTable.set("grapes", 1000);
 myHashTable.set("apple", 100);
 myHashTable.set("oranges", 50);
-myHashTable.get("grapess", 54);
+myHashTable.set("grapess", 54);
 
 //  down side of hash table
 myHashTable.keys();

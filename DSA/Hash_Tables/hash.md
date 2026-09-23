@@ -88,7 +88,7 @@ hash("grapes", 50); // an integer from 0 through 49
 The modulo operation guarantees that the result is a valid index:
 
 $$
-  ext{bucketIndex} = \text{hashValue} \bmod \text{tableSize}
+\mathrm{bucketIndex} = \mathrm{hashValue} \bmod \mathrm{tableSize}
 $$
 
 A good hash function should be deterministic, reasonably fast, and distribute keys across buckets. The same key must always produce the same index for the same table size.
@@ -195,16 +195,17 @@ class HashTable {
   }
 }
 
-const table = new HashTable(50);
+const table = new HashTable(20);
 
 table.set("grapes", 1000);
 table.set("apple", 100);
 table.set("oranges", 50);
+table.set("grapess", 54);
 
 table.get("grapes"); // 1000
-table.get("missing"); // undefined
-table.keys(); // ["grapes", "apple", "oranges"]
-table.values(); // [1000, 100, 50]
+table.get("grapess"); // 54
+table.keys(); // keys stored in occupied buckets
+table.values(); // values stored in occupied buckets
 ```
 
 ### How `set` works
@@ -223,21 +224,32 @@ table.values(); // [1000, 100, 50]
 4. Return the value for the matching key.
 5. Return `undefined` when the key is missing.
 
-### Important correction in the source example
+### Current source implementation
 
-The original `app.js` uses:
-
-```js
-this.data[address].push(key, value);
-```
-
-But its `get` method expects each bucket item to be a pair, such as `[key, value]`. The compatible version is:
+The current `app.js` stores each key-value pair as a nested array:
 
 ```js
 this.data[address].push([key, value]);
 ```
 
-Without the nested pair, collisions and lookups do not work as intended. The `keys` and `values` methods also need to loop through every entry in each bucket, as shown in the working implementation above.
+This matches the lookup code, which reads the key at position `0` and the value at position `1`:
+
+```js
+if (currentBucket[i][0] === key) {
+  return currentBucket[i][1];
+}
+```
+
+The current `keys()` and `values()` methods return the first pair from each occupied bucket:
+
+```js
+keysArray.push(this.data[i][0][0]);
+valuesArrays.push(this.data[i][0][1]);
+```
+
+That is enough for a basic demonstration, but a complete collision-safe implementation should loop through every pair in every bucket, as shown in the working implementation above. It should also update an existing key instead of adding a duplicate pair when that behavior is required.
+
+The `get` method is average **O(1)** when collisions are limited, but it can degrade to **O(n)** when many keys share one bucket.
 
 ## 6. JavaScript `Object`, `Map`, and `Set`
 
