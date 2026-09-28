@@ -240,6 +240,29 @@ flowchart LR
     C --> F[reads current count]
 ```
 
+### Run initialization only once
+
+A closure can also remember whether an operation has already run. Here the returned function and its private `initialized` binding stay connected, so later calls can skip the work:
+
+```js
+function createInitializer() {
+  let initialized = false;
+
+  return function initialize() {
+    if (initialized) return;
+
+    initialized = true;
+    console.log("view has been set!");
+  };
+}
+
+const initialize = createInitializer();
+initialize(); // logs "view has been set!"
+initialize(); // does nothing
+```
+
+Each call to `createInitializer` creates an independent `initialized` state. The closure keeps that state private and lets `initialize` update and check it.
+
 ## 8. Closures with asynchronous callbacks
 
 The callback passed to `setTimeout` is created inside `callMeMaybe`. It closes over `callMe`, so it can read the variable later when the timer runs.
@@ -323,6 +346,42 @@ for (var index = 0; index < 3; index += 1) {
 }
 
 callbacksWithVar.map((callback) => callback()); // [3, 3, 3]
+```
+
+The same shared binding causes a common issue with delayed callbacks:
+
+```js
+const values = [1, 2, 3, 4, 5];
+
+for (var index = 0; index < values.length; index += 1) {
+  setTimeout(() => {
+    console.log(values[index], index);
+  }, 3000);
+}
+```
+
+When the callbacks run, the loop has finished and `index` is `5`, so each callback logs `undefined, 5` (`values[5]` does not exist). With `let`, each iteration gets its own binding:
+
+```js
+for (let index = 0; index < values.length; index += 1) {
+  setTimeout(() => {
+    console.log(values[index], index);
+  }, 3000);
+}
+// Logs: 1 0, 2 1, 3 2, 4 3, 5 4
+```
+
+An IIFE can provide a separate function scope for each iteration when using `var`. Its parameter is captured by that iteration's callback:
+
+```js
+for (var index = 0; index < values.length; index += 1) {
+  (function (iterationIndex) {
+    setTimeout(() => {
+      console.log(values[iterationIndex]);
+    }, 3000);
+  })(index);
+}
+// Logs: 1, 2, 3, 4, 5
 ```
 
 Prefer `let` or `const` for block-scoped loop variables.
