@@ -1,17 +1,23 @@
 # JavaScript Prototype Inheritance
 
-## The core idea
+## 1) Core idea
 
-JavaScript uses **prototype-based inheritance**. An object can delegate property lookups to another object through its internal `[[Prototype]]` link. If a property is not found on the object itself, JavaScript checks its prototype, then that prototype's prototype, and so on until it finds the property or reaches `null`.
+JavaScript is built on prototype-based inheritance.
 
-The prototype is not a copy of the object. Objects in the chain share access to properties and methods through delegation.
+An object does not store all its methods and properties directly on itself. Instead, each object has an internal link called `[[Prototype]]`. When you read a property like `lizard.fire`, JavaScript first checks `lizard` itself. If it is not there, it moves to `lizard.__proto__`, then to that object's prototype, and continues upward until it reaches `null`.
 
-## Example: `lizard` inherits from `dragon`
+This means inheritance works by delegation, not by copying:
 
-This example follows the objects in `app.js` and `prototype_chain.js`. `Object.create(dragon)` is the preferred way to create an object whose prototype is `dragon`:
+- the child object gets access to parent properties
+- the parent remains the source of truth
+- the child can override behavior locally if needed
+
+## 2) Simple example: `dragon` and `lizard`
+
+This is the pattern from `prototype_chain.js`:
 
 ```js
-const dragon = {
+let dragon = {
   name: "Tanya",
   fire: true,
   fight() {
@@ -24,125 +30,245 @@ const dragon = {
   },
 };
 
-const lizard = Object.create(dragon);
-lizard.name = "Kiki";
-lizard.fight = function () {
-  return 1;
+let lizard = {
+  name: "Kiki",
+  fight() {
+    return 1;
+  },
 };
 
-console.log(lizard.sing()); // "I am Kiki the breather of fire!"
-console.log(lizard.fight()); // 1
-console.log(lizard.fire); // true (inherited from dragon)
+lizard.__proto__ = dragon;
 
-console.log(Object.getPrototypeOf(lizard) === dragon); // true
-console.log(Object.hasOwn(lizard, "sing")); // false
-console.log(Object.hasOwn(lizard, "fight")); // true
+console.log(lizard.name); // "Kiki" (own property wins)
+console.log(lizard.fire); // true (inherited from dragon)
+console.log(lizard.fight()); // 1 (own method shadows parent)
+console.log(lizard.sing()); // "I am Kiki the breather of fire!"
 ```
+
+### What is happening?
+
+- `lizard` has its own `name` and `fight`.
+- It does not have `fire` or `sing`, so JavaScript searches the prototype chain.
+- `dragon` has those properties, so they are accessible through inheritance.
+- When `sing()` runs, `this` is still `lizard`, so `this.name` becomes `"Kiki"` even though the function was found on `dragon`.
+
+This is called delegation.
+
+## 3) Prototype chain diagram
 
 ```mermaid
 flowchart LR
-    L["lizard (own: name, fight)"] -->|"[[Prototype]]"| D["dragon (own: name, fire, fight, sing)"]
+    L["lizard\nown: name, fight"] -->|"[[Prototype]]"| D["dragon\nown: name, fire, fight, sing"]
     D -->|"[[Prototype]]"| O["Object.prototype"]
     O -->|"[[Prototype]]"| N["null"]
 ```
 
-### What happens during lookup?
+In this chain:
 
-- `lizard.fire`: JavaScript does not find `fire` on `lizard`, so it finds `dragon.fire`.
-- `lizard.fight()`: both objects have `fight`; the own property on `lizard` is found first and shadows `dragon.fight`.
-- `lizard.sing()`: JavaScript finds `sing` on `dragon`, but the call receiver is still `lizard`. Therefore, inside `sing`, `this.name` is `"Kiki"` and `this.fire` is found on `dragon`.
-- A missing property lookup continues to `Object.prototype` and then stops at `null`. If the property is not found anywhere, the result is `undefined`.
+- `lizard` looks for `fire` and finds it on `dragon`
+- `lizard` looks for `sing` and finds it on `dragon`
+- `lizard` looks for `toString` and eventually finds it on `Object.prototype`
+- if nothing is found, the lookup ends at `null`
 
-To inspect own versus inherited enumerable properties, as in `prototype_chain.js`:
+## 4) How JavaScript checks properties
+
+JavaScript performs a lookup in this order:
+
+1. check the object itself
+2. check its prototype
+3. keep moving upward through the prototype chain
+4. stop at `null`
+
+Example:
 
 ```js
-for (const property in lizard) {
-  if (Object.hasOwn(lizard, property)) {
-    console.log(`Own property: ${property}`);
+console.log(lizard.__proto__); // dragon
+console.log(lizard.__proto__.__proto__); // Object.prototype
+console.log(lizard.__proto__.__proto__.__proto__); // null
+```
+
+## 5) Own property vs inherited property
+
+The `for...in` loop iterates enumerable properties from the object and its prototype chain.
+
+```js
+for (let prop in lizard) {
+  if (lizard.hasOwnProperty(prop)) {
+    console.log(`Own property: ${prop}`);
   } else {
-    console.log(`Inherited property: ${property}`);
+    console.log(`Inherited property: ${prop}`);
   }
 }
 ```
 
-`for...in` visits enumerable properties from the object and its prototype chain. Use `Object.hasOwn(object, property)` when you specifically need to tell whether a property belongs directly to that object.
+This prints properties that are directly on `lizard` versus ones inherited from `dragon`.
 
-## Creating and inspecting prototype links
-
-Prefer `Object.create()` when creating an object with a chosen prototype, and `Object.getPrototypeOf()` when inspecting the link:
+Better modern version:
 
 ```js
-const child = Object.create(parent);
-Object.getPrototypeOf(child) === parent; // true
+for (const prop in lizard) {
+  if (Object.hasOwn(lizard, prop)) {
+    console.log(`Own property: ${prop}`);
+  } else {
+    console.log(`Inherited property: ${prop}`);
+  }
+}
 ```
 
-The existing example also uses `lizard.__proto__ = dragon`. `__proto__` is a legacy accessor; prefer `Object.create()` for setup. The internal link is called `[[Prototype]]`; it is distinct from the `.prototype` property found on constructor functions.
+### Key point
 
-## Constructor functions and `.prototype`
+- `hasOwnProperty` checks only own properties
+- inherited properties are not counted as direct properties
 
-When a constructor is called with `new`, the new instance's `[[Prototype]]` is set to the constructor's `.prototype` object:
+## 6) `__proto__` is a legacy way to set prototype
+
+In the example, this line is used:
 
 ```js
-function Creature(name) {
-  this.name = name;
+lizard.__proto__ = dragon;
+```
+
+This works, but it is not the preferred modern way. A clearer and safer version is:
+
+```js
+const lizard = Object.create(dragon);
+```
+
+This creates an object whose prototype is `dragon` directly.
+
+```js
+const lizard = Object.create(dragon);
+console.log(Object.getPrototypeOf(lizard) === dragon); // true
+```
+
+### Why `Object.create()` is better
+
+- more explicit
+- easier to read
+- safer for learning and production code
+- avoids direct mutation of the hidden prototype link
+
+## 7) `Object.prototype` is the final stop
+
+Everything in JavaScript eventually inherits from `Object.prototype` unless it is `null`.
+
+```js
+const obj = { name: "Sally" };
+
+console.log(obj.hasOwnProperty("name")); // true
+console.log(obj.hasOwnProperty("hasOwnProperty")); // false
+```
+
+Why does `obj.hasOwnProperty` work even though it is not an own property? Because it is inherited from `Object.prototype`.
+
+Example chain:
+
+```mermaid
+flowchart LR
+    O["obj"] -->|"[[Prototype]]"| P["Object.prototype"]
+    P -->|"[[Prototype]]"| N["null"]
+```
+
+## 8) Functions also have prototype chains
+
+Functions are objects too, and they also sit in the prototype chain.
+
+```js
+function multiplyByFive(num) {
+  return num * 5;
 }
 
-Creature.prototype.describe = function () {
-  return `I am ${this.name}.`;
-};
+console.log(multiplyByFive(2)); // 10
+console.log(multiplyByFive.__proto__); // Function.prototype
+console.log(multiplyByFive.__proto__.__proto__); // Object.prototype
+```
 
-const creature = new Creature("Mira");
+This chain looks like:
 
-console.log(creature.describe()); // "I am Mira."
-console.log(Object.getPrototypeOf(creature) === Creature.prototype); // true
+```mermaid
+flowchart LR
+    F["multiplyByFive function"] -->|"[[Prototype]]"| FP["Function.prototype"]
+    FP -->|"[[Prototype]]"| OP["Object.prototype"]
+    OP -->|"[[Prototype]]"| N["null"]
+```
+
+So functions inherit from `Function.prototype`, and `Function.prototype` inherits from `Object.prototype`.
+
+## 9) Arrays also have prototype chains
+
+```js
+const array = [];
+
+console.log(array.__proto__); // Array.prototype
+console.log(array.__proto__.__proto__); // Object.prototype
 ```
 
 ```mermaid
-flowchart TD
-    I["creature instance (own: name)"] -->|"[[Prototype]]"| CP["Creature.prototype (describe)"]
-    CP -->|"[[Prototype]]"| OP["Object.prototype"]
+flowchart LR
+    A["array []"] -->|"[[Prototype]]"| AP["Array.prototype"]
+    AP -->|"[[Prototype]]"| OP["Object.prototype"]
     OP -->|"[[Prototype]]"| N["null"]
-    C["Creature function"] -. ".prototype property" .-> CP
-    C -->|"[[Prototype]]"| FP["Function.prototype"]
-    FP -->|"[[Prototype]]"| OP
 ```
 
-Keep these two relationships separate:
+That is why arrays can use methods like `map`, `filter`, `push`, and `length` even though those are not directly on the array object.
 
-- `creature`'s `[[Prototype]]` is `Creature.prototype`.
-- `Creature` is itself a function object, so its `[[Prototype]]` is `Function.prototype`.
-- `Creature.prototype` is an ordinary object that instances can inherit from.
-
-## Built-in prototype chain
-
-Arrays and functions also delegate to built-in prototype objects:
+## 10) Object.create() example with parent object
 
 ```js
-const values = [];
-function example() {}
+let human = {
+  mortal: true,
+};
 
-Object.getPrototypeOf(values) === Array.prototype; // true
-Object.getPrototypeOf(Array.prototype) === Object.prototype; // true
-Object.hasOwn(Array.prototype, "toString"); // true
-Object.getPrototypeOf(example) === Function.prototype; // true
-Object.getPrototypeOf(Object.prototype) === null; // true
+let socrates = Object.create(human);
+socrates.age = 45;
+
+console.log(socrates.age); // 45
+console.log(socrates.mortal); // true
+console.log(human.isPrototypeOf(socrates)); // true
 ```
 
-Array methods such as `map` and `toString` are found on `Array.prototype`. Methods such as `hasOwnProperty` are farther up the chain on `Object.prototype`.
+Here:
 
-## Interview recap
+- `socrates` is a new object
+- it inherits from `human`
+- `human` is the prototype of `socrates`
+- `human.isPrototypeOf(socrates)` returns `true`
 
-**What is the prototype chain?**  
-It is the linked sequence of objects JavaScript searches when resolving a property. Lookup starts on the object and follows `[[Prototype]]` links until the property is found or the chain ends at `null`.
+## 11) Big picture summary
 
-**What is shadowing?**  
-An object's own property takes precedence over an inherited property with the same key. The inherited property is still on the prototype; it has not been overwritten.
+Prototype inheritance means:
 
-**What is the difference between `[[Prototype]]` and `.prototype`?**  
-`[[Prototype]]` is an object's internal link to its prototype. A constructor function's `.prototype` is the object that instances created with `new` will link to.
+- objects delegate property lookup to another object
+- the parent object is in the prototype chain
+- lookup continues upward until the property is found or `null` is reached
+- own properties win over inherited ones
+- methods and data can be shared without copying them onto every object
 
-**Does inheritance copy methods onto the child?**  
-No. The child can access inherited properties through delegation; they remain on the prototype unless the child defines its own property.
+## 12) Quick interview answers
 
-**How do you inspect a prototype safely?**  
-Use `Object.getPrototypeOf(object)`. Use `Object.hasOwn(object, key)` to check whether a property is directly on the object.
+### What is a prototype chain?
+It is the chain of linked objects that JavaScript checks when a property is not found on the current object.
+
+### Why is prototype inheritance useful?
+It avoids duplication and lets objects share behavior efficiently.
+
+### What happens if a property is not found?
+JavaScript keeps searching until it reaches `Object.prototype`, then `null`. If still not found, it returns `undefined`.
+
+### What is shadowing?
+When a child object defines a property with the same name as an inherited property, the child's own property takes priority.
+
+### What is the difference between `[[Prototype]]` and `prototype`?
+- `[[Prototype]]` is the internal prototype link of an object
+- `.prototype` is a property on constructor functions used to define what instances inherit from
+
+## 13) Final mental model
+
+Think of prototype inheritance like this:
+
+- every object has a parent link
+- if you ask for a property and the object does not have it, JavaScript asks its parent
+- if the parent does not have it, JavaScript asks the grandparent
+- this continues until the chain ends
+
+That is the heart of JavaScript inheritance.
