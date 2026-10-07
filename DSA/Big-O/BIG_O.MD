@@ -126,6 +126,25 @@ for (let i = 0; i < n; i++) {
 
 This grows much faster than O(n), so it can become expensive very quickly.
 
+### `logAllPairs(boxes)` from `app.js`
+
+```js
+function logAllPairs(boxes) {
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = 0; j < boxes.length; j++) {
+      console.log(boxes[i], boxes[j]);
+    }
+  }
+}
+```
+
+For each item, the inner loop visits every item again. With `n` items, this logs
+`n * n` pairs, so the time complexity is **O(n^2)**. For example, six items
+produce 36 pairs.
+
+If the loops iterate over separate inputs with lengths `a` and `b`, the
+complexity is **O(a * b)**.
+
 ## 8) Binary search: O(log n)
 
 Binary search cuts the search space in half each step.
@@ -235,6 +254,19 @@ So the total becomes:
 O(n + n) = O(2n) = O(n)
 ```
 
+### `compressBoxesTwice(boxes, boxes2)`
+
+```js
+function compressBoxesTwice(boxes, boxes2) {
+  boxes.forEach((box) => console.log(box));
+  boxes2.forEach((box) => console.log(box));
+}
+```
+
+These loops run one after the other over two different inputs. If `boxes` has
+`a` items and `boxes2` has `b` items, the total work is **O(a + b)**. Keep both
+input sizes in the expression because either array can grow independently.
+
 ## 10) Simplifying rules
 
 ### Rule 1: Drop constants
@@ -253,14 +285,17 @@ O(n + log n) -> O(n)
 
 ### Rule 3: Different inputs may use different variables
 
-```js
-function twoArrays(a, b) {
-  for (let i = 0; i < a.length; i++) {}
-  for (let j = 0; j < b.length; j++) {}
-}
-```
+The `compressBoxesTwice(boxes, boxes2)` example above is **O(a + b)**, not just
+O(n), because it processes two independent input arrays.
 
-This is **O(a + b)**, not just O(n), because there are two separate inputs.
+### Rule 4: Drop non-dominant terms
+
+When multiple growth terms are added, keep the one that grows fastest:
+
+```text
+O(n + n^2) -> O(n^2)
+O(n + log n) -> O(n)
+```
 
 ## 11) Good code = readable + scalable
 

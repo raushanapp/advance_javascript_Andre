@@ -136,4 +136,39 @@ function anotherFunChallenge(input) {
 // Simplifying
 // BIG O Rule
 // 1. Wrost case --> Consider the scenario where the input is the largest possible or worst-case scenario for the algorithm
+
 // 2. Removed constants
+//  Rule number two drop the constants when analyzing Big O complexity
+
+// 3. Different terms for inputs
+
+// Example
+
+function compressBoxesTwice(boxes, boxes2) {
+  boxes.forEach((b) => {
+    console.log(b); // O(n)
+  });
+
+  boxes2.forEach((b) => {
+    console.log(b); // O(n)
+  });
+}
+
+// O(a + b); this depnends on the both input arrays length
+
+// Log all Pairs of array
+
+const boxes1 = [1, 2, 3, 4, 5, 6];
+
+function logAllPairs(boxes) {
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = 0; j < boxes.length; j++) {
+      console.log(boxes[i], boxes[j]); // O(n^2)
+    }
+  }
+}
+
+logAllPairs(boxes1); // O(n*n) --> O(n^2) --> Quadratic time complexity because of nested loops
+
+// 4. Drop non-dominant terms
+// When analyzing Big O complexity, after removing constants, we also drop non-dominant terms. For example, in O(n + n^2), the n^2 term dominates, so we simplify it to O(n^2).
