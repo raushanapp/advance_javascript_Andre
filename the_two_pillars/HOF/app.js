@@ -94,3 +94,8 @@ let multiplyByTwo = multiplyBy(2);
 let multiplyByTen = multiplyBy(10);
 console.log(multiplyByTwo(10)); // 20
 console.log(multiplyByTen(10)); // 100
+
+// using arrow function
+const multiplyByArrow = (num1) => (num2) => num1 * num2;
+console.log(multiplyByArrow(2)(10)); // 20
+console.log(multiplyByArrow(10)(10)); // 100
