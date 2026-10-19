@@ -7,12 +7,20 @@ function printName() {
 }
 
 function findName() {
+  function test() {}
   return printName();
 }
 
 function sayMyName() {
   return findName();
 }
+{
+  let blockScopedVariable = "I exist only within this block";
+  var keyScopedVariable =
+    "I exist within the function or globally if not in a function";
+}
+
+console.log(keyScopedVariable);
 
 console.log(sayMyName());
 
@@ -46,3 +54,8 @@ console.log(greetRaushan()); // Hello, Raushan!
 // top level depends on the host and script type; it is not universally
 // equal to the global object (for example, in ES modules, top-level `this`
 // is undefined).
+
+//  Global execution context
+//  global object  this keyword  globalThis(Node.js )
+//  Hoisting
+//  Run code ran when
