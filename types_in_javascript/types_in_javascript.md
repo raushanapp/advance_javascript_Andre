@@ -6,15 +6,15 @@ This note explains the concepts demonstrated in [`app.js`](./app.js). Open the b
 
 JavaScript has seven primitive types:
 
-| Type | Example | `typeof` result |
-| --- | --- | --- |
-| String | `"hello"` | `"string"` |
-| Number | `42` | `"number"` |
-| BigInt | `42n` | `"bigint"` |
-| Boolean | `true` | `"boolean"` |
-| Undefined | `undefined` | `"undefined"` |
-| Symbol | `Symbol("id")` | `"symbol"` |
-| Null | `null` | `"object"` |
+| Type      | Example        | `typeof` result |
+| --------- | -------------- | --------------- |
+| String    | `"hello"`      | `"string"`      |
+| Number    | `42`           | `"number"`      |
+| BigInt    | `42n`          | `"bigint"`      |
+| Boolean   | `true`         | `"boolean"`     |
+| Undefined | `undefined`    | `"undefined"`   |
+| Symbol    | `Symbol("id")` | `"symbol"`      |
+| Null      | `null`         | `"object"`      |
 
 `typeof null` returning `"object"` is a historical JavaScript quirk. `null` is still a primitive value that represents an intentional absence of a value.
 
@@ -133,3 +133,6 @@ console.log(Object.is(NaN, NaN)); // true
 - Spread syntax and `Object.assign()` make shallow copies, not deep copies.
 - Arrays are objects; use `Array.isArray()` to identify them.
 - `typeof null` is `"object"` for historical reasons.
+- type cocerion alogrithm ### https://262.ecma-international.org/5.1/#sec-11.9.3 ###
+- https://dorey.github.io/JavaScript-Equality-Table/
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Equality_comparisons_and_sameness
