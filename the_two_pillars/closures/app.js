@@ -16,6 +16,7 @@ function a() {
     };
   };
 }
+//  Closures is Feature of the javascript
 //  when creating closure  the javascript engine keeps a reference to lexical environment of the outer function, allowing the inner function to access those variables even after the outer function has finished executing.
 //  lexical --> it's mean where it ran code,
 //  scoping --> what variables are accessible in the current scope
@@ -130,3 +131,5 @@ ohno.totalPeaceTime();
 //  least privillage principle
 //  The idea is to give functions and modules the minimum level of access necessary to perform their tasks.
 //  In the makeNuclearButton example, the launch function is kept private and not exposed, adhering to the least privilege principle.
+
+// Lexical Environment === [[scope]];
