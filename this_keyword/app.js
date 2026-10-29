@@ -6,6 +6,7 @@
 const obj = {
   name: "Billay",
   sing: function () {
+    console.log(this);
     return "la la la" + this.name;
   },
   singAgain() {
@@ -106,3 +107,51 @@ const obj5 = {
   },
 };
 obj5.sing();
+
+//  Idea of new Binding this use with constructor functions
+
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const person1 = new Person("John", 30);
+console.log(person1);
+
+//  implicit binding
+
+const person2 = {
+  name: "Emma",
+  age: 25,
+  greet() {
+    //  this keyword refers to the object that is calling the method, in this case 'person2'
+    console.log(
+      `Hello, my name is ${this.name} and I am ${this.age} years old.`,
+    );
+  },
+};
+person2.greet();
+
+// explicit binding;
+
+const person3 = {
+  name: "Emma",
+  age: 25,
+  greet: function () {
+    //  here telling that 'this' will be explicitly bound to 'window' object due to .bind(window)
+    console.log(console.log("Hi" + this.setTimeout));
+  }.bind(window),
+};
+person2.greet();
+
+const person4 = {
+  name: "Emma",
+  age: 25,
+  hi: function () {
+    var inner = () => {
+      console.log("Inner", this.name); // 'this' here refers to 'person4' because arrow functions inherit 'this' from their surrounding context
+    };
+    return inner();
+  },
+};
+person2.greet();
