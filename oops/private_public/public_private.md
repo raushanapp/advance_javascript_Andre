@@ -5,26 +5,27 @@ JavaScript classes can contain **public** and **private** fields and methods. Pu
 ## Access diagram
 
 ```text
-                         Character class
-┌──────────────────────────────────────────────────────────┐
-│ Public interface                                         │
-│  name (getter)     ───────────► reads private #name      │
-│  weapon            ───────────► public instance property │
-│  attack()          ───────────► uses private members     │
-│  attackCount       ───────────► reads private count      │
-│                                                          │
-│ Private implementation (class-only access)               │
-│  #name                                                  │
-│  #attackCount                                           │
-│  #performAttack()                                       │
-└──────────────────────────────────────────────────────────┘
-           ▲                         ▲
-           │ public API              │ public API
-     Outside code                 Elf subclass
-     can use name,                can use inherited
-     weapon, attack()             name, weapon, attack()
-     and attackCount              but not Character's #name
-                                  or #performAttack()
+Outside the class                       Character class
+┌─────────────────────┐       ┌─────────────────────────────────────┐
+│ Read: hero.name     │──────►│ public getter: get name()           │
+└─────────────────────┘       │              │                      │
+                              │              ▼                      │
+                              │ private field: #name                │
+                              │                                     │
+┌─────────────────────┐       │                                     │
+│ Write:              │──────►│ public setter: set name(value)      │
+│ hero.name = "..."   │       │              │                      │
+└─────────────────────┘       │              ▼                      │
+                              │ validate value, then update #name   │
+                              │                                     │
+┌─────────────────────┐       │                                     │
+│ Call: hero.greet()  │──────►│ public method: greet()              │
+└─────────────────────┘       │              │                      │
+                              │              ▼                      │
+                              │ private method: #makeGreeting()     │
+                              └─────────────────────────────────────┘
+
+Direct access from outside: hero.#name or hero.#makeGreeting() ──X──► blocked
 ```
 
 ## Public members
@@ -84,6 +85,57 @@ console.log(hero.name); // "Legolas"
 console.log(hero.attack()); // "Legolas attacks with bow"
 // hero.#name; // SyntaxError: private fields cannot be accessed here
 ```
+
+### Reading and updating private fields; calling private methods
+
+A public getter can read a private field, and a public setter can update it. The setter is a good place to validate new values before storing them. Accessors are used like properties: write `hero.name`, not `hero.name()`.
+
+A private method cannot be called directly from outside the class. Instead, expose a public method that calls it. This keeps the private implementation hidden while still making its behavior available through the class's public API.
+
+```js
+class Character {
+  #name;
+
+  constructor(name) {
+    this.name = name; // Uses the public setter, including its validation.
+  }
+
+  get name() {
+    return this.#name; // Controlled read access to the private field.
+  }
+
+  set name(value) {
+    if (typeof value !== "string" || value.trim() === "") {
+      throw new TypeError("Name must be a non-empty string");
+    }
+
+    this.#name = value.trim(); // Controlled write access to the private field.
+  }
+
+  greet() {
+    return this.#makeGreeting(); // Public method delegates to the private method.
+  }
+
+  #makeGreeting() {
+    return `Hello, I'm ${this.#name}.`;
+  }
+}
+
+const hero = new Character("Legolas");
+console.log(hero.name); // "Legolas" — calls the getter
+hero.name = "Aragorn"; // Calls the setter
+console.log(hero.greet()); // "Hello, I'm Aragorn."
+// hero.#name; // SyntaxError: private field is only accessible inside Character
+// hero.#makeGreeting(); // SyntaxError: private method is only accessible inside Character
+```
+
+**Notes:**
+
+- `get name()` and `set name(value)` are public accessors, so callers can read and assign `name` without accessing `#name` directly.
+- The getter and setter do not make `#name` public. They provide controlled access through the public API.
+- JavaScript setters accept one value and are assigned like properties; they are not called with parentheses.
+- A private method is not exposed by a getter or setter here. The public `greet()` method calls `#makeGreeting()` from inside the class.
+- A setter is optional. Add one only when external code should be allowed to update the value; otherwise, use a getter for read-only access.
 
 ## Private members and inheritance
 
