@@ -1,14 +1,14 @@
 class Character {
-  #name;
+  #nameFirst;
   #attackCount = 0;
 
   constructor(name, weapon) {
-    this.#name = name;
+    this.#nameFirst = name;
     this.weapon = weapon;
   }
 
   get name() {
-    return this.#name;
+    return this.#nameFirst;
   }
 
   get attackCount() {
@@ -21,18 +21,22 @@ class Character {
   }
 
   #performAttack() {
-    return `${this.#name} attacks with ${this.weapon}`;
+    return `${this.#nameFirst} attacks with ${this.weapon}`;
   }
 }
 
 class Elf extends Character {
-  constructor(name, weapon, type) {
-    super(name, weapon);
+  constructor(nameFirst, weapon, type) {
+    super(nameFirst, weapon);
+    console.log(nameFirst);
     this.type = type;
   }
 }
 
 const elf = new Elf("Legolas", "bow", "woodland elf");
+console.log(elf.nameFirst);
+
+const firstName = new Character("Legolas", "bow"); // Legolas (read through the public getter)
 
 console.log(elf.name); // Legolas (read through the public getter)
 console.log(elf.weapon); // bow (public property)
