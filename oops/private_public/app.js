@@ -10,6 +10,9 @@ class Character {
   get name() {
     return this.#nameFirst;
   }
+  set setName(newName) {
+    this.#nameFirst = newName;
+  }
 
   get attackCount() {
     return this.#attackCount;
@@ -28,13 +31,14 @@ class Character {
 class Elf extends Character {
   constructor(nameFirst, weapon, type) {
     super(nameFirst, weapon);
-    console.log(nameFirst);
     this.type = type;
   }
 }
 
 const elf = new Elf("Legolas", "bow", "woodland elf");
-console.log(elf.nameFirst);
+console.log(elf.name);
+elf.setName = "Legolas Updated";
+console.log(elf.name);
 
 const firstName = new Character("Legolas", "bow"); // Legolas (read through the public getter)
 
